@@ -1,0 +1,39 @@
+                             SYMBA5 PARALLELIZATION
+Authors : Tommy Chi Ho Lau
+Date:     Aug/20
+Last Revisions: Feb/21
+
+SyMBAp in this package has been paralleized by implementing OpenMP.
+In this version, SIMD is not enabled.
+The original code is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
+Trapezium nested loop are flattened and close encounter pairs are grouped such thateach group can be handled in parallel.
+
+With OpenMP 5.0, automated flattening of non-rectangular loops is supported and more efficient.
+User have to check the compiler support for non-rectangular loop.
+
+Since encounter pairs are grouped in SyMBAp, errors may occur if the max no. of groups or the max group size pre-set in symba5p/symba5p.inc is too small for the simulation.
+ 
+
+                             COMPILATION
+                             
+In addition to the default compilation flags, "-fopenmp" is needed for GCC compiler to invoke OpenMP.
+
+
+                             ENVIRONMENT VARIABLE
+                             
+Prior to starting new job, depending on your system, use
+	export OMP_NUM_THREADS= <number of threads to use>
+or
+	set OMP_NUM_THREADS= <number of threads to use>
+to set the desired number of threads to use.
+
+From https://gcc.gnu.org/onlinedocs/gfortran/OpenMP.html: "-fopenmp implies -frecursive, i.e., all local arrays will be allocated on the stack." Segmentation faults occur if the stacksize is not large enough for the pre-set sizes of arrays. User may need to use
+	ulimit -s unlimited
+or
+	ulimit -s <specified value>
+to set the desired size of the main stack.
+
+                             CHANGELOG
+Nov/20 - version 1.1: Fixed a bug in symba5_getacch.f that the array ielst is passed from integer*2 to integer
+Feb/21 - version 1.4: Changed posting format to show particle number up to 6 digits.
+Nov/21 - version 1.5: Added thread no. control depending on user-determined lower limit of particle-to-thread ratio

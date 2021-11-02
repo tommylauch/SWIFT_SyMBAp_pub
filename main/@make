@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# USERS MUST CHANGE THESE !!!!!!
+SWIFT_DIR='~/SWIFT_SyMBAp_pub'
+SWIFT_DIR="${SWIFT_DIR/#\~/$HOME}"
+FORTRAN=gfortran
+FFLAGS='-O -march=native -fopenmp'
+
+i=1
+for file in *.f
+do
+    echo [$i] $file
+    file2="${file%%.*}"
+    $FORTRAN $FFLAGS -o $file2 $file -L$SWIFT_DIR -lswift
+    ((i++))
+done

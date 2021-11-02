@@ -1,0 +1,155 @@
+rm libswift.a
+
+echo DIRECTORY: anal
+cd anal
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: bs
+cd ../bs
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: coord
+cd ../coord
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: discard
+cd ../discard
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: io
+cd ../io
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: lyap
+cd ../lyap
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: lyap2
+cd ../lyap2
+rm @make
+ln -s ../@make .
+bash @make
+
+cd ../mvs
+
+echo DIRECTORY: mvs/drift 
+cd drift 
+rm @make
+ln -s ../../@make .
+bash @make
+
+echo DIRECTORY: mvs/getacch
+cd ../getacch
+rm @make
+ln -s ../../@make .
+bash @make
+
+echo DIRECTORY: mvs/kickvh
+cd ../kickvh
+rm @make
+ln -s ../../@make .
+bash @make
+
+echo DIRECTORY: mvs/step
+cd ../step
+rm @make
+ln -s ../../@make .
+bash @make
+
+cd ..
+
+echo DIRECTORY: orbel
+cd ../orbel
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: rmvs
+cd ../rmvs
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: rmvs2
+cd ../rmvs2
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: rmvs3
+cd ../rmvs3
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: rmvs4
+cd ../rmvs4
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: tu4
+cd ../tu4
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: obl
+cd ../obl
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: util
+cd ../util
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: helio
+cd ../helio
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: symba5
+cd ../symba5
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: symba5p
+cd ../symba5p
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: symba5p_pgm
+cd ../symba5p_pgm
+rm @make
+ln -s ../@make .
+bash @make
+
+echo DIRECTORY: skeel
+cd ../skeel
+rm @make
+ln -s ../@make .
+bash @make
+
+cd ..
+ar ts libswift.a
+ranlib libswift.a
+
+echo DONE
