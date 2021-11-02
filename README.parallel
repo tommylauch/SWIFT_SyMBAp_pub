@@ -3,8 +3,7 @@ Authors : Tommy Chi Ho Lau
 Date:     Aug/20
 Last Revisions: Feb/21
 
-SyMBAp in this package has been paralleized by implementing OpenMP.
-In this version, SIMD is not enabled.
+SyMBAp in this package has been parallelized by implementing OpenMP.
 The original code is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
 Trapezium nested loop are flattened and close encounter pairs are grouped such thateach group can be handled in parallel.
 
