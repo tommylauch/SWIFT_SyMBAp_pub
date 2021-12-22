@@ -29,7 +29,7 @@ c Note: integer instead of integer*2 is used entirely
       integer ntp,istat(1)
 
       integer nbod,i1st,nbodm,nbodo
-      integer threads,th_low
+      integer threads,th_low,th_max
       integer iflgchk,iub,iuj,iud,iue,ium
       
       real*8 t0,tstop,dt,dtout,dtdump
@@ -81,6 +81,12 @@ c Get threads usage parameter:
       write(*,*) 'Enter lower limit of particle-to-thread ratio : '
       read(*,'(i6)') th_low
 
+      write(*,*) 'Max. no. of threads to be used : '
+      read(*,'(i6)') th_max
+
+      threads = max(min(nbod/th_low,th_max),1)
+      call omp_set_num_threads(threads)
+      write(*,*) 'No. of threads: ',threads
 c Initialize initial time and times for first output and first dump
       t = t0
       tout = t0 + dtout
@@ -148,7 +154,6 @@ c***************here's the big loop *************************************
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
 c change no. of threads if condition met
                if ((nbod/threads .lt. th_low).and.(threads .gt. 1)) then
-                  call omp_get_num_threads(threads)
                   threads = max(nbod/th_low,1)
                   call omp_set_num_threads(threads)
                   write(*,*) 'No. of threads decreased to ',threads
