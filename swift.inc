@@ -16,7 +16,7 @@ c...    Version of Swift
 c...    Maximum array size, note your stack size!
 	integer  NPLMAX, NTPMAX
 	parameter  (NPLMAX = 1000) ! max number of planets, including the Sun 
-	parameter  (NTPMAX = 1000) ! max number of test particles
+        parameter  (NTPMAX = 1000) ! max number of test particles, must not exceed 46342
 
 c...    Size of the test particle integer status flag
 	integer NSTATP            ! Number of status parameters

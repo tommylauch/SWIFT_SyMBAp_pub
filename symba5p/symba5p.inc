@@ -12,6 +12,6 @@ c..    Maximum no. of pairs in a group
        
 c..    Maximum no. of group
        integer GRPNMAX
-       parameter (GRPNMAX = 500)
+       parameter (GRPNMAX = NENMAX)
        
 c..    Note your stack size!
