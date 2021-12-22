@@ -36,3 +36,4 @@ to set the desired size of the main stack.
 Nov/20 - version 1.1: Fixed a bug in symba5_getacch.f that the array ielst is passed from integer*2 to integer
 Feb/21 - version 1.4: Changed posting format to show particle number up to 6 digits.
 Nov/21 - version 1.5: Added thread no. control depending on user-determined lower limit of particle-to-thread ratio
+Dec/21 - Energy checking found to be incompatible with SyMBAp. Please turn off flag L4 in parameter file before the next version.
