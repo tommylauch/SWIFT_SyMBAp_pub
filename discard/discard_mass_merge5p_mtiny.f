@@ -36,7 +36,7 @@ c Remarks: Based on discard_mass_merge5
 c
 c Authors:  Hal Levison 
 c Date:    12/16/09
-c Last revision:
+c Last revision:  01/09/22 energy offset ignored for SyMBAp
 
       subroutine discard_mass_merge5p_mtiny(time,nbod,nbodm,ip1,ip2,
      &           mass,xh,yh,zh,vxh,vyh,vzh,rpl,eoff,ielc,ielst,ntpmaxsq)
@@ -50,8 +50,8 @@ c...  Inputs:
 
 c...  Input and Output
       integer nbod,nbodm,ntpmaxsq
-      real*8 mass(nbod),xh(nbod),yh(nbod),zh(nbod)
-      real*8 vxh(nbod),vyh(nbod),vzh(nbod),rpl(nbod)
+      real*8 mass(NTPMAX),xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
+      real*8 vxh(NTPMAX),vyh(NTPMAX),vzh(NTPMAX),rpl(NTPMAX)
       real*8 eoff
       integer ielst(2,ntpmaxsq),ielc
 
@@ -63,15 +63,13 @@ c...  internal
       real*8 x2,y2,z2
       real*8 vx2,vy2,vz2
       integer itmp,j,i
-      real*8 j2rp2,j4rp4,ke,pot,energy1,energy2,eltot(3)
+      real*8 j2rp2,j4rp4
 
 c-----
 c...  Executable code 
 
       j2rp2=0.0d0
       j4rp4=0.0d0
-      call anal_energy_discard5(0,nbod,nbodm,mass,j2rp2,j4rp4,xh,yh,zh,
-     &           vxh,vyh,vzh,ke,pot,energy1,eltot)
 
       if( mass(ip2).gt.mass(ip1) ) then
          itmp = ip1
@@ -135,10 +133,7 @@ c..   Remove any encounters with ip2
          endif
       enddo
 
-      call anal_energy_discard5(0,nbod,nbodm,mass,j2rp2,j4rp4,xh,yh,zh,
-     &           vxh,vyh,vzh,ke,pot,energy2,eltot)
-
-      eoff = eoff + energy1 - energy2
+      eoff = 0.d0
 
       call io_discard_merge(time,ip1,ip2,m1,r1,x1,y1,z1,vx1,vy1,
      &     vz1,m2,r2,x2,y2,z2,vx2,vy2,vz2,

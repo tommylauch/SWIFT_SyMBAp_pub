@@ -54,7 +54,7 @@ c...  print version number
       call util_version
       
       write(*,*) '------------------------------------------------'
-      write(*,*)('------------- SyMBAp: Version 1.5 -------------')
+      write(*,*)('------------- SyMBAp: Version 1.6 -------------')
       write(*,*) '------ OpenMP 4.0 or above is recommended ------'
       write(*,*) '--------------- for this version ---------------'
       write(*,*) '------------------------------------------------'
