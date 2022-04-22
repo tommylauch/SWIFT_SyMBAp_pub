@@ -62,36 +62,8 @@ c...  now the third terms
 !$OMP& SHARED(ij_tm,nbod,nbodm,mass,xh,yh,zh,
 !$OMP& ielc,ielst)
 !$OMP DO COLLAPSE(2)
-	do i=2,nbodm
-            do j=nbodm+1,nbod
-                dx = xh(j) - xh(i)
-                dy = yh(j) - yh(i)
-                dz = zh(j) - zh(i)
-                rji2 = dx*dx + dy*dy + dz*dz
-
-                irij3 = 1.0d0/(rji2*sqrt(rji2))
-                faci = mass(i)*irij3
-                facj = mass(j)*irij3
-
-                axh(j) = axh(j) + (-faci*dx)
-                ayh(j) = ayh(j) + (-faci*dy)
-                azh(j) = azh(j) + (-faci*dz)
-
-                axh(i) = axh(i) + facj*dx
-                ayh(i) = ayh(i) + facj*dy
-                azh(i) = azh(i) + facj*dz
-            enddo
-	enddo
-!$OMP END DO NOWAIT
-!$OMP DO
-	do ij=0,(ij_tm-1)
-            i=ij/(nbodm-2)+2 !i goes from 2
-            j=mod(ij,(nbodm-2))+3  !j goes from 3
-            if(j.le.i) then
-                i = nbodm-i+2 !i goes to nbodm-1
-                j = nbodm-j+3 !j goes to nbodm
-            endif
-
+      do i=2,nbodm
+         do j=nbodm+1,nbod
             dx = xh(j) - xh(i)
             dy = yh(j) - yh(i)
             dz = zh(j) - zh(i)
@@ -108,7 +80,35 @@ c...  now the third terms
             axh(i) = axh(i) + facj*dx
             ayh(i) = ayh(i) + facj*dy
             azh(i) = azh(i) + facj*dz
-	enddo
+         enddo
+      enddo
+!$OMP END DO NOWAIT
+!$OMP DO
+      do ij=0,(ij_tm-1)
+         i=ij/(nbodm-2)+2 !i goes from 2
+         j=mod(ij,(nbodm-2))+3  !j goes from 3
+         if(j.le.i) then
+            i = nbodm-i+2 !i goes to nbodm-1
+            j = nbodm-j+3 !j goes to nbodm
+         endif
+
+         dx = xh(j) - xh(i)
+         dy = yh(j) - yh(i)
+         dz = zh(j) - zh(i)
+         rji2 = dx*dx + dy*dy + dz*dz
+
+         irij3 = 1.0d0/(rji2*sqrt(rji2))
+         faci = mass(i)*irij3
+         facj = mass(j)*irij3
+
+         axh(j) = axh(j) + (-faci*dx)
+         ayh(j) = ayh(j) + (-faci*dy)
+         azh(j) = azh(j) + (-faci*dz)
+
+         axh(i) = axh(i) + facj*dx
+         ayh(i) = ayh(i) + facj*dy
+         azh(i) = azh(i) + facj*dz
+      enddo
 !$OMP END DO NOWAIT
 c...  Now subtract off anyone in an encounter
 !$OMP DO

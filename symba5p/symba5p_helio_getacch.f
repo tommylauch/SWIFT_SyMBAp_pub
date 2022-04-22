@@ -61,53 +61,53 @@ c...     now the third terms
 !$OMP& PRIVATE(i,j,ij,dx,dy,dz,rji2,irij3,faci,facj)
 !$OMP& SHARED(ij_tm,nbod,nbodm,mass,xh,yh,zh)
 !$OMP DO COLLAPSE(2)
-	do i=2,nbodm
-            do j=nbodm+1,nbod
-               dx = xh(j) - xh(i)
-               dy = yh(j) - yh(i)
-               dz = zh(j) - zh(i)
-               rji2 = dx*dx + dy*dy + dz*dz
+      do i=2,nbodm
+         do j=nbodm+1,nbod
+            dx = xh(j) - xh(i)
+            dy = yh(j) - yh(i)
+            dz = zh(j) - zh(i)
+            rji2 = dx*dx + dy*dy + dz*dz
 
-               irij3 = 1.0d0/(rji2*sqrt(rji2))
-               faci = mass(i)*irij3
-               facj = mass(j)*irij3
+            irij3 = 1.0d0/(rji2*sqrt(rji2))
+            faci = mass(i)*irij3
+            facj = mass(j)*irij3
 
-               axhl(j) = axhl(j) + (-faci*dx)
-               ayhl(j) = ayhl(j) + (-faci*dy)
-               azhl(j) = azhl(j) + (-faci*dz)
+            axhl(j) = axhl(j) + (-faci*dx)
+            ayhl(j) = ayhl(j) + (-faci*dy)
+            azhl(j) = azhl(j) + (-faci*dz)
 
-               axhl(i) = axhl(i) + facj*dx
-               ayhl(i) = ayhl(i) + facj*dy
-               azhl(i) = azhl(i) + facj*dz
-            enddo
-	enddo
+            axhl(i) = axhl(i) + facj*dx
+            ayhl(i) = ayhl(i) + facj*dy
+            azhl(i) = azhl(i) + facj*dz
+         enddo
+      enddo
 !$OMP END DO NOWAIT
 !$OMP DO
-	do ij=0,(ij_tm-1)
-               i=ij/(nbodm-2)+2 !i goes from 2
-               j=mod(ij,(nbodm-2))+3  !j goes from 3
-               if(j.le.i) then
-               	i = nbodm-i+2 !i goes to nbodm-1
-               	j = nbodm-j+3 !j goes to nbodm
-               endif
+      do ij=0,(ij_tm-1)
+         i=ij/(nbodm-2)+2 !i goes from 2
+         j=mod(ij,(nbodm-2))+3  !j goes from 3
+         if(j.le.i) then
+            i = nbodm-i+2 !i goes to nbodm-1
+            j = nbodm-j+3 !j goes to nbodm
+         endif
 
-               dx = xh(j) - xh(i)
-               dy = yh(j) - yh(i)
-               dz = zh(j) - zh(i)
-               rji2 = dx*dx + dy*dy + dz*dz
+         dx = xh(j) - xh(i)
+         dy = yh(j) - yh(i)
+         dz = zh(j) - zh(i)
+         rji2 = dx*dx + dy*dy + dz*dz
 
-               irij3 = 1.0d0/(rji2*sqrt(rji2))
-               faci = mass(i)*irij3
-               facj = mass(j)*irij3
+         irij3 = 1.0d0/(rji2*sqrt(rji2))
+         faci = mass(i)*irij3
+         facj = mass(j)*irij3
 
-               axhl(j) = axhl(j) + (-faci*dx)
-               ayhl(j) = ayhl(j) + (-faci*dy)
-               azhl(j) = azhl(j) + (-faci*dz)
+         axhl(j) = axhl(j) + (-faci*dx)
+         ayhl(j) = ayhl(j) + (-faci*dy)
+         azhl(j) = azhl(j) + (-faci*dz)
 
-               axhl(i) = axhl(i) + facj*dx
-               ayhl(i) = ayhl(i) + facj*dy
-               azhl(i) = azhl(i) + facj*dz
-	enddo
+         axhl(i) = axhl(i) + facj*dx
+         ayhl(i) = ayhl(i) + facj*dy
+         azhl(i) = azhl(i) + facj*dz
+      enddo
 !$OMP END DO
 !$OMP END PARALLEL
 

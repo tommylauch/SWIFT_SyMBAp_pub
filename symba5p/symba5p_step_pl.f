@@ -109,65 +109,63 @@ c...  check for encounters
 !$OMP& vyh,vzh,dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,
 !$OMP& grpie)
 !$OMP DO COLLAPSE(2)
-	do j=2,nbodm
-            do i=nbodm+1,nbod
-                ieflg = 0
-                call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
-     &             vyh,vzh,dt,irec,ieflg,svdotr)
-                if(ieflg.ne.0) then
+      do j=2,nbodm
+         do i=nbodm+1,nbod
+            ieflg = 0
+            call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
+     &         vyh,vzh,dt,irec,ieflg,svdotr)
+            if(ieflg.ne.0) then
 !$OMP CRITICAL (ENC)
-                isenc = 1
-                iecnt(i) = iecnt(i) + 1
-                iecnt(j) = iecnt(j) + 1
-                ielev(i) = 0
-                ielev(j) = 0
-                ielc = ielc + 1
-                if(ielc.gt.NENMAX) then
-                   write(*,*) 'ERROR: encounter matrix is filled.'
-                   write(*,*) 'STOPPING'
-                   call util_exit(1)
-                endif
-                ielst(1,ielc) = i
-                ielst(2,ielc) = j
-                call symba5p_group(ielst,ielc,i,j,
-     &             grpie,grppc,grpc)
+               isenc = 1
+               iecnt(i) = iecnt(i) + 1
+               iecnt(j) = iecnt(j) + 1
+               ielev(i) = 0
+               ielev(j) = 0
+               ielc = ielc + 1
+               if(ielc.gt.NENMAX) then
+                  write(*,*) 'ERROR: encounter matrix is filled.'
+                  write(*,*) 'STOPPING'
+                  call util_exit(1)
+               endif
+               ielst(1,ielc) = i
+               ielst(2,ielc) = j
+               call symba5p_group(ielst,ielc,i,j,grpie,grppc,grpc)
 !$OMP END CRITICAL (ENC)
-                endif
-            enddo
-	enddo
+            endif
+         enddo
+      enddo
 !$OMP END DO NOWAIT
 !$OMP DO SCHEDULE(GUIDED)
 c...  Guided scheduling specified as iterations with close encounter are longer
-	do ij=0,(ij_tm-1)
-            j=ij/(nbodm-2)+2 !j goes from 2
-            i=mod(ij,(nbodm-2))+3  !i goes from 3
-            if(i.le.j) then
-              j = nbodm-j+2 !j goes to nbodm-1
-              i = nbodm-i+3 !i goes to nbodm
-            endif
-            ieflg = 0
-            call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
-     &           vyh,vzh,dt,irec,ieflg,svdotr)
-            if(ieflg.ne.0) then
+      do ij=0,(ij_tm-1)
+         j=ij/(nbodm-2)+2 !j goes from 2
+         i=mod(ij,(nbodm-2))+3  !i goes from 3
+         if(i.le.j) then
+            j = nbodm-j+2 !j goes to nbodm-1
+            i = nbodm-i+3 !i goes to nbodm
+         endif
+         ieflg = 0
+         call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
+     &        vyh,vzh,dt,irec,ieflg,svdotr)
+         if(ieflg.ne.0) then
 !$OMP CRITICAL (ENC)
-              isenc = 1
-              iecnt(i) = iecnt(i) + 1
-              iecnt(j) = iecnt(j) + 1
-              ielev(i) = 0
-              ielev(j) = 0
-              ielc = ielc + 1
-              if(ielc.gt.NENMAX) then
-                 write(*,*) 'ERROR: encounter matrix is filled.'
-                 write(*,*) 'STOPPING'
-                 call util_exit(1)
-              endif
-              ielst(1,ielc) = i
-              ielst(2,ielc) = j
-              call symba5p_group(ielst,ielc,i,j,
-     &             grpie,grppc,grpc)
-!$OMP END CRITICAL (ENC)
+            isenc = 1
+            iecnt(i) = iecnt(i) + 1
+            iecnt(j) = iecnt(j) + 1
+            ielev(i) = 0
+            ielev(j) = 0
+            ielc = ielc + 1
+            if(ielc.gt.NENMAX) then
+               write(*,*) 'ERROR: encounter matrix is filled.'
+               write(*,*) 'STOPPING'
+               call util_exit(1)
             endif
-	enddo
+            ielst(1,ielc) = i
+            ielst(2,ielc) = j
+            call symba5p_group(ielst,ielc,i,j,grpie,grppc,grpc)
+!$OMP END CRITICAL (ENC)
+         endif
+      enddo
 !$OMP END DO
 !$OMP END PARALLEL
 c...  do a step
