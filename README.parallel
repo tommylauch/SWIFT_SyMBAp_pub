@@ -30,7 +30,9 @@ From https://gcc.gnu.org/onlinedocs/gfortran/OpenMP.html: "-fopenmp implies -fre
 	ulimit -s unlimited
 or
 	ulimit -s <specified value>
-to set the desired size of the main stack.
+to set the desired size of the main stack. And use
+   export OMP_STACKSIZE=<specified value>
+to set the desired size of the stack for all threads created with OpenMP.
 
                              CHANGELOG
 Nov/20 - version 1.1: Fixed a bug in symba5_getacch.f that the array ielst is passed from integer*2 to integer
