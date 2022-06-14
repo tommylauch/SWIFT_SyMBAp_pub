@@ -1,14 +1,13 @@
                              SYMBA5 PARALLELIZATION
 Authors : Tommy Chi Ho Lau
 Date:     Aug/20
-Last Revisions: Feb/21
+Last Revisions: Jun/22
 
-SyMBAp in this package has been parallelized by implementing OpenMP.
-The original code is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
-Trapezium nested loop are flattened and close encounter pairs are grouped such thateach group can be handled in parallel.
+SyMBAp (main/swift_symba5p.f) in this package is a parallelized version of SyMBA (main/swift_symba5.f) in the SWIFT subroutine package.
+The original SWIFT package is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
+Trapezium nested loops are flattened and close encounter pairs are grouped such thateach group can be handled in parallel.
 
-With OpenMP 5.0, automated flattening of non-rectangular loops is supported and more efficient.
-User have to check the compiler support for non-rectangular loop.
+In addition to the input file and parameter for SyMBA, SyMBAp also asks for two thread usage parameters: lower limit of particle-to-thread ratio (integer) and max. no. of threads to be used (integer)
 
 Since encounter pairs are grouped in SyMBAp, errors may occur if the max no. of groups or the max group size pre-set in symba5p/symba5p.inc is too small for the simulation.
  
