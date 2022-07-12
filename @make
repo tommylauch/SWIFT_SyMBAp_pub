@@ -5,7 +5,7 @@ SWIFT_DIR='~/SWIFT_SyMBAp_pub'
 SWIFT_DIR="${SWIFT_DIR/#\~/$HOME}"
 FORTRAN=gfortran
 FFLAGS='-O -march=native -fopenmp -c'
-PRECOMP=/usr/bin/cpp
+PRECOMP=cpp
 CPPFLAGS='-march=native -fopenmp -D_OPEN_POSITION -D_RECUR_SUB'
 
 # To Profile the code:
