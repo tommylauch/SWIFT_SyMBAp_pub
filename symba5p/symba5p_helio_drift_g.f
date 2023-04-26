@@ -35,12 +35,12 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,irec
-      real*8 mass(NTPMAX),dt
-      integer ielev(NTPMAX)
+      real*8 mass(nbod),dt
+      integer ielev(nbod)
       integer ielst(2,NENMAX),ielc
 c...  Inputs and Outputs:
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
-      real*8 vxb(NTPMAX),vyb(NTPMAX),vzb(NTPMAX)
+      real*8 xh(nbod),yh(nbod),zh(nbod)
+      real*8 vxb(nbod),vyb(nbod),vzb(nbod)
       
 c...  Internals:
       integer i,j,iflg,i_ie,j_ie
@@ -74,7 +74,7 @@ c Take a drift forward dth
               gpmb(gpmbc) = j_ie
          endif
       enddo
-
+      
       do i=1,gpmbc
          j = gpmb(i)
          if( (ielev(j).eq.irec) .and. (mass(j).ne.0.0d0) ) then

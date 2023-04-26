@@ -40,6 +40,7 @@ c...  Internals
 c...  Executable code
 c...  group the encounter pairs
           tempc = 0
+          temp = 0
 c... see if i_ie or j_ie is in any group already
           do j=1,grpc
              do i=1,grppc(j)

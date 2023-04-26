@@ -38,13 +38,13 @@ c Last revision: 3/3/10
 
 c...  Inputs Only: 
       integer nbod,irec
-      real*8 mass(NTPMAX),dt,rhill(NTPMAX),sgn
-      integer iecnt(NTPMAX),ielev(NTPMAX)
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
+      real*8 mass(nbod),dt,rhill(nbod),sgn
+      integer iecnt(nbod),ielev(nbod)
+      real*8 xh(nbod),yh(nbod),zh(nbod)
       integer ielst(2,NENMAX),ielc
 
 c...  Inputs and Outputs:
-      real*8 vxb(NTPMAX),vyb(NTPMAX),vzb(NTPMAX)
+      real*8 vxb(nbod),vyb(nbod),vzb(nbod)
 
 c...  Internals: 
       real*8 dx,dy,dz,fac,ris,r

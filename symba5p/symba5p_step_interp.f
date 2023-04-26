@@ -59,19 +59,19 @@ c Last revision: 5/13/99
       include 'symba5p.inc'
 
 c...  Inputs Only: 
-      real*8 mass(NTPMAX),dt,j2rp2,j4rp4,time,mtiny
-      integer iecnt(NTPMAX),ielev(NTPMAX)
+      real*8 mass(nbod),dt,j2rp2,j4rp4,time,mtiny
+      integer iecnt(nbod),ielev(nbod)
       logical*2 lclose 
       integer ielst(2,NENMAX),ielc
 
 c...  Inputs and Outputs:
       integer nbod,nbodm
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
-      real*8 vxh(NTPMAX),vyh(NTPMAX),vzh(NTPMAX)
-      real*8 rpl(NTPMAX),eoff,rhill(NTPMAX)
+      real*8 xh(nbod),yh(nbod),zh(nbod)
+      real*8 vxh(nbod),vyh(nbod),vzh(nbod)
+      real*8 rpl(nbod),eoff,rhill(nbod)
 
 c...  Outputs
-      integer mergelst(2,NTPMAX),mergecnt
+      integer mergelst(2,nbod),mergecnt
 
 c...  Internals:
       integer irec,ilevl(NTPMAX),i

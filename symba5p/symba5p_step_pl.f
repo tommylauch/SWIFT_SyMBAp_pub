@@ -67,18 +67,18 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,i1st,nbodm
-      real*8 mass(NTPMAX),dt,time,j2rp2,j4rp4,mtiny
+      real*8 mass(nbod),dt,time,j2rp2,j4rp4,mtiny
       logical*2 lclose
 
 c...  Inputs and Outputs:
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
-      real*8 vxh(NTPMAX),vyh(NTPMAX),vzh(NTPMAX)
-      real*8 rpl(NTPMAX),eoff,rhill(NTPMAX)
+      real*8 xh(nbod),yh(nbod),zh(nbod)
+      real*8 vxh(nbod),vyh(nbod),vzh(nbod)
+      real*8 rpl(nbod),eoff,rhill(nbod)
 
 c...  Outputs only
       integer isenc
-      integer iecnt(NTPMAX),ielev(NTPMAX)
-      integer mergelst(2,NTPMAX),mergecnt
+      integer iecnt(nbod),ielev(nbod)
+      integer mergelst(2,nbod),mergecnt
 
 c...  Internals
       integer i,j,ieflg,irec,ij_tm,ij
@@ -105,15 +105,14 @@ c...  check for encounters
       grpc = 0
 !$OMP PARALLEL DEFAULT (NONE)
 !$OMP& PRIVATE(i,j,ij,ieflg,svdotr)
-!$OMP& SHARED(ij_tm,rhill,nbod,nbodm,mass,xh,yh,zh,vxh,
-!$OMP& vyh,vzh,dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,
-!$OMP& grpie)
+!$OMP& SHARED(ij_tm,rhill,nbod,nbodm,mass,xh,yh,zh,vxh,vyh,vzh,
+!$OMP& dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,grpie)
 !$OMP DO COLLAPSE(2)
       do j=2,nbodm
          do i=nbodm+1,nbod
             ieflg = 0
             call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
-     &         vyh,vzh,dt,irec,ieflg,svdotr)
+     &           vyh,vzh,dt,irec,ieflg,svdotr)
             if(ieflg.ne.0) then
 !$OMP CRITICAL (ENC)
                isenc = 1

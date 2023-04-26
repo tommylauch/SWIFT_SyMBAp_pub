@@ -71,7 +71,7 @@ c Date:
 c...  Inputs Only: 
       integer nbod,ireci,nbodm
       real*8 mass(nbod),dt0,rhill(nbod),t
-      integer iecnt(NTPMAX),ielev(nbod)
+      integer iecnt(nbod),ielev(nbod)
       logical*2 lclose 
       integer ielst(2,NENMAX),ielc
 
@@ -79,7 +79,7 @@ c...  Inputs and Outputs:
       integer ilevl(nbod)
       real*8 xh(nbod),yh(nbod),zh(nbod),eoff
       real*8 vxb(nbod),vyb(nbod),vzb(nbod),rpl(nbod)
-      integer mergelst(2,NTPMAX),mergecnt
+      integer mergelst(2,nbod),mergecnt
       logical*1 svdotr(NENMAX)
 
 c...  Internals:

@@ -28,11 +28,11 @@ c Last revision: 11/08/13
 
 c...  Inputs: 
       integer nbod,nbodm,iflg
-      real*8 mass(NTPMAX),j2rp2,j4rp4
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
+      real*8 mass(nbod),j2rp2,j4rp4
+      real*8 xh(nbod),yh(nbod),zh(nbod)
 
 c...  Outputs:
-      real*8 axh(NTPMAX),ayh(NTPMAX),azh(NTPMAX)
+      real*8 axh(nbod),ayh(nbod),azh(nbod)
                 
 c...  Internals:
       integer i,j,ij_tm,ij

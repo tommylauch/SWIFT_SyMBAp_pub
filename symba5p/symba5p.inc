@@ -8,7 +8,7 @@ c Date:    7/23/21
 
 c..    Maximum no. of pairs in a group
        integer GRPMAX
-       parameter (GRPMAX = 500)
+       parameter (GRPMAX = 2000)
        
 c..    Maximum no. of group
        integer GRPNMAX
