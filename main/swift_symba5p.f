@@ -64,7 +64,11 @@ c Get data for the run and the test particles
       read(*,999) inparfile
       call io_init_param(inparfile,t0,tstop,dt,dtout,dtdump,
      &     iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile,fopenstat)
-
+c clean up discard_mass.out if needed
+      if ((fopenstat(1:6).eq.'append').or.(fopenstat(1:6).eq.'APPEND'))
+     &   then
+         call io_discard_cleanup(t0)
+      endif
 c Prompt and read name of planet data file
       write(*,*) ' '
       write(*,*) 'Enter name of planet data file : '
