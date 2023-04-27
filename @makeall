@@ -45,8 +45,8 @@ bash @make
 
 cd ../mvs
 
-echo DIRECTORY: mvs/drift 
-cd drift 
+echo DIRECTORY: mvs/drift
+cd drift
 rm @make
 ln -s ../../@make .
 bash @make
