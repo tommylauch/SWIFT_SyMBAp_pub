@@ -33,28 +33,26 @@ c...  Outputs
 c...  Internals
       real*4 mass4(NTPMAX)
       real*4 ttmp
-      integer*2 nbod2
       integer i,ierr
 
 c----
 c...  Executable code 
 
-      read(iu,iostat=ierr) ttmp,nbod2
+      read(iu,iostat=ierr) ttmp,nbod
       io_read_mass_r = ierr
       if(ierr.ne.0) then
          return
       endif
 
-      read(iu,iostat=ierr) (mass4(i),i=1,nbod2)
+      read(iu,iostat=ierr) (mass4(i),i=1,nbod)
       io_read_mass_r = ierr
       if(ierr.ne.0) then
          return
       endif
 
-      do i=1,nbod2
+      do i=1,nbod
          mass(i) = mass4(i)
       enddo
-      nbod = nbod2
       time = ttmp
 
       return

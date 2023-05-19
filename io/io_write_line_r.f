@@ -28,15 +28,11 @@ c...  Inputs:
       real*8 a,e,inc,capom,omega,capm
 
 c...  Internals
-      integer*2 id2
       real*4 a4,e4,inc4,capom4,omega4,capm4
 
 
 c----
 c...  Executable code 
-
-      id2 = id
-
       a4 = a
       e4 = e
       inc4 = inc
@@ -44,7 +40,7 @@ c...  Executable code
       capm4 = capm
       omega4 = omega
 
-      write(iu) id2,a4,e4,inc4,capom4,omega4,capm4
+      write(iu) id,a4,e4,inc4,capom4,omega4,capm4
 
       return
       end      ! io_write_line_r

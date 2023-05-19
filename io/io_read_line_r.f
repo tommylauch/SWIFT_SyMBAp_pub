@@ -35,20 +35,17 @@ c...  Output:
       real*8 a,e,inc,capom,omega,capm
 
 c...  Internals
-      integer*2 id2
       real*4 a4,e4,inc4,capom4,omega4,capm4
       integer ierr
 
 c----
 c...  Executable code 
 
-      read(iu,iostat=ierr) id2,a4,e4,inc4,capom4,omega4,capm4
+      read(iu,iostat=ierr) id,a4,e4,inc4,capom4,omega4,capm4
       io_read_line_r = ierr
       if(ierr.ne.0) then
          return
       endif
-
-      id = id2
 
       a = a4
       e = e4

@@ -64,7 +64,7 @@ c...  Executable code
  1000 format(1x,1p1e23.16,'  2')
 
       write(iu,2000) ip1,m1,r1
- 2000 format('-1',1x,i5,1x,2(1p1e23.16,1x))
+ 2000 format('-1',1x,i7,1x,2(1p1e23.16,1x))
       write(iu,3000) x1,y1,z1
  3000 format(3(1p1e23.16,1x))
       write(iu,3000) vx1,vy1,vz1
@@ -74,7 +74,7 @@ c...  Executable code
       write(iu,3000) vx2,vy2,vz2
 
       write(iu,4000) ip1,mn,rn
- 4000 format('+1',1x,i5,1x,2(1p1e23.16,1x))
+ 4000 format('+1',1x,i7,1x,2(1p1e23.16,1x))
       write(iu,3000) xn,yn,zn
       write(iu,3000) vxn,vyn,vzn
 

@@ -27,7 +27,7 @@ c...  Inputs:
 c...  Internals
       integer i
       real*4 ttmp
-      integer*2 nleft,nbod2
+      integer nleft
 
 c----
 c...  Executable code 
@@ -41,11 +41,9 @@ c...  calculate number of remaining test particles
          endif
       enddo
 
-      nbod2 = nbod
-
       ttmp = time
  
-      write(iu) ttmp,nbod2,nleft
+      write(iu) ttmp,nbod,nleft
 
       return
       end     ! io_write_hdr_r.f

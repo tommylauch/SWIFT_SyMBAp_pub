@@ -75,7 +75,7 @@ c...     try to open as new
  1000 format(1x,1p1e23.16,1x,i4)
 
       write(iu,2000) id,m1,r1
- 2000 format('-1',1x,i5,1x,2(1p1e23.16,1x))
+ 2000 format('-1',1x,i7,1x,2(1p1e23.16,1x))
       write(iu,3000) x1,y1,z1
  3000 format(3(1p1e23.16,1x))
       write(iu,3000) vx1,vy1,vz1

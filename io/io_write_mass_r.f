@@ -32,7 +32,6 @@ c...  Inputs:
 c...  Internals
       real*4 mass4(NTPMAX)
       real*4 ttmp
-      integer*2 nbod2
       integer ierr,i,ldir,lfile
       character*80 dirname,filename
 
@@ -62,10 +61,9 @@ c...  if first time through open file
       do i=1,nbod
          mass4(i) = mass(i)
       enddo
-      nbod2 = nbod
       ttmp = time
 
-      write(iu) ttmp,nbod2
+      write(iu) ttmp,nbod
       write(iu) (mass4(i),i=1,nbod)
 
       close(iu)

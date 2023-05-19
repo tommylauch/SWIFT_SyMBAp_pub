@@ -32,21 +32,17 @@ c...  Output
 
 c...  Internals
       real*4 ttmp
-      integer*2 nleft2,nbod2
       integer ierr
 
 c----
 c...  Executable code 
 
 
-      read(iu,iostat=ierr) ttmp,nbod2,nleft2
+      read(iu,iostat=ierr) ttmp,nbod,nleft
       io_read_hdr_r = ierr
       if(ierr.ne.0) then
          return
       endif
-
-      nbod = nbod2
-      nleft = nleft2
       time = ttmp
 
       return
