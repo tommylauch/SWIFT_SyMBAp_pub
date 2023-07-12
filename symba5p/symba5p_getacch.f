@@ -41,7 +41,7 @@ c...  Outputs:
 c...  Internals:
       real*8 aoblx(NTPMAX),aobly(NTPMAX),aoblz(NTPMAX) 
       real*8 ir3h(NTPMAX),irh(NTPMAX) 
-      integer i,j,ie,ij_tm,ij
+      integer i,j,ie
       real*8 dx,dy,dz,rji2,faci,facj,irij3
 c---
 c...  Executable code 
@@ -53,17 +53,14 @@ c...  Zero things
          azh(i) = 0.0
       enddo
 c...  now the third terms
-
-      ij_tm=((nbodm-1)*(nbodm-2))/2
-
-!$OMP PARALLEL
+!$OMP PARALLEL DEFAULT (NONE)
 !$OMP& REDUCTION(+:axh,ayh,azh)
-!$OMP& PRIVATE(i,j,ij,ie,dx,dy,dz,rji2,irij3,faci,facj)
-!$OMP& SHARED(ij_tm,nbod,nbodm,mass,xh,yh,zh,
+!$OMP& PRIVATE(i,j,ie,dx,dy,dz,rji2,irij3,faci,facj)
+!$OMP& SHARED(nbod,nbodm,mass,xh,yh,zh,
 !$OMP& ielc,ielst)
 !$OMP DO COLLAPSE(2)
       do i=2,nbodm
-         do j=nbodm+1,nbod
+         do j=i+1,nbod
             dx = xh(j) - xh(i)
             dy = yh(j) - yh(i)
             dz = zh(j) - zh(i)
@@ -81,33 +78,6 @@ c...  now the third terms
             ayh(i) = ayh(i) + facj*dy
             azh(i) = azh(i) + facj*dz
          enddo
-      enddo
-!$OMP END DO NOWAIT
-!$OMP DO
-      do ij=0,(ij_tm-1)
-         i=ij/(nbodm-2)+2 !i goes from 2
-         j=mod(ij,(nbodm-2))+3  !j goes from 3
-         if(j.le.i) then
-            i = nbodm-i+2 !i goes to nbodm-1
-            j = nbodm-j+3 !j goes to nbodm
-         endif
-
-         dx = xh(j) - xh(i)
-         dy = yh(j) - yh(i)
-         dz = zh(j) - zh(i)
-         rji2 = dx*dx + dy*dy + dz*dz
-
-         irij3 = 1.0d0/(rji2*sqrt(rji2))
-         faci = mass(i)*irij3
-         facj = mass(j)*irij3
-
-         axh(j) = axh(j) + (-faci*dx)
-         ayh(j) = ayh(j) + (-faci*dy)
-         azh(j) = azh(j) + (-faci*dz)
-
-         axh(i) = axh(i) + facj*dx
-         ayh(i) = ayh(i) + facj*dy
-         azh(i) = azh(i) + facj*dz
       enddo
 !$OMP END DO NOWAIT
 c...  Now subtract off anyone in an encounter
@@ -141,10 +111,6 @@ c...  Now do j2 and j4 stuff
          call getacch_ir3(nbod,2,xh,yh,zh,ir3h,irh)
          call obl_acc(nbod,mass,j2rp2,j4rp4,xh,yh,zh,irh,
      &        aoblx,aobly,aoblz)
-!$OMP PARALLEL
-!$OMP& PRIVATE(i)
-!$OMP& SHARED(nbod,axh,ayh,azh,aoblx,aobly,aoblz)
-!$OMP DO
          do i = 2,nbod
             if(mass(i).ne.0.0d0) then
                axh(i) = axh(i) + aoblx(i)
@@ -152,8 +118,6 @@ c...  Now do j2 and j4 stuff
                azh(i) = azh(i) + aoblz(i)
             endif
          enddo
-!$OMP END DO
-!$OMP END PARALLEL
       endif
 
       return

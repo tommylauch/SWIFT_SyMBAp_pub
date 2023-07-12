@@ -81,7 +81,7 @@ c...  Outputs only
       integer mergelst(2,nbod),mergecnt
 
 c...  Internals
-      integer i,j,ieflg,irec,ij_tm,ij
+      integer i,j,ieflg,irec
       logical*1 svdotr            ! Not used in the routine
       integer ielst(2,NENMAX),ielc
 
@@ -101,15 +101,14 @@ c...  Executable code
 c...  check for encounters
       irec = 0
       ielc = 0
-      ij_tm=((nbodm-1)*(nbodm-2))/2
       grpc = 0
 !$OMP PARALLEL DEFAULT (NONE)
-!$OMP& PRIVATE(i,j,ij,ieflg,svdotr)
-!$OMP& SHARED(ij_tm,rhill,nbod,nbodm,mass,xh,yh,zh,vxh,vyh,vzh,
+!$OMP& PRIVATE(i,j,ieflg,svdotr)
+!$OMP& SHARED(rhill,nbod,nbodm,mass,xh,yh,zh,vxh,vyh,vzh,
 !$OMP& dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,grpie)
 !$OMP DO COLLAPSE(2)
       do j=2,nbodm
-         do i=nbodm+1,nbod
+         do i=j+1,nbod
             ieflg = 0
             call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
      &           vyh,vzh,dt,irec,ieflg,svdotr)
@@ -132,38 +131,6 @@ c...  check for encounters
 !$OMP END CRITICAL (ENC)
             endif
          enddo
-      enddo
-!$OMP END DO NOWAIT
-!$OMP DO SCHEDULE(GUIDED)
-c...  Guided scheduling specified as iterations with close encounter are longer
-      do ij=0,(ij_tm-1)
-         j=ij/(nbodm-2)+2 !j goes from 2
-         i=mod(ij,(nbodm-2))+3  !i goes from 3
-         if(i.le.j) then
-            j = nbodm-j+2 !j goes to nbodm-1
-            i = nbodm-i+3 !i goes to nbodm
-         endif
-         ieflg = 0
-         call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
-     &        vyh,vzh,dt,irec,ieflg,svdotr)
-         if(ieflg.ne.0) then
-!$OMP CRITICAL (ENC)
-            isenc = 1
-            iecnt(i) = iecnt(i) + 1
-            iecnt(j) = iecnt(j) + 1
-            ielev(i) = 0
-            ielev(j) = 0
-            ielc = ielc + 1
-            if(ielc.gt.NENMAX) then
-               write(*,*) 'ERROR: encounter matrix is filled.'
-               write(*,*) 'STOPPING'
-               call util_exit(1)
-            endif
-            ielst(1,ielc) = i
-            ielst(2,ielc) = j
-            call symba5p_group(ielst,ielc,i,j,grpie,grppc,grpc)
-!$OMP END CRITICAL (ENC)
-         endif
       enddo
 !$OMP END DO
 !$OMP END PARALLEL

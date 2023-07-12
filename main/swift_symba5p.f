@@ -53,11 +53,9 @@ c...  Executable code
 c...  print version number
       call util_version
       
-      write(*,*) '------------------------------------------------'
-      write(*,*)('------------- SyMBAp: Version 1.6 -------------')
-      write(*,*) '------ OpenMP 4.0 or above is recommended ------'
-      write(*,*) '--------------- for this version ---------------'
-      write(*,*) '------------------------------------------------'
+      write(*,*) '-----------------------------------------------'
+      write(*,*) '------------- SyMBAp: Version 1.7 -------------'
+      write(*,*) '-----------------------------------------------'
 
 c Get data for the run and the test particles
       write(*,*) 'Enter name of parameter data file : '

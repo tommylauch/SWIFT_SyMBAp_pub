@@ -2,7 +2,7 @@
 
 # USERS MUST CHANGE THESE !!!!!!
 SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
-FORTRAN=gfortran
+FORTRAN=gfortran-13
 FFLAGS='-O -march=native -fopenmp'
 
 i=1

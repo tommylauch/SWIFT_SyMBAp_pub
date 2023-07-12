@@ -1,7 +1,7 @@
                              SYMBA5 PARALLELIZATION
 Authors : Tommy Chi Ho Lau
 Date:     Aug/20
-Last Revisions: Jun/22
+Last Revisions: Jul/22
 
 SyMBAp (main/swift_symba5p.f) in this package is a parallelized version of SyMBA (main/swift_symba5.f) in the SWIFT subroutine package.
 The original SWIFT package is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
@@ -15,7 +15,7 @@ Since encounter pairs are grouped in SyMBAp, errors may occur if the max no. of 
                              COMPILATION
                              
 In addition to the default compilation flags, "-fopenmp" is needed for GCC compiler to invoke OpenMP.
-
+GCC 13+ required for version 1.7+.
 
                              ENVIRONMENT VARIABLE
                              
@@ -39,3 +39,5 @@ Feb/21 - version 1.4: Changed posting format to show particle number up to 6 dig
 Nov/21 - version 1.5: Added thread no. control depending on user-determined lower limit of particle-to-thread ratio
 Dec/21 - Energy checking found to be incompatible with SyMBAp. Please turn off flag L4 in parameter file before the next version.
 Jan/22 - version 1.6: Energy offset due to mergers will not be tracked for SyMBAp. Flag L4 can be turned on again.
+Jul/22 - Added subroutine 'io_discard_cleanup' to clean up discard_mass.out upon resumption for SyMBA and SyMBAp
+Jul/22 - version 1.7: Implemented automatic non-rectangular loop nests collapse, requires GCC 13+.

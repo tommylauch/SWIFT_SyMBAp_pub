@@ -35,7 +35,7 @@ c...  Outputs:
       real*8 axh(nbod),ayh(nbod),azh(nbod)
                 
 c...  Internals:
-      integer i,j,ij_tm,ij
+      integer i,j
       real*8 aoblx(NTPMAX),aobly(NTPMAX),aoblz(NTPMAX) 
       real*8 axhl(NTPMAX),ayhl(NTPMAX),azhl(NTPMAX)
       real*8 ir3h(NTPMAX),irh(NTPMAX)
@@ -54,15 +54,13 @@ c...  Executable code
          enddo
 
 c...     now the third terms
-      ij_tm=((nbodm-1)*(nbodm-2))/2
-
-!$OMP PARALLEL
+!$OMP PARALLEL DEFAULT (NONE)
 !$OMP& REDUCTION(+:axhl,ayhl,azhl)
-!$OMP& PRIVATE(i,j,ij,dx,dy,dz,rji2,irij3,faci,facj)
-!$OMP& SHARED(ij_tm,nbod,nbodm,mass,xh,yh,zh)
+!$OMP& PRIVATE(i,j,dx,dy,dz,rji2,irij3,faci,facj)
+!$OMP& SHARED(nbod,nbodm,mass,xh,yh,zh)
 !$OMP DO COLLAPSE(2)
       do i=2,nbodm
-         do j=nbodm+1,nbod
+         do j=i+1,nbod
             dx = xh(j) - xh(i)
             dy = yh(j) - yh(i)
             dz = zh(j) - zh(i)
@@ -72,43 +70,15 @@ c...     now the third terms
             faci = mass(i)*irij3
             facj = mass(j)*irij3
 
-            axhl(j) = axhl(j) + (-faci*dx)
-            ayhl(j) = ayhl(j) + (-faci*dy)
-            azhl(j) = azhl(j) + (-faci*dz)
+            axhl(j) = axhl(j) - faci*dx
+            ayhl(j) = ayhl(j) - faci*dy
+            azhl(j) = azhl(j) - faci*dz
 
             axhl(i) = axhl(i) + facj*dx
             ayhl(i) = ayhl(i) + facj*dy
             azhl(i) = azhl(i) + facj*dz
          enddo
       enddo
-!$OMP END DO NOWAIT
-!$OMP DO
-      do ij=0,(ij_tm-1)
-         i=ij/(nbodm-2)+2 !i goes from 2
-         j=mod(ij,(nbodm-2))+3  !j goes from 3
-         if(j.le.i) then
-            i = nbodm-i+2 !i goes to nbodm-1
-            j = nbodm-j+3 !j goes to nbodm
-         endif
-
-         dx = xh(j) - xh(i)
-         dy = yh(j) - yh(i)
-         dz = zh(j) - zh(i)
-         rji2 = dx*dx + dy*dy + dz*dz
-
-         irij3 = 1.0d0/(rji2*sqrt(rji2))
-         faci = mass(i)*irij3
-         facj = mass(j)*irij3
-
-         axhl(j) = axhl(j) + (-faci*dx)
-         ayhl(j) = ayhl(j) + (-faci*dy)
-         azhl(j) = azhl(j) + (-faci*dz)
-
-         axhl(i) = axhl(i) + facj*dx
-         ayhl(i) = ayhl(i) + facj*dy
-         azhl(i) = azhl(i) + facj*dz
-      enddo
-!$OMP END DO
 !$OMP END PARALLEL
 
       endif
@@ -117,30 +87,17 @@ c...  Now do j2 and j4 stuff
          call getacch_ir3(nbod,2,xh,yh,zh,ir3h,irh)
          call obl_acc(nbod,mass,j2rp2,j4rp4,xh,yh,zh,irh,
      &        aoblx,aobly,aoblz)
-!$OMP PARALLEL
-!$OMP& PRIVATE(i)
-!$OMP& SHARED(nbod,axh,ayh,azh,axhl,ayhl,azhl,
-!$OMP& aoblx,aobly,aoblz)
-!$OMP DO
          do i = 2,nbod
             axh(i) = axhl(i) + aoblx(i)
             ayh(i) = ayhl(i) + aobly(i)
             azh(i) = azhl(i) + aoblz(i)
          enddo
-!$OMP END DO
-!$OMP END PARALLEL
       else
-!$OMP PARALLEL
-!$OMP& PRIVATE(i)
-!$OMP& SHARED(nbod,axh,ayh,azh,axhl,ayhl,azhl)
-!$OMP DO
          do i = 2,nbod
             axh(i) = axhl(i)
             ayh(i) = ayhl(i)
             azh(i) = azhl(i)
          enddo
-!$OMP END DO
-!$OMP END PARALLEL
       endif
 
       return
