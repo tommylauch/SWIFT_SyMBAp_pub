@@ -137,12 +137,6 @@ rm @make
 ln -s ../@make .
 bash @make
 
-echo DIRECTORY: symba5p_pgm
-cd ../symba5p_pgm
-rm @make
-ln -s ../@make .
-bash @make
-
 echo DIRECTORY: skeel
 cd ../skeel
 rm @make
