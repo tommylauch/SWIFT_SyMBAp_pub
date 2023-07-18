@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # USERS MUST CHANGE THESE !!!!!!
-SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
+SWIFT_DIR=$(pwd)
 FORTRAN=gfortran-13
 FFLAGS='-O -march=native -fopenmp -c'
 PRECOMP=cpp-13
