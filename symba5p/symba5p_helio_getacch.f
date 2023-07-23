@@ -79,6 +79,7 @@ c...     now the third terms
             azhl(i) = azhl(i) + facj*dz
          enddo
       enddo
+!$OMP END DO
 !$OMP END PARALLEL
 
       endif
