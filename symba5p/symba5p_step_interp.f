@@ -110,7 +110,7 @@ c...     only include those guys that it is not encountering with.
      &     xh,yh,zh,axh,ayh,azh,mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvhp(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
 
 c..   Do a recursion step for full dt for particles not in close encounter
       irec = -1
@@ -166,7 +166,7 @@ c...     only include those guys that it is not encountering with.
      &     xh,yh,zh,axh,ayh,azh,mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvhp(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
       call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
