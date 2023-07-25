@@ -2,10 +2,10 @@
 
 # USERS MUST CHANGE THESE !!!!!!
 SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
-FORTRAN=gfortran
-FFLAGS='-O -march=native -c'
-PRECOMP=cpp
-CPPFLAGS='-march=native -D_OPEN_POSITION -D_RECUR_SUB'
+FORTRAN=gfortran-13
+FFLAGS='-O -march=native -fopenmp -c'
+PRECOMP=cpp-13
+CPPFLAGS='-march=native -fopenmp -D_OPEN_POSITION -D_RECUR_SUB'
 
 # To Profile the code:
 if [ `ls *.F | wc -l` != 0 ]
