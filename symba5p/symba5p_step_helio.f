@@ -72,7 +72,7 @@ c...  Get the accelerations in helio frame. if frist time step
       i1stloc = 0
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvhp(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
 
 c..   Drift in helio coords for the full step 
       call helio_drift(nbod,mass,xh,yh,zh,vxb,vyb,vzb,dt)
@@ -82,7 +82,7 @@ c...  Get the accelerations in helio frame. if frist time step
      &     xh,yh,zh,axh,ayh,azh)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvhp(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
       call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
