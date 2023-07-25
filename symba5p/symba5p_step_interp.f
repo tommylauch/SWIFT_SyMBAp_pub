@@ -101,7 +101,7 @@ c...  Convert vel to bery to jacobi coords
       call coord_vh2b(nbod,mass,vxh,vyh,vzh,vxb,vyb,vzb,msys)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindriftp(nbod,mass,vxb,vyb,vzb,dth,
+      call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
      &     xh,yh,zh,ptxb,ptyb,ptzb)
 
 c...  Get the accelerations in helio frame. For each object
@@ -169,7 +169,7 @@ c...  Apply a heliocentric kick for a half dt
       call kickvhp(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindriftp(nbod,mass,vxb,vyb,vzb,dth,
+      call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
      &     xh,yh,zh,ptxe,ptye,ptze)
 
 c...  convert back to helio velocities

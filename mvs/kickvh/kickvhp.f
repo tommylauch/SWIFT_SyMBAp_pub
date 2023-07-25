@@ -40,17 +40,11 @@ c...  Internals:
 
 c----
 c...  Executable code 
-!$OMP PARALLEL
-!$OMP& PRIVATE(n)
-!$OMP& SHARED(nbod,vxh,vyh,vzh,axh,ayh,azh,dt)
-!$OMP DO
 	do n= 2, nbod
 	   vxh(n) = vxh(n) + axh(n)*dt
 	   vyh(n) = vyh(n) + ayh(n)*dt
 	   vzh(n) = vzh(n) + azh(n)*dt
 	enddo
-!$OMP END DO
-!$OMP END PARALLEL
         return
         end    ! kickvhp
 c-----------------------------------------------------------------------------

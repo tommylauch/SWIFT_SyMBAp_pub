@@ -133,9 +133,9 @@ bash @make
 
 echo DIRECTORY: symba5p
 cd ../symba5p
-rm @make
-ln -s ../@make .
-bash @make
+rm @makep
+ln -s ../@makep .
+bash @makep
 
 echo DIRECTORY: skeel
 cd ../skeel
