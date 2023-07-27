@@ -14,7 +14,7 @@ Since encounter pairs are grouped in SyMBAp, errors may occur if the max no. of 
 
                              COMPILATION
                              
-In addition to the default compilation flags, "-fopenmp" is needed for GCC compiler to invoke OpenMP.
+In addition to the default compilation flags, "-fopenmp" is needed for GCC compiler to invoke OpenMP. This flag is only in `@makep' and you have to change the path of the SWIFT package and names for the compilers.
 
 
                              ENVIRONMENT VARIABLE
