@@ -21,8 +21,7 @@ c Note: integer instead of integer*2 is used entirely
       include 'swift.inc'
 
       real*8 mass(NTPMAX),j2rp2,j4rp4
-      real*8 xh(3,NTPMAX)
-      real*8 vxh(3,NTPMAX)
+      real*8 xh(3,NTPMAX),vxh(3,NTPMAX)
 
       real*8 xht(3,1)               ! Dummy for the io
       real*8 vxht(3,1)
