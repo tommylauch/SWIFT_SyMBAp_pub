@@ -21,11 +21,11 @@ c Note: integer instead of integer*2 is used entirely
       include 'swift.inc'
 
       real*8 mass(NTPMAX),j2rp2,j4rp4
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX)
-      real*8 vxh(NTPMAX),vyh(NTPMAX),vzh(NTPMAX)
+      real*8 xh(3,NTPMAX)
+      real*8 vxh(3,NTPMAX)
 
-      real*8 xht(1),yht(1),zht(1)       ! Dummy for the io
-      real*8 vxht(1),vyht(1),vzht(1)
+      real*8 xht(3,1)               ! Dummy for the io
+      real*8 vxht(3,1)
       integer ntp,istat(1)
 
       integer nbod,i1st,nbodm,nbodo
@@ -73,7 +73,7 @@ c Prompt and read name of planet data file
       read(*,999) inplfile
  999  format(a)
       call io_init_pl_symbap(inplfile,lclose,iflgchk,nbod,mass,
-     &     xh,yh,zh,vxh,vyh,vzh,rpl,rhill,j2rp2,j4rp4)
+     &     xh,vxh,rpl,rhill,j2rp2,j4rp4)
 
       write(*,*) 'Enter the smallest mass to self gravitate :'
       read(*,*) mtiny
@@ -102,20 +102,20 @@ c Initialize initial time and times for first output and first dump
 
 c...    Do the initial io write
       if(btest(iflgchk,0))  then ! bit 0 is set
-         call io_write_frame(t0,nbod,ntp,mass,xh,yh,zh,vxh,vyh,vzh,
-     &        xht,yht,zht,vxht,vyht,vzht,istat,outfile,iub,fopenstat)
+         call io_write_frame_symbap(t0,nbod,ntp,mass,xh,vxh,
+     &        xht,vxht,istat,outfile,iub,fopenstat)
          call io_write_mass(t0,nbod,mass,outfile,ium,fopenstat)
       endif
       if(btest(iflgchk,1))  then ! bit 1 is set
-         call io_write_frame_r(t0,nbod,ntp,mass,xh,yh,zh,vxh,vyh,vzh,
-     &        xht,yht,zht,vxht,vyht,vzht,istat,outfile,iub,fopenstat)
+         call io_write_frame_r_symbap(t0,nbod,ntp,mass,xh,vxh,
+     &        xht,vxht,istat,outfile,iub,fopenstat)
          call io_write_mass_r(t0,nbod,mass,outfile,ium,fopenstat)
       endif
 
 c...  must initize discard io routine
       if(btest(iflgchk,4))  then ! bit 4 is set
-         call io_discard_mass(0,t,0,mass(1),rpl(1),xh(1),yh(1),zh(1),
-     &        vxh(1),vyh(1),vzh(1),iud,-1,fopenstat)
+         call io_discard_mass_symbap(0,t,0,mass(1),rpl(1),xh(:,1),
+     &        vxh(:,1),iud,-1,fopenstat)
       endif
 
 c...  Calculate the location of the last massive particle
@@ -124,13 +124,13 @@ c...  Calculate the location of the last massive particle
 c...  set up energy write stuff
       if(btest(iflgchk,2))  then ! bit 2 is set
          eoff = 0.0d0
-         call anal_energy_write(t0,nbod,mass,j2rp2,j4rp4,xh,yh,zh,vxh,
-     &        vyh,vzh,iue,fopenstat,eoff)
-         call anal_energy_discard5(1,nbod,nbodm,mass,j2rp2,j4rp4,
-     &        xh,yh,zh,vxh,vyh,vzh,ke,pot,energy,eltot)
+         call anal_energy_write_symbap(t0,nbod,mass,j2rp2,j4rp4,xh,vxh,
+     &        iue,fopenstat,eoff)
+         call anal_energy_discard5_symbap(1,nbod,nbodm,mass,j2rp2,j4rp4,
+     &        xh,vxh,ke,pot,energy,eltot)
       else
-         call anal_energy_discard5(-1,nbod,nbodm,mass,j2rp2,j4rp4,
-     &        xh,yh,zh,vxh,vyh,vzh,ke,pot,energy,eltot)
+         call anal_energy_discard5_symbap(-1,nbod,nbodm,mass,j2rp2,
+     &        j4rp4,xh,vxh,ke,pot,energy,eltot)
       endif
 
       ihills = 0
@@ -140,17 +140,15 @@ c***************here's the big loop *************************************
 
       do while ( (t .le. tstop) .and. (nbod.gt.1) )
 
-         call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,
-     &        xh,yh,zh,vxh,vyh,vzh,dt,lclose,rpl,isenc,
-     &        mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
+         call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,xh,vxh,
+     &    dt,lclose,rpl,isenc,mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
 
          t = t + dt
 
          if(btest(iflgchk,4))  then ! bit 4 is set
             nbodo = nbod
-            call discard_massive5p(t,dt,nbod,mass,xh,yh,zh,
-     &           vxh,vyh,vzh,rmin,rmax,rmaxu,qmin,lclose,
-     &           rpl,rhill,isenc,mergelst,mergecnt,
+            call discard_massive5p(t,dt,nbod,mass,xh,vxh,rmin,rmax,
+     &           rmaxu,qmin,lclose,rpl,rhill,isenc,mergelst,mergecnt,
      &           iecnt,eoff,i1st)
             if(nbodo.ne.nbod) then
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
@@ -168,15 +166,13 @@ c if it is time, output orb. elements,
          if(t .ge. tout) then 
 
             if(btest(iflgchk,0))  then ! bit 0 is set
-               call  io_write_frame(t,nbod,ntp,mass,xh,yh,zh,vxh,
-     &              vyh,vzh,xht,yht,zht,vxht,vyht,vzht,istat,outfile,
-     &              iub,fopenstat)
+               call  io_write_frame_symbap(t,nbod,ntp,mass,xh,vxh,
+     &               xht,vxht,istat,outfile,iub,fopenstat)
                call io_write_mass(t,nbod,mass,outfile,ium,fopenstat)
             endif
             if(btest(iflgchk,1))  then ! bit 1 is set
-               call  io_write_frame_r(t,nbod,ntp,mass,xh,yh,zh,vxh,
-     &              vyh,vzh,xht,yht,zht,vxht,vyht,vzht,istat,outfile,
-     &              iub,fopenstat)
+               call  io_write_frame_r_symbap(t,nbod,ntp,mass,xh,vxh,
+     &               xht,vxht,istat,outfile,iub,fopenstat)
                call io_write_mass_r(t,nbod,mass,outfile,ium,fopenstat)
             endif
 
@@ -190,15 +186,15 @@ c If it is time, do a dump
             write(*,998) t,tfrac,nbod
  998        format(' Time = ',1p1e12.5,': fraction done = ',0pf5.3,
      &            ': Number of bodies =',i6)
-            call io_dump_pl_symba('dump_pl.dat',nbod,mass,xh,yh,zh,
-     &           vxh,vyh,vzh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
+            call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
+     &           vxh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
             call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
      &           dtdump,iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile)
             tdump = tdump + dtdump
 
             if(btest(iflgchk,2))  then ! bit 2 is set
-               call anal_energy_write(t,nbod,mass,j2rp2,j4rp4,
-     &              xh,yh,zh,vxh,vyh,vzh,iue,fopenstat,eoff)
+               call anal_energy_write_symbap(t,nbod,mass,j2rp2,j4rp4,
+     &              xh,vxh,iue,fopenstat,eoff)
             endif
             
          endif
@@ -208,8 +204,8 @@ c********** end of the big loop from time 't0' to time 'tstop'
 
 c Do a final dump for possible resumption later 
 
-        call io_dump_pl_symba('dump_pl.dat',nbod,mass,xh,yh,zh,
-     &            vxh,vyh,vzh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
+        call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
+     &            vxh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
         call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
      &         dtdump,iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile)
 

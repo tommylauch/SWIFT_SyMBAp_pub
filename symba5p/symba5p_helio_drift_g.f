@@ -26,8 +26,8 @@ c Authors:  Hal Levison
 c Date:    1/20.97
 c Last revision: 
 
-      subroutine symba5p_helio_drift_g(nbod,ielev,irec,mass,xh,yh,zh,
-     &     vxb,vyb,vzb,dt,ielc,ielst)	
+      subroutine symba5p_helio_drift_g(nbod,ielev,irec,mass,xh,vxb,
+     &                                 dt,ielc,ielst)	
 
       include '../swift.inc'
       include '../symba5/symba5.inc'
@@ -39,8 +39,7 @@ c...  Inputs Only:
       integer ielev(nbod)
       integer ielst(2,NENMAX),ielc
 c...  Inputs and Outputs:
-      real*8 xh(nbod),yh(nbod),zh(nbod)
-      real*8 vxb(nbod),vyb(nbod),vzb(nbod)
+      real*8 xh(3,nbod),vxb(3,nbod)
       
 c...  Internals:
       integer i,j,iflg,i_ie,j_ie
@@ -78,13 +77,12 @@ c Take a drift forward dth
       do i=1,gpmbc
          j = gpmb(i)
          if( (ielev(j).eq.irec) .and. (mass(j).ne.0.0d0) ) then
-            call drift_one(mass(1),xh(j),yh(j),zh(j),
-     &           vxb(j),vyb(j),vzb(j),dt,iflg)
+            call drift_one_symbap(mass(1),xh(:,j),vxb(:,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
                write(*,*) mass(1),dt
-               write(*,*) xh(j),yh(j),zh(j),' H '
-               write(*,*) vxb(j),vyb(j),vzb(j),' B '
+               write(*,*) xh(1,j),xh(2,j),xh(3,j),' H '
+               write(*,*) vxb(1,j),vxb(2,j),vxb(3,j),' B '
                write(*,*) ' STOPPING G'
                call util_exit(1)
             endif

@@ -62,9 +62,9 @@ c Authors:  Hal Levison
 c Date:    12/30/96
 c Last revision: 5/13/99
 
-      subroutine discard_massive5p(time,dt,nbod,mass,xh,yh,zh,
-     &     vxh,vyh,vzh,rmin,rmax,rmaxu,qmin,lclose,rpl,
-     &     rhill,isenc,mergelst,mergecnt,iecnt,eoff,i1st)
+      subroutine discard_massive5p(time,dt,nbod,mass,xh,vxh,rmin,rmax,
+     &     rmaxu,qmin,lclose,rpl,rhill,isenc,mergelst,mergecnt,iecnt,
+     &     eoff,i1st)
 
       include '../swift.inc'
 
@@ -78,14 +78,12 @@ c...  Inputs:
 
 c...  Input and Output
       integer nbod,i1st
-      real*8 mass(nbod),xh(nbod),yh(nbod),zh(nbod)
-      real*8 vxh(nbod),vyh(nbod),vzh(nbod)
+      real*8 mass(nbod),xh(3,nbod),vxh(3,nbod)
       real*8 eoff,rpl(nbod),rhill(nbod)
 
 c...  internal
       integer iwhy(NTPMAX),i,iu,iflg,i1,i2,j,isperih(NTPMAX)
-      real*8 xb(NTPMAX),yb(NTPMAX),zb(NTPMAX)
-      real*8 vxb(NTPMAX),vyb(NTPMAX),vzb(NTPMAX)
+      real*8 xb(3,NTPMAX),vxb(3,NTPMAX)
       real*8 rmin2,rmax2,rmaxu2,energy
       real*8 ei,ef,ke,pot,eltot(3),vdotr
       real*8 rh2,rb2,vb2,msys
@@ -115,15 +113,15 @@ c.... take care of mergers
       do i=1,mergecnt
          i1 = mergelst(1,i)
          i2 = mergelst(2,i)
-         vdotr = xh(i1)*vxh(i1)+yh(i1)*vyh(i1)+zh(i1)*vzh(i1)
+         vdotr =xh(1,i1)*vxh(1,i1)+xh(2,i1)*vxh(2,i1)+xh(3,i1)*vxh(3,i1)
          if (vdotr .gt. 0.d0) then
             isperih(i1) = 1
          else 
             isperih(i1) =-1
          endif
          if(i2.gt.0) then
-            call discard_mass_reorder5(i2,nbod,mass,xh,yh,zh,
-     &           vxh,vyh,vzh,rpl,rhill,isperih)
+            call discard_mass_reorder5_symbap(i2,nbod,mass,xh,vxh,rpl,
+     &                                        rhill,isperih)
             i1st = 0
             do j=i+1,mergecnt
                if(mergelst(1,j).gt.i2) then
@@ -146,11 +144,10 @@ c...  check for position
          rmin2 = rmin*rmin
          rmax2 = rmax*rmax
          rmaxu2 = rmaxu*rmaxu
-         call coord_h2b(nbod,mass,xh,yh,zh,vxh,vyh,vzh,
-     &        xb,yb,zb,vxb,vyb,vzb,msys)
+         call coord_h2b_symbap(nbod,mass,xh,vxh,xb,vxb,msys)
 
          do i=2,nbod
-            rh2 = xh(i)**2 + yh(i)**2 + zh(i)**2
+            rh2 = xh(1,i)**2 + xh(2,i)**2 + xh(3,i)**2
             if( (rmax.ge.0.0) .and. (rh2.gt.rmax2) ) then
                write(*,*) rmax2,rh2,i
                write(*,*) 'Particle',i,' too far from Sun at t=',
@@ -165,8 +162,8 @@ c...  check for position
 
             if((iecnt(i).eq.0).and.(rmaxu.ge.0.0).and.
      &           (iwhy(i).eq.0)) then
-               rb2 = xb(i)**2 + yb(i)**2 + zb(i)**2
-               vb2 = vxb(i)**2 + vyb(i)**2 + vzb(i)**2
+               rb2 = xb(1,i)**2 + xb(2,i)**2 + xb(3,i)**2
+               vb2 = vxb(1,i)**2 + vxb(2,i)**2 + vxb(3,i)**2
                energy = 0.5*vb2 - msys/sqrt(rb2)
                if( (energy.gt.0.0) .and. (rb2.gt.rmaxu2) ) then
                   write(*,*) 'Particle',i,' is unbound and too far ',
@@ -179,8 +176,8 @@ c...  check for position
 
 c...  check perihelion distance
       if(qmin.ge.0.0) then
-         call discard_mass_peri5p(time,nbod,iecnt,mass,xh,yh,zh,
-     &       vxh,vyh,vzh,qmin,iwhy,isperih)
+         call discard_mass_peri5p_symbap(time,nbod,iecnt,mass,xh,vxh,
+     &                                   vxh,qmin,iwhy,isperih)
       endif
 
       iu = 40
@@ -190,17 +187,17 @@ c...  check perihelion distance
          if(iwhy(i).ne.0) then
             if(iflg.eq.0) then
                iflg = 1
-               call anal_energy(nbod,mass,0.0d0,0.0d0,xh,yh,zh,
-     &           vxh,vyh,vzh,ke,pot,ei,eltot)
+               call anal_energy_symbap(nbod,mass,0.0d0,0.0d0,xh,
+     &           vxh,ke,pot,ei,eltot)
             endif
-            call io_discard_mass(1,time,i,mass(i),rpl(i),xh(i),yh(i),
-     &           zh(i),vxh(i),vyh(i),vzh(i),iu,iwhy(i),cdummy)
+            call io_discard_mass_symbap(1,time,i,mass(i),rpl(i),xh(:,i),
+     &           vxh(:,i),iu,iwhy(i),cdummy)
             do j=i,nbod-1
                iwhy(j) = iwhy(j+1)
             enddo
             i1st = 0
-            call discard_mass_reorder5(i,nbod,mass,xh,yh,zh,
-     &           vxh,vyh,vzh,rpl,rhill,isperih)
+            call discard_mass_reorder5_symbap(i,nbod,mass,xh,vxh,rpl,
+     &                                        rhill,isperih)
          else
             i = i + 1
          endif
@@ -208,8 +205,8 @@ c...  check perihelion distance
 
 
       if(iflg.ne.0) then
-         call anal_energy(nbod,mass,0.0d0,0.0d0,xh,yh,zh,
-     &        vxh,vyh,vzh,ke,pot,ef,eltot)
+         call anal_energy_symbap(nbod,mass,0.0d0,0.0d0,xh,
+     &        vxh,ke,pot,ef,eltot)
          eoff = ei - ef
       endif
 

@@ -49,10 +49,9 @@ c Authors:  Hal Levison
 c Date:    11/21/96
 c Last revision: 5/13/99
 
-      subroutine symba5p_step_interp(time,iecnt,ielev,nbod,
-     &     nbodm,mass,rhill,j2rp2,j4rp4,lclose,rpl,xh,yh,zh,
-     &     vxh,vyh,vzh,dt,mergelst,mergecnt,eoff,ielc,ielst,mtiny,
-     &     grpie,grppc,grpc)
+      subroutine symba5p_step_interp(time,iecnt,ielev,nbod,nbodm,mass,
+     &     rhill,j2rp2,j4rp4,lclose,rpl,xh,vxh,dt,mergelst,mergecnt,
+     &     eoff,ielc,ielst,mtiny,grpie,grppc,grpc)
 
       include '../swift.inc'
       include '../symba5/symba5.inc'
@@ -66,8 +65,7 @@ c...  Inputs Only:
 
 c...  Inputs and Outputs:
       integer nbod,nbodm
-      real*8 xh(nbod),yh(nbod),zh(nbod)
-      real*8 vxh(nbod),vyh(nbod),vzh(nbod)
+      real*8 xh(3,nbod),vxh(3,nbod)
       real*8 rpl(nbod),eoff,rhill(nbod)
 
 c...  Outputs
@@ -76,21 +74,18 @@ c...  Outputs
 c...  Internals:
       integer irec,ilevl(NTPMAX),i
       real*8 dth
-      real*8 axh(NTPMAX),ayh(NTPMAX),azh(NTPMAX)
-      real*8 vxb(NTPMAX),vyb(NTPMAX),vzb(NTPMAX),msys
-      real*8 ptxb,ptyb,ptzb            ! Not used here
-      real*8 ptxe,ptye,ptze
+      real*8 axh(3,NTPMAX),vxb(3,NTPMAX),msys
+      real*8 ptxb(3)            ! Not used here
+      real*8 ptxe(3)
       logical*1 svdotr(NENMAX)  ! Used by symba_step_recur
 
 c... grouping
       integer j,k,ip2
       integer gplst(2,GRPMAX)
       integer grpie(GRPMAX,GRPNMAX),grppc(GRPNMAX),grpc
-      
-c... grouping ^^^^^^^^
 
-      save axh,ayh,azh     ! Note this !!
-      save vxb,vyb,vzb     ! Note this !!
+      save axh     ! Note this !!
+      save vxb     ! Note this !!
 
 c----
 c...  Executable code 
@@ -98,24 +93,22 @@ c...  Executable code
       dth = 0.5d0*dt
 
 c...  Convert vel to bery to jacobi coords
-      call coord_vh2b(nbod,mass,vxh,vyh,vzh,vxb,vyb,vzb,msys)
+      call coord_vh2b_symbap(nbod,mass,vxh,vxb,msys)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
-     &     xh,yh,zh,ptxb,ptyb,ptzb)
+      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxb)
 
 c...  Get the accelerations in helio frame. For each object
 c...     only include those guys that it is not encountering with. 
-      call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,
-     &     xh,yh,zh,axh,ayh,azh,mtiny,ielc,ielst)
+      call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,
+     &                     mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh_symbap(nbod,vxb,axh,dth)
 
 c..   Do a recursion step for full dt for particles not in close encounter
       irec = -1
-      call symba5p_helio_drift(nbod,ielev,irec,mass,xh,
-     &     yh,zh,vxb,vyb,vzb,dt)
+      call symba5p_helio_drift(nbod,ielev,irec,mass,xh,vxb,dt)
       irec = 0
       do i=2,nbod
          ilevl(i) = 0
@@ -124,9 +117,8 @@ c..   Do a recursion step for full dt for particles not in close encounter
 c------------------------------
 !$OMP PARALLEL DEFAULT (NONE)
 !$OMP& PRIVATE(i,j,svdotr,gplst)
-!$OMP& SHARED(ielst,time,nbod,nbodm,mass,irec,eoff,
-!$OMP& ielev,rhill,xh,yh,zh,vxb,vyb,vzb,lclose,rpl,mergelst,
-!$OMP& mergecnt,dt,grpc,grppc,grpie,iecnt,ilevl)
+!$OMP& SHARED(ielst,time,nbod,nbodm,mass,irec,eoff,ielev,rhill,xh,vxb,
+!$OMP& lclose,rpl,mergelst,mergecnt,dt,grpc,grppc,grpie,iecnt,ilevl)
 !$OMP DO SCHEDULE(GUIDED)
 c...  Guided scheduling specified as the groups have different sizes
 c...   and goes to different levels
@@ -136,9 +128,9 @@ c...  cheat symba5_step_recur with gplst and grppc(j)
              gplst(1,i) = ielst(1,grpie(i,j))
              gplst(2,i) = ielst(2,grpie(i,j))
          enddo
-      call symba5p_step_recur(time,nbod,nbodm,mass,irec,ilevl,
-     &     iecnt,ielev,rhill,xh,yh,zh,vxb,vyb,vzb,lclose,
-     &     rpl,mergelst,mergecnt,dt,eoff,svdotr,grppc(j),gplst)
+      call symba5p_step_recur(time,nbod,nbodm,mass,irec,ilevl,iecnt,
+     &     ielev,rhill,xh,vxb,lclose,rpl,mergelst,mergecnt,dt,eoff,
+     &     svdotr,grppc(j),gplst)
       enddo
 !$OMP END DO
 !$OMP END PARALLEL
@@ -162,18 +154,17 @@ c------------------------------
 
 c...  Get the accelerations in helio frame. For each object
 c...     only include those guys that it is not encountering with. 
-      call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,
-     &     xh,yh,zh,axh,ayh,azh,mtiny,ielc,ielst)
+      call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,
+     &                     mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh(nbod,vxb,vyb,vzb,axh,ayh,azh,dth)
+      call kickvh_symbap(nbod,vxb,axh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift(nbod,mass,vxb,vyb,vzb,dth,
-     &     xh,yh,zh,ptxe,ptye,ptze)
+      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxe)
 
 c...  convert back to helio velocities
-      call coord_vb2h(nbod,mass,vxb,vyb,vzb,vxh,vyh,vzh)
+      call coord_vb2h_symbap(nbod,mass,vxb,vxh)
 
       return
       end   ! symba5p_step_interp

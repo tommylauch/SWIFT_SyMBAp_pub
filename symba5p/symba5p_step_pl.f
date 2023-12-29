@@ -11,9 +11,9 @@ c                                    (int scalar)
 c                 mass          ==>  mass of bodies (real array)
 c                 j2rp2,j4rp4   ==>  J2*radii_pl^2 and  J4*radii_pl^4
 c                                     (real scalars)
-c                 xh,yh,zh      ==>  initial position in helio coord 
+c                 xh            ==>  initial position in helio coord 
 c                                    (real arrays)
-c                 vxh,vyh,vzh   ==>  initial velocity in helio coord 
+c                 vxh           ==>  initial velocity in helio coord 
 c                                    (real arrays)
 c                 dt            ==>  time step
 c                 lclose        ==> .true. --> marge particles if they
@@ -27,9 +27,9 @@ c                 rhill         ==>  size of planet's hills sphere
 c                                    (real array)
 c                 mtiny         ==>  Small mass  (real array)
 c             Output:
-c                 xh,yh,zh      ==>  final position in helio coord 
+c                 xh            ==>  final position in helio coord 
 c                                       (real arrays)
-c                 vxh,vyh,vzh   ==>  final velocity in helio coord 
+c                 vxh           ==>  final velocity in helio coord 
 c                                       (real arrays)
 c                 rpl           ==>  Recalculated physical size of a planet.
 c                                    if merger happened (real array)
@@ -58,7 +58,7 @@ c Date:    11/27/97
 c Last revision: 
 
       subroutine symba5p_step_pl(i1st,time,nbod,nbodm,mass,j2rp2,
-     &     j4rp4,xh,yh,zh,vxh,vyh,vzh,dt,lclose,rpl,isenc,
+     &     j4rp4,xh,vxh,dt,lclose,rpl,isenc,
      &     mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
 
       include '../swift.inc'
@@ -71,8 +71,7 @@ c...  Inputs Only:
       logical*2 lclose
 
 c...  Inputs and Outputs:
-      real*8 xh(nbod),yh(nbod),zh(nbod)
-      real*8 vxh(nbod),vyh(nbod),vzh(nbod)
+      real*8 xh(3,nbod),vxh(3,nbod)
       real*8 rpl(nbod),eoff,rhill(nbod)
 
 c...  Outputs only
@@ -104,14 +103,14 @@ c...  check for encounters
       grpc = 0
 !$OMP PARALLEL DEFAULT (NONE)
 !$OMP& PRIVATE(i,j,ieflg,svdotr)
-!$OMP& SHARED(rhill,nbod,nbodm,mass,xh,yh,zh,vxh,vyh,vzh,
+!$OMP& SHARED(rhill,nbod,nbodm,mass,xh,vxh,
 !$OMP& dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,grpie)
 !$OMP DO COLLAPSE(2)
       do j=2,nbodm
          do i=j+1,nbod
             ieflg = 0
-            call symba5_chk(rhill,nbod,i,j,mass,xh,yh,zh,vxh,
-     &           vyh,vzh,dt,irec,ieflg,svdotr)
+            call symba5_chk_symbap(rhill,nbod,i,j,mass,xh,vxh,
+     &           dt,irec,ieflg,svdotr)
             if(ieflg.ne.0) then
 !$OMP CRITICAL (ENC)
                isenc = 1
@@ -136,14 +135,13 @@ c...  check for encounters
 !$OMP END PARALLEL
 c...  do a step
       if(isenc.eq.0) then
-         call symba5p_step_helio(i1st,nbod,nbodm,mass,j2rp2,
-     &     j4rp4,xh,yh,zh,vxh,vyh,vzh,dt)
+         call symba5p_step_helio(i1st,nbod,nbodm,mass,j2rp2,j4rp4,
+     &                           xh,vxh,dt)
          mergecnt=0
       else
-         call symba5p_step_interp(time,iecnt,ielev,nbod,
-     &     nbodm,mass,rhill,j2rp2,j4rp4,lclose,rpl,xh,yh,zh,
-     &     vxh,vyh,vzh,dt,mergelst,mergecnt,eoff,ielc,ielst,mtiny,
-     &     grpie,grppc,grpc)
+         call symba5p_step_interp(time,iecnt,ielev,nbod,nbodm,mass,
+     &     rhill,j2rp2,j4rp4,lclose,rpl,xh,vxh,dt,mergelst,mergecnt,
+     &     eoff,ielc,ielst,mtiny,grpie,grppc,grpc)
          i1st = 0  
       endif
 

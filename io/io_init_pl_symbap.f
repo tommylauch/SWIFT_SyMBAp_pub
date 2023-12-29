@@ -15,10 +15,10 @@ c
 c             Output:
 c                 nbod          ==>  number of massive bodies (int scalar)
 c                 mass          ==>  mass of bodies (real array)
-c                 xh,yh,zh      ==>  initial position in Helio coord 
-c                                    (real arrays)
-c                 vxh,vyh,vzh   ==>  initial position in Helio coord 
-c                                    (real arrays)
+c                 xh            ==>  initial position in Helio coord 
+c                                    (real array)
+c                 vxh           ==>  initial position in Helio coord 
+c                                    (real array)
 c                 rpl           ==>  physical size of planet
 c                                    (real array)
 c                 rhill         ==>  size of planet's hills sphere
@@ -32,7 +32,7 @@ c Date:    11/21/96
 c Last revision: 1/10/97
 
       subroutine io_init_pl_symbap(infile,lclose,iflgchk,nbod,mass,
-     &     xh,yh,zh,vxh,vyh,vzh,rpl,rhill,j2rp2,j4rp4)
+     &     xh,vxh,rpl,rhill,j2rp2,j4rp4)
 
       include '../swift.inc'
       include 'io.inc'
@@ -44,8 +44,8 @@ c...  Input
 
 c...  Output
       real*8 mass(NTPMAX),rpl(NTPMAX),j2rp2,j4rp4
-      real*8 xh(NTPMAX),yh(NTPMAX),zh(NTPMAX),rhill(NTPMAX)
-      real*8 vxh(NTPMAX),vyh(NTPMAX),vzh(NTPMAX)
+      real*8 xh(3,NTPMAX),rhill(NTPMAX)
+      real*8 vxh(3,NTPMAX)
       integer nbod
 
 c...  Internal
@@ -80,17 +80,17 @@ c and helioc. position and vel .
          j2rp2 = 0.0d0
          j4rp4 = 0.0d0
       endif
-      read(7,*) xh(1),yh(1),zh(1)
-      read(7,*) vxh(1),vyh(1),vzh(1)
+      read(7,*) xh(1,1),xh(2,1),xh(3,1)
+      read(7,*) vxh(1,1),vxh(2,1),vxh(3,1)
       rpl(1) = 0.0d0
       rhill(1) = 0.0d0
       
-      if(  (xh(1).ne.0.0d0) .or.
-     &     (yh(1).ne.0.0d0) .or.
-     &     (zh(1).ne.0.0d0) .or.
-     &     (vxh(1).ne.0.0d0) .or.
-     &     (vyh(1).ne.0.0d0) .or.
-     &     (vzh(1).ne.0.0d0) ) then
+      if(  (xh(1,1).ne.0.0d0) .or.
+     &     (xh(2,1).ne.0.0d0) .or.
+     &     (xh(3,1).ne.0.0d0) .or.
+     &     (vxh(1,1).ne.0.0d0) .or.
+     &     (vxh(2,1).ne.0.0d0) .or.
+     &     (vxh(3,1).ne.0.0d0) ) then
          write(*,*) ' SWIFT ERROR: in io_init_pl_symbap: '
          write(*,*) '   Input MUST be in heliocentric coordinates '
          write(*,*) '   Position and Vel. of Massive body 1 .ne. 0'
@@ -103,14 +103,14 @@ c and helioc. position and vel .
          else
             read(7,*) mass(j),rhill(j)
          endif
-         read(7,*) xh(j),yh(j),zh(j)
-         read(7,*) vxh(j),vyh(j),vzh(j)
+         read(7,*) xh(1,j),xh(2,j),xh(3,j)
+         read(7,*) vxh(1,j),vxh(2,j),vxh(3,j)
       enddo
 
       close(unit = 7)
 
 c...  check to see if the hills spheres are ok
-      call util_hills(nbod,mass,xh,yh,zh,vxh,vyh,vzh,r2hill) 
+      call util_hills_symbap(nbod,mass,xh,vxh,r2hill) 
       ibad = 0
       do j=2,nbod
          rhrat = rhill(j)/sqrt(r2hill(j))

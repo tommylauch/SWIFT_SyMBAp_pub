@@ -1,12 +1,10 @@
 c*************************************************************************
-c                        SYMBA5P_HELIO_DRIFT.F
+c                        HELIO_DRIFT.F
 c*************************************************************************
 c This subroutine loops thorugh the particles and calls the danby routine
 c
 c             Input:
 c                 nbod          ==>  number of massive bodies (int scalar)
-c                 ielev         ==>  Level of particles (int array)
-c                 irec          ==>  current level of the code
 c                 mass          ==>  mass of bodies (real array)
 c                 xh            ==>  initial position in helio coord 
 c                                    (real arrays)
@@ -19,24 +17,22 @@ c                                       (real arrays)
 c                 vxb           ==>  final position in bary coord 
 c                                       (real arrays)
 c
-c Remarks:  Based on helio_drift.f
+c Remarks:  Based on drift.f
 c Authors:  Hal Levison 
-c Date:    1/20.97
-c Last revision: 
+c Date:    11/14/96
+c Last revision: 1/8/97  for symba
 
-      subroutine symba5p_helio_drift(nbod,ielev,irec,mass,xh,vxb,dt)	
+      subroutine helio_drift_symbap(nbod,mass,xh,vxb,dt)	
 
       include '../swift.inc'
-      include '../symba5/symba5.inc'
-      include 'symba5p.inc'
 
 c...  Inputs Only: 
-      integer nbod,irec
+      integer nbod
       real*8 mass(nbod),dt
-      integer ielev(nbod)
 
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod),vxb(3,nbod)
+      real*8 xh(3,nbod)
+      real*8 vxb(3,nbod)
 
 c...  Internals:
       integer j,iflg
@@ -47,10 +43,10 @@ c...  Executable code
 c Take a drift forward dth
 !$OMP PARALLEL DEFAULT (NONE)
 !$OMP& PRIVATE(j,iflg)
-!$OMP& SHARED(nbod,mass,xh,vxb,dt,ielev,irec)
+!$OMP& SHARED(nbod,mass,xh,vxb,dt)
 !$OMP DO
       do j=2,nbod
-         if( (ielev(j).eq.irec) .and. (mass(j).ne.0.0d0) ) then
+         if(mass(j).ne.0.0d0) then
             call drift_one_symbap(mass(1),xh(:,j),vxb(:,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
@@ -64,7 +60,6 @@ c Take a drift forward dth
       enddo
 !$OMP END DO
 !$OMP END PARALLEL
-
       return
       end
 c--------------------------------------------------------------------------
