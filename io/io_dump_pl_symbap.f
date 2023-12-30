@@ -30,7 +30,7 @@ c Authors:  Hal Levison
 c Date:    1/8/97
 c Last revision: 
 
-      subroutine io_dump_pl_symbap(dplfile,nbod,mass,xh,vxh,
+      subroutine io_dump_pl_symbap(dplfile,nbod,mass,xh,vxh,lclose,
      &                            iflgchk,rpl,rhill,j2rp2,j4rp4)
 
       include '../swift.inc'

@@ -53,7 +53,7 @@ c...  print version number
       call util_version
       
       write(*,*) '-----------------------------------------------'
-      write(*,*) '------------- SyMBAp: Version 1.7 -------------'
+      write(*,*) '------------- SyMBAp: Version 1.8 -------------'
       write(*,*) '-----------------------------------------------'
 
 c Get data for the run and the test particles
