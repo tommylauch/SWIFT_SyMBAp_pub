@@ -11,9 +11,9 @@ c                                    (int scalar)
 c                 mass          ==>  mass of bodies (real array)
 c                 j2rp2,j4rp4   ==>  J2*radii_pl^2 and  J4*radii_pl^4
 c                                     (real scalars)
-c                 xh            ==>  initial position in helio coord 
+c                 xh            ==>  initial position in helio coord
 c                                    (real arrays)
-c                 vxh           ==>  initial velocity in helio coord 
+c                 vxh           ==>  initial velocity in helio coord
 c                                    (real arrays)
 c                 dt            ==>  time step
 c                 lclose        ==> .true. --> marge particles if they
@@ -27,9 +27,9 @@ c                 rhill         ==>  size of planet's hills sphere
 c                                    (real array)
 c                 mtiny         ==>  Small mass  (real array)
 c             Output:
-c                 xh            ==>  final position in helio coord 
+c                 xh            ==>  final position in helio coord
 c                                       (real arrays)
-c                 vxh           ==>  final velocity in helio coord 
+c                 vxh           ==>  final velocity in helio coord
 c                                       (real arrays)
 c                 rpl           ==>  Recalculated physical size of a planet.
 c                                    if merger happened (real array)

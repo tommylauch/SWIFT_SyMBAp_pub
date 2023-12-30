@@ -37,8 +37,7 @@ c...  Inputs Only:
       real*8 mass(nbod),dt,j2rp2,j4rp4
 
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod)
-      real*8 vxh(3,nbod)
+      real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Internals:
       integer i1stloc
