@@ -84,7 +84,7 @@ c...  Executable code
       endif
 
       return
-      end    ! util_mass_peri
+      end    ! util_mass_peri_symbap
 c------------------------------------------------------------------
 
 

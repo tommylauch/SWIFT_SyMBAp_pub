@@ -75,8 +75,8 @@ c...  Executable code
          u = atan2(x(3)/sin(inc),x(1)*cos(capom)+x(2)*sin(capom))
       endif
 
-      if(capom .lt. 0.d0) capom = capom + 2.d0*PI
-      if(u .lt. 0.d0) u = u + 2.d0*PI
+      if(capom .lt. 0.d0) capom = capom + TWOPI
+      if(u .lt. 0.d0) u = u + TWOPI
 
 *  Compute the radius R and velocity squared V2, and the dot
 *  product RDOTV, the energy per unit mass ENERGY .
@@ -118,11 +118,11 @@ c... Apr. 16/93 : watch for case where face is slightly outside unity
                 endif
              endif
 
-            if ( vdotr .lt. 0.d0 ) cape = 2.d0*PI - cape
+            if ( vdotr .lt. 0.d0 ) cape = TWOPI - cape
           cw = (cos( cape) -e)/(1.d0 - e*cos(cape))
           sw = sqrt(1.d0 - e*e)*sin(cape)/(1.d0 - e*cos(cape))
           w = atan2(sw,cw)
-          if(w .lt. 0.d0) w = w + 2.d0*PI
+          if(w .lt. 0.d0) w = w + TWOPI
         else
           e = 0.d0
           w = u
@@ -131,8 +131,8 @@ c... Apr. 16/93 : watch for case where face is slightly outside unity
 
         capm = cape - e*sin (cape)
         omega = u - w
-        if(omega .lt. 0.d0) omega = omega + 2.d0*PI
-        omega = omega - int(omega/(2.d0*PI))*2.d0*PI        
+        if(omega .lt. 0.d0) omega = omega + TWOPI
+        omega = omega - int(omega/(TWOPI))*TWOPI        
 
       endif
 ***
@@ -154,22 +154,22 @@ c HYPERBOLA
           cw = (e - cosh(capf))/(e*cosh(capf) - 1.d0 )
           sw = sqrt(e*e - 1.d0)*sinh(capf)/(e*cosh(capf) - 1.d0 )
           w = atan2(sw,cw)
-          if(w .lt. 0.d0) w = w + 2.d0*PI
+          if(w .lt. 0.d0) w = w + TWOPI
         else
 c we only get here if a hyperbola is essentially a parabola
 c so we calculate e and w accordingly to avoid singularities
           e = 1.d0
           tmpf = 0.5d0*h2/gmsum
           w = acos(2.d0*tmpf/r -1.d0)
-          if ( vdotr .lt. 0.d0) w = 2.d0*PI - w
+          if ( vdotr .lt. 0.d0) w = TWOPI - w
           tmpf = (a+r)/(a*e)
           capf = log(tmpf + sqrt(tmpf*tmpf -1.d0))
         endif
 
         capm = e * sinh(capf) - capf
         omega = u - w
-        if(omega .lt. 0.d0) omega = omega + 2.d0*PI
-        omega = omega - int(omega/(2.d0*PI))*2.d0*PI        
+        if(omega .lt. 0.d0) omega = omega + TWOPI
+        omega = omega - int(omega/(TWOPI))*TWOPI        
       endif
 ***
 ***
@@ -178,12 +178,12 @@ c PARABOLA : ( NOTE - in this case we use "a" to mean pericentric distance)
         a =  0.5d0*h2/gmsum  
         e = 1.d0
         w = acos(2.d0*a/r -1.d0)
-        if ( vdotr .lt. 0.d0) w = 2.d0*PI - w
+        if ( vdotr .lt. 0.d0) w = TWOPI - w
         tmpf = tan(0.5d0 * w)
         capm = tmpf* (1.d0 + tmpf*tmpf/3.d0)
         omega = u - w
-        if(omega .lt. 0.d0) omega = omega + 2.d0*PI
-        omega = omega - int(omega/(2.d0*PI))*2.d0*PI        
+        if(omega .lt. 0.d0) omega = omega + TWOPI
+        omega = omega - int(omega/(TWOPI))*TWOPI        
       endif
 ***
 ***

@@ -1,5 +1,5 @@
 c*************************************************************************
-c                          ANAL_ENERGY_SYMBAP.F
+c                          ANAL_ENERGY.F
 c*************************************************************************
 c Calculates the energy of the total system (massive bodies) wrt time.
 c returns the total energy of n objects by direct pairwise summation

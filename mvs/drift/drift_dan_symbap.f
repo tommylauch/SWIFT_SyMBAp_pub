@@ -54,7 +54,7 @@ c...  for new coords.
       iflg = 0
       r0 = sqrt(x0(1)**2 + x0(2)**2 + x0(3)**2)
       v0s = vx0(1)**2 + vx0(2)**2 + vx0(3)**2
-      u = x0(1)**2 + x0(2)**2 + x0(3)**2
+      u = x0(1)*vx0(1) + x0(2)*vx0(2) + x0(3)*vx0(3)
       alpha = 2.0*mu/r0 - v0s
 
       if (alpha.gt.0.d0) then

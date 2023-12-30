@@ -85,11 +85,8 @@ c...  Internals
 c-----
 c...  Executable code 
 
-      xr(1) = xh(1,ip2) - xh(1,ip1)
-      xr(2) = xh(2,ip2) - xh(2,ip1)
-      xr(3) = xh(3,ip2) - xh(3,ip1)
+      xr(:) = xh(:,ip2) - xh(:,ip1)
       rr2 = xr(1)**2 + xr(2)**2 + xr(3)**2
-
       rlim = rpl(ip1)+rpl(ip2)
 
       if(rlim.eq.0.0d0) RETURN  ! <======  NOTE !!!!!
@@ -112,9 +109,7 @@ c...  Executable code
          return      !   <=== NOTE !!!!!!!!!
       endif
 
-      vxr(1) = vxb(1,ip2) - vxb(1,ip1)
-      vxr(2) = vxb(2,ip2) - vxb(2,ip1)
-      vxr(3) = vxb(3,ip2) - vxb(3,ip1)
+      vxr(:) = vxb(:,ip2) - vxb(:,ip1)
       vdotr = xr(1)*vxr(1) + xr(2)*vxr(2) + xr(3)*vxr(3)
 
       if( svdotrold .and. (vdotr.gt.0.0d0)) then

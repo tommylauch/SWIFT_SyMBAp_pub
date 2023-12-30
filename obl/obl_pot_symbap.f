@@ -52,10 +52,10 @@ c----
 c...  executable code
 c Sum all the the bary terms for each "planet" due to central oblate "sun"
       oblpot = 0.d0
-      do n =2,nbod
+      do n=2,nbod
 c Note that here we assume we know inverse of radius rather than calc. it
 c from (x,y,z) to save the sqrt.
-         rinv2= irh(n)**2
+         rinv2 = irh(n)**2
          t0 = mass(1)*mass(n)*rinv2*irh(n)
          t1 = j2rp2
          t2 = xh(3,n)**2*rinv2

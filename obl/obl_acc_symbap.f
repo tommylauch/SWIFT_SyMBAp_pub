@@ -72,9 +72,7 @@ c Now compute the bary. acc. of Sun due to all the planets
       aoblx(2,1) = 0.d0
       aoblx(3,1) = 0.d0
       do n=2,nbod
-         aoblx(1,1) = aoblx(1,1) - mass(n)*aoblx(1,n)/mass(1)
-         aoblx(2,1) = aoblx(2,1) - mass(n)*aoblx(2,n)/mass(1)
-         aoblx(3,1) = aoblx(3,1) - mass(n)*aoblx(3,n)/mass(1)
+         aoblx(:,1) = aoblx(:,1) - mass(n)*aoblx(:,n)/mass(1)
       enddo
 
       return

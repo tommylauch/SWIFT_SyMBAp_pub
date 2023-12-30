@@ -46,7 +46,7 @@ c----
 c...  Executable code 
 
       if(iflg.eq.0) then
-         axhl = 0.0
+         axhl = 0.d0
 c...     now the third terms
 !$OMP PARALLEL DEFAULT (NONE)
 !$OMP& REDUCTION(+:axhl)

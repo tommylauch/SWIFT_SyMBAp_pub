@@ -85,5 +85,3 @@ c.           minimum separation attained in time dt.
       return
       end  ! rmvs_chk_ind
 c--------------------------------------------------------------
-
-

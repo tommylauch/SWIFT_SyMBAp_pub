@@ -58,12 +58,8 @@ c-----
 c...  Executable code 
 
       do i=ip,nbod-1
-         xh(1,i) = xh(1,i+1)
-         xh(2,i) = xh(2,i+1)
-         xh(3,i) = xh(3,i+1)
-         vxh(1,i) = vxh(1,i+1)
-         vxh(2,i) = vxh(2,i+1)
-         vxh(3,i) = vxh(3,i+1)
+         xh(:,i) = xh(:,i+1)
+         vxh(:,i) = vxh(:,i+1)
          mass(i) = mass(i+1)
          rpl(i) = rpl(i+1)
          rhill(i) = rhill(i+1)

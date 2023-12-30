@@ -81,9 +81,10 @@ c...  Executable code
 
       do i=nbodm+1,nbod-1
          ke = ke + 0.5*mass(i)*(vxb(1,i)**2 + vxb(2,i)**2 + vxb(3,i)**2)
-         elx(1) = (xb(2,i)*vxb(3,i)-xb(3,i)*vxb(2,i))*mass(i)
-         elx(2) = (xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i))*mass(i)
-         elx(3) = (xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i))*mass(i)
+         elx(1) = xb(2,i)*vxb(3,i)-xb(3,i)*vxb(2,i)
+         elx(2) = xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i)
+         elx(3) = xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i)
+         elx = elx*mass(i)
          eltot(:) = eltot(:) + elx(:)
       enddo
 
