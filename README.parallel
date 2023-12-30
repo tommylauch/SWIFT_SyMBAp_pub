@@ -40,4 +40,5 @@ Nov/21 - version 1.5: Added thread no. control depending on user-determined lowe
 Dec/21 - Energy checking found to be incompatible with SyMBAp. Please turn off flag L4 in parameter file before the next version.
 Jan/22 - version 1.6: Energy offset due to mergers will not be tracked for SyMBAp. Flag L4 can be turned on again.
 Jul/22 - Added subroutine 'io_discard_cleanup' to clean up discard_mass.out upon resumption for SyMBA and SyMBAp
-Jul/22 - version 1.7: Implemented automatic non-rectangular loop nests collapse, requires GCC 13+.
+Jul/23 - version 1.7: Implemented automatic non-rectangular loop nests collapse, requires GCC 13+.
+Dec/23 - version 1.8: x,y,z arrays in SyMBAp are merged into large arrays and the '-ftree-vectorize' flag is added to the compilation scripts.
