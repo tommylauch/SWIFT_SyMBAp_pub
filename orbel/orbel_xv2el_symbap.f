@@ -60,7 +60,7 @@ c...  Executable code
         hx(1) = 0.0d0
         hx(2) = 0.0d0
       endif
-      inc = acos(x(3)/h)
+      inc = acos(hx(3)/h)
 
 * Compute longitude of ascending node CAPOM and the argument of
 * latitude u.
@@ -71,7 +71,7 @@ c...  Executable code
          u = atan2(x(2),x(1))
          if(abs(inc - PI).lt. 10.d0*TINY) u = -u
       else
-         capom = atan2(hx(1),-hx(2))        
+         capom = atan2(hx(1),-hx(2))
          u = atan2(x(3)/sin(inc),x(1)*cos(capom)+x(2)*sin(capom))
       endif
 
@@ -188,6 +188,6 @@ c PARABOLA : ( NOTE - in this case we use "a" to mean pericentric distance)
 ***
 ***
       return
-      end    ! orbel_xv2el
+      end    ! orbel_xv2el_symbap
 c------------------------------------------------------------------
 
