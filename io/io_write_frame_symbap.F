@@ -101,8 +101,8 @@ c...  write out planets
       do i=2,nbod
          gm = mass(1)+mass(i)
          id = -1*i
-         call orbel_xv2el(xh(:,i),vxh(:,i),gm,ialpha,a,e,inc,capom,
-     &        omega,capm)
+         call orbel_xv2el_symbap(xh(:,i),vxh(:,i),gm,ialpha,a,e,
+     &        inc,capom,omega,capm)
          call io_write_line(iu,id,a,e,inc,capom,omega,capm)
       enddo
 
@@ -110,8 +110,8 @@ c...  write out test particles
       gm = mass(1)
       do i=1,ntp
          if(istat(i).eq.0) then
-            call orbel_xv2el(xht(:,i),vxht(:,i),gm,ialpha,a,e,inc,capom,
-     &           omega,capm)
+            call orbel_xv2el_symbap(xht(:,i),vxht(:,i),gm,ialpha,a,e,
+     &           inc,capom,omega,capm)
             call io_write_line(iu,i,a,e,inc,capom,omega,capm)
          endif
       enddo
