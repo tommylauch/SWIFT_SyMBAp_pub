@@ -41,10 +41,10 @@ c Last revision:
 
 c...  Inputs: 
       integer nbod,ntp,iu
-      real*8 mass(nbod),time
+      real*8 mass(:),time
       integer istat(NTPMAX,NSTAT)
-      real*8 xh(3,nbod),vxh(3,nbod)
-      real*8 xht(3,ntp),vxht(3,ntp)
+      real*8 xh(:,:),vxh(:,:)
+      real*8 xht(:,:),vxht(:,:)
       character*80 oname,fopenstat
 
 c...  Internals
@@ -78,7 +78,7 @@ c...  write out planets
       do i=2,nbod
          gm = mass(1)+mass(i)
          id = -1*i
- 	      call orbel_xv2el_symbap(xh(:,i),vxh(:,i),gm,ialpha,a,e,
+ 	      call orbel_xv2el_symbap(xh(1:3,i),vxh(1:3,i),gm,ialpha,a,e,
      &                    inc,capom,omega,capm)
          call io_write_line_r(iu,id,a,e,inc,capom,omega,capm)
       enddo
@@ -87,8 +87,8 @@ c...  write out test particles
       gm = mass(1)
       do i=1,ntp
          if(istat(i,1).eq.0) then
-            call orbel_xv2el_symbap(xht(:,i),vxht(:,i),gm,ialpha,a,e,
-     &                       inc,capom,omega,capm)
+            call orbel_xv2el_symbap(xht(1:3,i),vxht(1:3,i),gm,ialpha,a,
+     &                       e,inc,capom,omega,capm)
             call io_write_line_r(iu,i,a,e,inc,capom,omega,capm)
          endif
       enddo

@@ -38,8 +38,8 @@ c Last revision:
 
 c...    Input
       integer nbod
-      real*8 mass(nbod),rpl(nbod),j2rp2,j4rp4
-      real*8 xh(3,nbod),vxh(3,nbod),rhill(nbod)
+      real*8 mass(:),rpl(:),j2rp2,j4rp4
+      real*8 xh(:,:),vxh(:,:),rhill(:)
       integer iflgchk
       character*(*) dplfile
       logical*2 lclose

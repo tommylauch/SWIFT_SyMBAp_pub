@@ -32,8 +32,8 @@ c Last revision: 12/27/96
 
 c...  Inputs: 
       integer nbod,iu
-      real*8 mass(nbod),t,j2rp2,j4rp4,eoff
-      real*8 xh(3,nbod),vxh(3,nbod)
+      real*8 mass(:),t,j2rp2,j4rp4,eoff
+      real*8 xh(:,:),vxh(:,:)
       character*80 fopenstat
 
 c...  Internals

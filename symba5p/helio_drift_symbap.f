@@ -28,11 +28,11 @@ c Last revision: 1/8/97  for symba
 
 c...  Inputs Only: 
       integer nbod
-      real*8 mass(nbod),dt
+      real*8 mass(:),dt
 
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod)
-      real*8 vxb(3,nbod)
+      real*8 xh(:,:)
+      real*8 vxb(:,:)
 
 c...  Internals:
       integer j,iflg
@@ -47,7 +47,7 @@ c Take a drift forward dth
 !$OMP DO
       do j=2,nbod
          if(mass(j).ne.0.0d0) then
-            call drift_one_symbap(mass(1),xh(:,j),vxb(:,j),dt,iflg)
+            call drift_one_symbap(mass(1),xh(1:3,j),vxb(1:3,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
                write(*,*) mass(1),dt

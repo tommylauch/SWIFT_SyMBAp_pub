@@ -35,12 +35,12 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,iflg
-      real*8 mass(nbod),x(3,nbod),vx(3,nbod),gm
+      real*8 mass(:),x(:,:),vx(:,:),gm
 
 c...  Outputs:
-      real*8 peri(NTPMAX)
-      integer isperi(NTPMAX)
-      logical*2 lperi(NTPMAX)
+      real*8 peri(:)
+      integer isperi(:)
+      logical*2 lperi(:)
 
 c...  Internals
       integer i,ialpha

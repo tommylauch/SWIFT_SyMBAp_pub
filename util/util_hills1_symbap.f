@@ -25,7 +25,7 @@ c Last revision:
       include '../swift.inc'
 
 c...  Inputs: 
-      real*8 msun,mpl,xh(3),vxh(3)
+      real*8 msun,mpl,xh(:),vxh(:)
 
 c...  Outputs
       real*8 rhill

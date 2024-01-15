@@ -70,16 +70,16 @@ c Date:
 
 c...  Inputs Only: 
       integer nbod,ireci,nbodm
-      real*8 mass(nbod),dt0,rhill(nbod),t
-      integer iecnt(nbod),ielev(nbod)
+      real*8 mass(:),dt0,rhill(:),t
+      integer iecnt(:),ielev(:)
       logical*2 lclose 
-      integer ielst(2,NENMAX),ielc
+      integer ielst(:,:),ielc
 
 c...  Inputs and Outputs:
-      integer ilevl(nbod)
-      real*8 xh(3,nbod),vxb(3,nbod),eoff,rpl(nbod)
-      integer mergelst(2,nbod),mergecnt
-      logical*1 svdotr(NENMAX)
+      integer ilevl(:)
+      real*8 xh(:,:),vxb(:,:),eoff,rpl(:)
+      integer mergelst(:,:),mergecnt
+      logical*1 svdotr(:)
 
 c...  Internals:
       integer i,j,ie
