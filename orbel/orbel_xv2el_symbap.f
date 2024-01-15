@@ -60,7 +60,7 @@ c...  Executable code
         hx(1) = 0.0d0
         hx(2) = 0.0d0
       endif
-      inc = acos(x(3)/h)
+      inc = acos(hx(3)/h)
 
 * Compute longitude of ascending node CAPOM and the argument of
 * latitude u.
