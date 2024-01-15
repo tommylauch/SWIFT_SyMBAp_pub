@@ -35,8 +35,8 @@ c
 
 c...  Inputs: 
       integer nbod,irec,ip1,ip2
-      real*8 mass(:),xh(:,:),dt
-      real*8 vxh(:,:),rhill(:)
+      real*8 mass(nbod),xh(3,nbod),dt
+      real*8 vxh(3,nbod),rhill(nbod)
 
 c...  Outputs
       integer icflg

@@ -28,13 +28,13 @@ c Last revision: 1/8/97
 
 c...  Inputs Only: 
       integer nbod
-      real*8 mass(:),dt,vxb(:,:)
+      real*8 mass(nbod),dt,vxb(3,nbod)
 
 c...  Inputs and Outputs:
-      real*8 xh(:,:)
+      real*8 xh(3,nbod)
 
 c...  Outputs Only: 
-      real*8 ptx(:)
+      real*8 ptx(3)
 
 c...  Internals:
       integer n

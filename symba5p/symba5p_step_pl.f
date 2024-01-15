@@ -67,12 +67,12 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,i1st,nbodm
-      real*8 mass(:),dt,time,j2rp2,j4rp4,mtiny
+      real*8 mass(nbod),dt,time,j2rp2,j4rp4,mtiny
       logical*2 lclose
 
 c...  Inputs and Outputs:
-      real*8 xh(:,:),vxh(:,:)
-      real*8 rpl(:),eoff,rhill(:)
+      real*8 xh(3,nbod),vxh(3,nbod)
+      real*8 rpl(nbod),eoff,rhill(nbod)
 
 c...  Outputs only
       integer isenc

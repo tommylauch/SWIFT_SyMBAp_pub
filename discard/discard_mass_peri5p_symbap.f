@@ -36,13 +36,13 @@ c Last revision:
 
 c...  Inputs: 
       integer nbod
-      real*8 mass(:),time,qmin
-      real*8 xh(:,:),vxh(:,:)
-      integer iecnt(:)
+      real*8 mass(nbod),time,qmin
+      real*8 xh(3,nbod),vxh(3,nbod)
+      integer iecnt(NTPMAX)
 
 c...  Input and Output
-      integer iwhy(:)
-      integer isperi(:)
+      integer iwhy(nbod)
+      integer isperi(nbod)
 
 c...  internal
       integer i,i1st

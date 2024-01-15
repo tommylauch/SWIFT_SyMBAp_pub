@@ -31,7 +31,7 @@ c...  Inputs Only:
       real*8 mu,dt0
 
 c...  Inputs and Outputs:
-      real*8 x0(:),vx0(:)
+      real*8 x0(3),vx0(3)
 
 c...  Output
       integer iflg

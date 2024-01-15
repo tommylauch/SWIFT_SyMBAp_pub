@@ -34,8 +34,8 @@ c...  Inputs:
       integer iwhy,iu,init,id
       real*8 time
       real*8 m1,r1
-      real*8 x1(:)
-      real*8 vx1(:)
+      real*8 x1(3)
+      real*8 vx1(3)
       character*(*) fopenstat
 
 c...  Internals

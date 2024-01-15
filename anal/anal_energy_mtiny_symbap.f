@@ -36,11 +36,11 @@ c Last revision:
 
 c...  Inputs: 
       integer nbod,nbodm
-      real*8 mass(:),j2rp2,j4rp4
-      real*8 xh(:,:),vxh(:,:)
+      real*8 mass(nbod),j2rp2,j4rp4
+      real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Output
-      real*8 energy,eltot(:),ke,pot
+      real*8 energy,eltot(3),ke,pot
 
 c...  Internals
       real*8 elx(3)

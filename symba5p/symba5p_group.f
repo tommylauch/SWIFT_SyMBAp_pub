@@ -30,11 +30,11 @@ c Date:    06/08/20
       include 'symba5p.inc'
 
 c...  Inputs Only: 
-      integer ielst(:,:),ielc,i_ie,j_ie
+      integer ielst(2,NENMAX),ielc
 c...  Outputs only
-      integer grpie(:,:),grppc(:),grpc
+      integer grpie(GRPMAX,GRPNMAX),grppc(GRPNMAX),grpc
 c...  Internals
-      integer i,j,ie_t
+      integer i,j,i_ie,j_ie,ie_t
       integer temp(2),tempc
 
 c...  Executable code

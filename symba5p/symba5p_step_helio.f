@@ -34,10 +34,10 @@ c Last revision: 12/13/00
 
 c...  Inputs Only: 
       integer nbod,i1st,nbodm
-      real*8 mass(:),dt,j2rp2,j4rp4
+      real*8 mass(nbod),dt,j2rp2,j4rp4
 
 c...  Inputs and Outputs:
-      real*8 xh(:,:),vxh(:,:)
+      real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Internals:
       integer i1stloc

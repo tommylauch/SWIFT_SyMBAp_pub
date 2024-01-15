@@ -36,11 +36,11 @@ c Last revision:
 c...  Inputs Only: 
       integer nbod
       real*8 j2rp2,j4rp4
-      real*8 mass(:)
-      real*8 xh(:,:),irh(:)
+      real*8 mass(NPLMAX)
+      real*8 xh(3,NPLMAX),irh(NPLMAX)
 
 c...  Output
-      real*8 aoblx(:,:)
+      real*8 aoblx(3,NPLMAX)
 
 c...  Internals
       integer n
