@@ -27,9 +27,9 @@ c***********************************************************************
       include '../swift.inc'
 c...  Inputs: 
       integer nbod
-      real*8 mass(NPLMAX),xh(3,NPLMAX),vxh(3,NPLMAX)
+      real*8 mass(:),xh(:,:),vxh(:,:)
 c...  Outputs:
-      real*8 xb(3,NPLMAX),vxb(3,NPLMAX)
+      real*8 xb(:,:),vxb(:,:)
 c...  Internals:
       real*8 msys,xtmp(3),vxtmp(3)
       integer n

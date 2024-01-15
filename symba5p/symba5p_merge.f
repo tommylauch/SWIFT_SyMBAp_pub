@@ -68,12 +68,12 @@ c...  Inputs:
       logical*1 svdotrold
 
 c...  Inputs and Outputs:
-      real*8 mass(NTPMAX),xh(3,NTPMAX),vxb(3,NTPMAX),eoff
-      real*8 rpl(NTPMAX),rhill(NTPMAX)
-      integer iecnt(NTPMAX)
-      integer mergelst(2,NTPMAX),mergecnt
+      real*8 mass(:),xh(:,:),vxb(:,:),eoff
+      real*8 rpl(:),rhill(:)
+      integer iecnt(:)
+      integer mergelst(:,:),mergecnt
       integer ip1l,ip2l
-      integer ielst(2,NENMAX),ielc
+      integer ielst(:,:),ielc
 
 c...  Outputs
 
@@ -103,8 +103,8 @@ c...  Executable code
          mergelst(1,mergecnt) = ip1l
          mergelst(2,mergecnt) = ip2l
          rhill(ip2l) = 0.0d0
-         call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
-     &                           vxb(:,ip1l),rhill(ip1l))
+         call util_hills1_symbap(mass(1),mass(ip1l),xh(1:3,ip1l),
+     &                           vxb(1:3,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
          return      !   <=== NOTE !!!!!!!!!
       endif
@@ -130,8 +130,8 @@ c...  Executable code
                mergelst(1,mergecnt) = ip1l
                mergelst(2,mergecnt) = ip2l
                rhill(ip2l) = 0.0d0
-               call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
-     &                                 vxb(:,ip1l),rhill(ip1l))
+               call util_hills1_symbap(mass(1),mass(ip1l),xh(1:3,ip1l),
+     &                                 vxb(1:3,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
             endif
          endif

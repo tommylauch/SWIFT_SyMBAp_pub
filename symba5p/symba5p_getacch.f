@@ -31,12 +31,12 @@ c Last revision: 17/8/20
 
 c...  Inputs: 
       integer nbod,nbodm
-      real*8 mass(nbod),j2rp2,j4rp4,mtiny
-      real*8 xh(3,nbod)
-      integer ielst(2,NENMAX),ielc
+      real*8 mass(:),j2rp2,j4rp4,mtiny
+      real*8 xh(:,:)
+      integer ielst(:,:),ielc
 
 c...  Outputs:
-      real*8 axh(3,nbod)
+      real*8 axh(:,:)
 
 c...  Internals:
       real*8 aoblx(3,NTPMAX)

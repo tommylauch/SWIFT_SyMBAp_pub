@@ -25,10 +25,10 @@ c***********************************************************************
 
 c...  Inputs: 
       integer nbod
-      real*8 mass(nbod),vxh(3,nbod)
+      real*8 mass(:),vxh(:,:)
 
 c...  Outputs:
-      real*8 vxb(3,nbod)
+      real*8 vxb(:,:)
 
 c...  Internals:
       real*8 msys,vxtmp(3)

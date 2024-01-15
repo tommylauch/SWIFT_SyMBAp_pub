@@ -29,10 +29,10 @@ c     REVISIONS: 2/18/93   HFL
 
 c...  Inputs Only: 
       integer nbod
-      real*8 axh(3,nbod),dt
+      real*8 axh(:,:),dt
 
 c...   Inputs and Output:
-      real*8 vxh(3,nbod)
+      real*8 vxh(:,:)
 
 c...  Internals:
       integer n

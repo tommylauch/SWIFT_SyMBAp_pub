@@ -26,11 +26,11 @@ c Last revision: 1/6/97
 
 c...  Inputs: 
       integer nbod
-      real*8 mass(nbod),xh(3,nbod)
-      real*8 vxh(3,nbod)
+      real*8 mass(:),xh(:,:)
+      real*8 vxh(:,:)
 
 c...  Outputs
-      real*8 r2hill(nbod)
+      real*8 r2hill(:)
 
 c...  Internals
       integer i

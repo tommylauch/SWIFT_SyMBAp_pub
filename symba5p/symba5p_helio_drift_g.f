@@ -35,11 +35,11 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,irec
-      real*8 mass(nbod),dt
-      integer ielev(nbod)
-      integer ielst(2,NENMAX),ielc
+      real*8 mass(:),dt
+      integer ielev(:)
+      integer ielst(:,:),ielc
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod),vxb(3,nbod)
+      real*8 xh(:,:),vxb(:,:)
       
 c...  Internals:
       integer i,j,iflg,i_ie,j_ie
@@ -77,7 +77,7 @@ c Take a drift forward dth
       do i=1,gpmbc
          j = gpmb(i)
          if( (ielev(j).eq.irec) .and. (mass(j).ne.0.0d0) ) then
-            call drift_one_symbap(mass(1),xh(:,j),vxb(:,j),dt,iflg)
+            call drift_one_symbap(mass(1),xh(1:3,j),vxb(1:3,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
                write(*,*) mass(1),dt

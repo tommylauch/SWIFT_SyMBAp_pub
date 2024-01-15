@@ -38,13 +38,13 @@ c Last revision: 3/3/10
 
 c...  Inputs Only: 
       integer nbod,irec
-      real*8 mass(nbod),dt,rhill(nbod),sgn
-      integer iecnt(nbod),ielev(nbod)
-      real*8 xh(3,nbod)
-      integer ielst(2,NENMAX),ielc
+      real*8 mass(:),dt,rhill(:),sgn
+      integer iecnt(:),ielev(:)
+      real*8 xh(:,:)
+      integer ielst(:,:),ielc
 
 c...  Inputs and Outputs:
-      real*8 vxb(3,nbod)
+      real*8 vxb(:,:)
 
 c...  Internals: 
       real*8 dx(3),fac,ris,r
