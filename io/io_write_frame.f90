@@ -1,47 +1,46 @@
-c*************************************************************************
-c                            IO_WRITE_FRAME
-c*************************************************************************
-c write out a whole frame to an real*4 binary file.
-c both massive and test particles
-c
-c             Input:
-c                 time          ==>  current time (real scalar)
-c                 nbod          ==>  number of massive bodies (int scalar)
-c                 ntp           ==>  number of massive bodies (int scalar)
-c                 mass          ==>  mass of bodies (real array)
-c                 xh            ==>  current position in helio coord 
-c                                    (real array)
-c                 vxh           ==>  current velocity in helio coord 
-c                                    (real array)
-c                 xht           ==>  current part position in helio coord 
-c                                    (real array)
-c                 vxht          ==>  current velocity in helio coord 
-c                                    (real array)
-c                 istat         ==>  status of the test paricles
-c                                    (2d integer array)
-c                                    istat(i,1) = 0 ==> active:  = 1 not
-c                                    istat(i,2) = -1 ==> Danby did not work
-c                 oname         ==>  output file name (character string) 
-c                 iu            ==>  unit number to write to
-c                 fopenstat     ==>  The status flag for the open 
-c                                    statements of the output files.  
-c                                    (character*80)
-c
-c
-c Remarks: Based on io_write_frame
-c Authors:  Hal Levison 
-c Date:    2/22/94
-c Last revision: 
+!*************************************************************************
+!                           IO_WRITE_FRAME
+!*************************************************************************
+! write out a whole frame to an real*4 binary file.
+! both massive and test particles
+!            Input:
+!                time          ==>  current time (real scalar)
+!                nbod          ==>  number of massive bodies (int scalar)
+!                ntp           ==>  number of massive bodies (int scalar)
+!                mass          ==>  mass of bodies (real array)
+!                xh            ==>  current position in helio coord 
+!                                   (real array)
+!                vxh           ==>  current velocity in helio coord 
+!                                   (real array)
+!                xht           ==>  current part position in helio coord 
+!                                   (real array)
+!                vxht          ==>  current velocity in helio coord 
+!                                   (real array)
+!                istat         ==>  status of the test paricles
+!                                   (2d integer array)
+!                                   istat(i,1) = 0 ==> active:  = 1 not
+!                                   istat(i,2) = -1 ==> Danby did not work
+!                oname         ==>  output file name (character string) 
+!                iu            ==>  unit number to write to
+!                fopenstat     ==>  The status flag for the open 
+!                                   statements of the output files.  
+!                                   (character*80)
+! Remarks: Based on io_write_frame
+! Authors:  Hal Levison 
+! Date:    2/22/94
+! Last revision: 
 
 subroutine io_write_frame(time,nbod,ntp,mass,xh,vxh,xht,vxht,istat,    &
                           oname,iu,fopenstat)
 implicit none
 use swift_mod
-use io_mod
+use util_interface
+use io_interface, except_this_one => io_write_frame
+use orbel_interface
 
 integer(ik), intent(in)        :: nbod,ntp,iu
-real(rk), intent(in)           :: mass(nbod),time
-integer(ik), intent(in)        :: istat(NTPMAX,NSTAT)
+real(rk), intent(in)           :: mass(:),time
+integer(ik), intent(in)        :: istat(:,:)
 real(rk), intent(in)           :: xh(:,:),vxh(:,:)
 real(rk), intent(in)           :: xht(:,:),vxht(:,:)
 character(len = :), intent(in) :: oname,fopenstat
@@ -51,40 +50,41 @@ integer(ik)                    :: ialpha,ierr
 real(rk)                       :: gm,a,e,inc,capom,omega,capm
 integer(ik), save              :: i1st = 0_ik                           ! = 0 first time through; =1  after
 
-c...  Executable code 
+!...  Executable code 
 
-c...  if first time through open file
-if (i1st.eq.0) then
-   call io_open(iu,oname,fopenstat,'UNFORMATTED',ierr)
-   if (ierr.ne.0) then
-      write(*,*) ' SWIFT ERROR: in io_write_frame: '
-      write(*,*) '     Could not open binary output file:'
-      call util_exit(1)
+!...  if first time through open file
+   if (i1st.eq.0) then
+      call io_open(iu,oname,fopenstat,'UNFORMATTED',ierr)
+      if (ierr.ne.0) then
+         write(*,*) ' SWIFT ERROR: in io_write_frame: '
+         write(*,*) '     Could not open binary output file:'
+         call util_exit(1)
+      endif
+      i1st = 1_ik
+   else
+      call io_open(iu,oname,'append','UNFORMATTED',ierr)
    endif
-   i1st = 1
-else
-   call io_open(iu,oname,'append','UNFORMATTED',ierr)
-endif
 
-call io_write_hdr(iu,time,nbod,ntp,istat)
+   call io_write_hdr(iu,time,nbod,ntp,istat)
       
-c...  write out planets
-do i=2,nbod
-   gm = mass(1)+mass(i)
-   id = -1*i
-   call orbel_xv2el(xh(1:3,i),vxh(1:3,i),gm,ialpha,a,e,inc,capom,omega,capm)
-   call io_write_line(iu,id,a,e,inc,capom,omega,capm)
-enddo
+!...  write out planets
+   do i=2,nbod
+      gm = mass(1)+mass(i)
+      id = -1*i
+      call orbel_xv2el(xh(1:3,i),vxh(1:3,i),gm,ialpha,a,e,inc,capom,omega,capm)
+      call io_write_line(iu,id,a,e,inc,capom,omega,capm)
+   enddo
 
-c...  write out test particles
-gm = mass(1)
-do i=1,ntp
-   if (istat(i,1).eq.0) then
-      call orbel_xv2el(xht(1:3,i),vxht(1:3,i),gm,ialpha,a,e,inc,capom,omega,capm)
-      call io_write_line(iu,i,a,e,inc,capom,omega,capm)
-   endif
-enddo
+!...  write out test particles
+   gm = mass(1)
+   do i=1,ntp
+      if (istat(i,1).eq.0) then
+         call orbel_xv2el(xht(1:3,i),vxht(1:3,i),gm,ialpha,a,e,inc,capom,omega,capm)
+         call io_write_line(iu,i,a,e,inc,capom,omega,capm)
+      endif
+   enddo
 
-close(iu)
+   close(iu)
+
 return
 end subroutine io_write_frame

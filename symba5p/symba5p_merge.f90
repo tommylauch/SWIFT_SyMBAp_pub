@@ -1,143 +1,131 @@
-c*************************************************************************
-c                            SYMBA5P_MERGE.F
-c*************************************************************************
-c This subroutine checks to see if there are encounters
-c
-c             Input:
-c                 t             ==>  current time (real scalar)
-c                 dt            ==>  time step (real scalar)
-c                 nbod          ==>  number of massive bodies (int scalar)
-c                 nbodm         ==>  Location of last massive body(int scalar)
-c                 ip1,ip2       ==>  The two bodies to check (int scalar)
-c                 mass          ==>  mass of bodies (real array)
-c                 xh            ==>  initial position in helio coord 
-c                                    (real arrays)
-c                 vxb           ==>  initial velocity in helio coord 
-c                                    (real arrays)
-c                 ireci         ==>  current recursion level (int scalar)
-c                 irecl         ==>  maximum recursion level (int scalar)
-c                 svdotrold     ==>  old radial velocity test
-c                                   = .true. if i,j are receding
-c                                   = .false is approaching
-c                                     (logical*1 scalar)
-c                 iecnt         ==>  The number of objects that each planet 
-c                                    is encountering (int*2 array)
-c                 rpl           ==>  physical size of a planet.
-c                                    (real array)
-c             mergelst          ==>  list of mergers (int array)
-c             mergecnt          ==>  count of mergers (int array)
-c             rhill             ==>  Hill sphere of planet (real Scalar)
-c             eoff              ==>  Energy offset (real scalar)
-c                ielc           ==>  number of encounters (integer scalar)
-c                ielst          ==>  list of ecnounters (2D integer array)
-c
-c             Output:  Changed only if a Megrer happens
-c                 mass          ==>  mass of bodies (real array)
-c                 xh            ==>  initial position in helio coord 
-c                                    (real arrays)
-c                 vxb           ==>  initial velocity in helio coord 
-c                                    (real arrays)
-c                 iecnt         ==>  The number of objects that each planet 
-c                                    is encountering (int*2 array)
-c                 rpl           ==>  physical size of a planet.
-c                                    (real array)
-c             mergelst          ==>  list of mergers (int array)
-c             mergecnt          ==>  count of mergers (int array)
-c             rhill             ==>  Hill sphere of planet (real Scalar)
-c             eoff              ==>  Energy offset (real scalar)
-c                ielc           ==>  number of encounters (integer scalar)
-c                ielst          ==>  list of ecnounters (2D integer array)
-c
-c Remarks: 
-c Authors:  Hal Levison
-c Date:   1/2/97
-c Last revision: 12/16/09
-c
+!*************************************************************************
+!                            SYMBA5P_MERGE.F
+!*************************************************************************
+! This subroutine checks to see if there are encounters
+!             Input:
+!                 t             ==>  current time (real scalar)
+!                 dt            ==>  time step (real scalar)
+!                 nbod          ==>  number of massive bodies (int scalar)
+!                 nbodm         ==>  Location of last massive body(int scalar)
+!                 ip1,ip2       ==>  The two bodies to check (int scalar)
+!                 mass          ==>  mass of bodies (real array)
+!                 xh            ==>  initial position in helio coord 
+!                                    (real arrays)
+!                 vxb           ==>  initial velocity in helio coord 
+!                                    (real arrays)
+!                 ireci         ==>  current recursion level (int scalar)
+!                 irecl         ==>  maximum recursion level (int scalar)
+!                 svdotrold     ==>  old radial velocity test
+!                                   = .true. if i,j are receding
+!                                   = .false is approaching
+!                                     (logical*1 scalar)
+!                 iecnt         ==>  The number of objects that each planet 
+!                                    is encountering (int*2 array)
+!                 rpl           ==>  physical size of a planet.
+!                                    (real array)
+!             mergelst          ==>  list of mergers (int array)
+!             mergecnt          ==>  count of mergers (int array)
+!             rhill             ==>  Hill sphere of planet (real Scalar)
+!             eoff              ==>  Energy offset (real scalar)
+!                ielc           ==>  number of encounters (integer scalar)
+!                ielst          ==>  list of ecnounters (2D integer array)
+!             Output:  Changed only if a Megrer happens
+!                 mass          ==>  mass of bodies (real array)
+!                 xh            ==>  initial position in helio coord 
+!                                    (real arrays)
+!                 vxb           ==>  initial velocity in helio coord 
+!                                    (real arrays)
+!                 iecnt         ==>  The number of objects that each planet 
+!                                    is encountering (int*2 array)
+!                 rpl           ==>  physical size of a planet.
+!                                    (real array)
+!             mergelst          ==>  list of mergers (int array)
+!             mergecnt          ==>  count of mergers (int array)
+!             rhill             ==>  Hill sphere of planet (real Scalar)
+!             eoff              ==>  Energy offset (real scalar)
+!                ielc           ==>  number of encounters (integer scalar)
+!                ielst          ==>  list of ecnounters (2D integer array)
+! Remarks: 
+! Authors:  Hal Levison
+! Date:   1/2/97
+! Last revision: 12/16/09
 
-      subroutine symba5p_merge(t,dt,nbod,nbodm,ip1,ip2,mass,xh,vxb,
-     &     ireci,irecl,svdotrold,iecnt,rpl,mergelst,mergecnt,rhill,
-     &     eoff,ielc,ielst)
+subroutine symba5p_merge(t,dt,nbod,nbodm,ip1,ip2,mass,xh,vxb,          &
+      ireci,irecl,svdotrold,iecnt,rpl,mergelst,mergecnt,rhill,         &
+      eoff,ielc,ielst)
+implicit none
+use swift_mod
+use sybam5p_mod
+use discard_interface
+use orbel_interface
+use util_interface
 
+integer(ik), intent(in)    :: nbod,nbodm,ireci,irecl,ip1,ip2
+real(rk), intent(in)       :: t,dt
+logical(ik), intent(in)    :: svdotrold
 
-      include '../swift.inc'
-      include '../symba5/symba5.inc'
+real(rk), intent(inout)    :: mass(:),xh(:,:),vxb(:,:),eoff
+real(rk), intent(inout)    :: rpl(:),rhill(:)
+integer(ik), intent(inout) :: iecnt(:),ielst(:,:),ielc
+integer(ik), intent(inout) :: mergelst(:,:),mergecnt
+integer(ik), intent(inout) :: ip1l,ip2l
 
-c...  Inputs: 
-      integer nbod,nbodm,ireci,irecl,ip1,ip2
-      real*8 t,dt
-      logical*1 svdotrold
+integer(ik)                :: ialpha
+real(rk)                   :: xr(3),vxr(3),vdotr,tcross2
+real(rk)                   :: rlim,rlim2,rr2,massc,a,e,peri,dt2
 
-c...  Inputs and Outputs:
-      real*8 mass(NTPMAX),xh(3,NTPMAX),vxb(3,NTPMAX),eoff
-      real*8 rpl(NTPMAX),rhill(NTPMAX)
-      integer iecnt(NTPMAX)
-      integer mergelst(2,NTPMAX),mergecnt
-      integer ip1l,ip2l
-      integer ielst(2,NENMAX),ielc
+!...  Executable code 
 
-c...  Outputs
+   xr(:) = xh(:,ip2) - xh(:,ip1)
+   rr2 = dot_product(xr,xr)
+   rlim = rpl(ip1)+rpl(ip2)
 
-c...  Internals
-      integer ialpha
-      real*8 xr(3),vxr(3),vdotr,tcross2
-      real*8 rlim,rlim2,rr2,massc,a,e,peri,dt2
+   if (rlim.eq.0.0_rk) return  ! <======  NOTE !!!!!
 
-c-----
-c...  Executable code 
+   rlim2 = rlim**2
 
-      xr(:) = xh(:,ip2) - xh(:,ip1)
-      rr2 = xr(1)**2 + xr(2)**2 + xr(3)**2
-      rlim = rpl(ip1)+rpl(ip2)
-
-      if(rlim.eq.0.0d0) RETURN  ! <======  NOTE !!!!!
-
-      rlim2 = rlim*rlim
-
-      if(rlim2.ge.rr2) then
-         ip1l = ip1
-         ip2l = ip2 
+   if (rlim2.ge.rr2) then
+      ip1l = ip1
+      ip2l = ip2 
 !$OMP CRITICAL (MERGE)
-         call discard_mass_merge5p_mtiny(t,nbod,nbodm,ip1l,ip2l,
-     &                  mass,xh,vxb,rpl,eoff,ielc,ielst,NENMAX)
-         mergecnt = mergecnt + 1
-         mergelst(1,mergecnt) = ip1l
-         mergelst(2,mergecnt) = ip2l
-         rhill(ip2l) = 0.0d0
-         call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
-     &                           vxb(:,ip1l),rhill(ip1l))
+      call discard_mass_merge5p_mtiny(t,nbod,nbodm,ip1l,ip2l,          &
+           mass,xh,vxb,rpl,eoff,ielc,ielst)
+      mergecnt = mergecnt+1
+      mergelst(1,mergecnt) = ip1l
+      mergelst(2,mergecnt) = ip2l
+      rhill(ip2l) = 0.0_rk
+      call util_hills1(mass(1),mass(ip1l),xh(1:3,ip1l),                &
+                       vxb(1:3,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
-         return      !   <=== NOTE !!!!!!!!!
-      endif
+      return      !   <=== NOTE !!!!!!!!!
+   endif
 
-      vxr(:) = vxb(:,ip2) - vxb(:,ip1)
-      vdotr = xr(1)*vxr(1) + xr(2)*vxr(2) + xr(3)*vxr(3)
+   vxr(:) = vxb(:,ip2) - vxb(:,ip1)
+   vdotr = dot_product(xr,vxr)
 
-      if( svdotrold .and. (vdotr.gt.0.0d0)) then
+   if ( svdotrold .and. (vdotr.gt.0.0_rk) ) then
+      tcross2 = rr2/(dot_product(vxr,vxr))
+      dt2 = dt**2
 
-         tcross2 = rr2/(vxr(1)**2+vxr(2)**2+vxr(3)**2)
-         dt2 = dt*dt
-
-         if(tcross2.le.dt2) then
-            massc = mass(ip1) + mass(ip2)
-            call orbel_xv2aeq_symbap(xr,vxr,massc,ialpha,a,e,peri)
-            if( peri.lt.rlim) then
-               ip1l = ip1
-               ip2l = ip2 
+      if (tcross2.le.dt2) then
+         massc = mass(ip1)+mass(ip2)
+         call orbel_xv2aeq(xr,vxr,massc,ialpha,a,e,peri)
+         if (peri.lt.rlim) then
+            ip1l = ip1
+            ip2l = ip2 
 !$OMP CRITICAL (MERGE)
-               call discard_mass_merge5p_mtiny(t,nbod,nbodm,ip1l,ip2l,
-     &                        mass,xh,vxb,rpl,eoff,ielc,ielst,NENMAX)
-               mergecnt = mergecnt + 1
-               mergelst(1,mergecnt) = ip1l
-               mergelst(2,mergecnt) = ip2l
-               rhill(ip2l) = 0.0d0
-               call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
-     &                                 vxb(:,ip1l),rhill(ip1l))
+            call discard_mass_merge5p_mtiny(t,nbod,nbodm,ip1l,ip2l, &
+                 mass,xh,vxb,rpl,eoff,ielc,ielst)
+            mergecnt = mergecnt + 1
+            mergelst(1,mergecnt) = ip1l
+            mergelst(2,mergecnt) = ip2l
+            rhill(ip2l) = 0.0_rk
+            call util_hills1(mass(1),mass(ip1l),xh(1:3,ip1l),       &
+                             vxb(1:3,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
-            endif
          endif
       endif
+   endif
 
-      return
-      end                       ! symba5p_merge
-c------------------------------------------------------
-
+return
+end subroutine symba5p_merge

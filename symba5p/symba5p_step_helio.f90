@@ -1,89 +1,85 @@
-c*************************************************************************
-c                            SYMBA5P_STEP_HELIO.F
-c*************************************************************************
-c This subroutine takes a step in helio coord.  
-c Does a KICK than a DRIFT than a KICK.
-c ONLY DOES MASSIVE PARTICLES
-c
-c             Input:
-c                 i1st          ==>  = 0 if first step; = 1 not (int scalar)
-c                 nbod          ==>  number of massive bodies (int scalar)
-c                 mass          ==>  mass of bodies (real array)
-c                 j2rp2,j4rp4   ==>  J2*radii_pl^2 and  J4*radii_pl^4
-c                                     (real scalars)
-c                 xh            ==>  initial position in helio coord 
-c                                    (real arrays)
-c                 vxh           ==>  initial velocity in helio coord 
-c                                    (real arrays)
-c                 dt            ==>  time step
-c             Output:
-c                 xh            ==>  final position in helio coord 
-c                                       (real arrays)
-c                 vxh           ==>  final velocity in helio coord 
-c                                       (real arrays)
-c Remarks: Based on helio_step_pl.f but does not pass the intermediate
-c          positions and velocities back for the TP to use.
-c Authors:  Hal Levison 
-c Date:    3/20/97
-c Last revision: 12/13/00
+!*************************************************************************
+!                            SYMBA5P_STEP_HELIO.F
+!*************************************************************************
+! This subroutine takes a step in helio coord.  
+! Does a KICK than a DRIFT than a KICK.
+! ONLY DOES MASSIVE PARTICLES
+!             Input:
+!                 i1st          ==>  = 0 if first step; = 1 not (int scalar)
+!                 nbod          ==>  number of massive bodies (int scalar)
+!                 mass          ==>  mass of bodies (real array)
+!                 j2rp2,j4rp4   ==>  J2*radii_pl^2 and  J4*radii_pl^4
+!                                     (real scalars)
+!                 xh            ==>  initial position in helio coord 
+!                                    (real arrays)
+!                 vxh           ==>  initial velocity in helio coord 
+!                                    (real arrays)
+!                 dt            ==>  time step
+!             Output:
+!                 xh            ==>  final position in helio coord 
+!                                       (real arrays)
+!                 vxh           ==>  final velocity in helio coord 
+!                                       (real arrays)
+! Remarks: Based on helio_step_pl.f but does not pass the intermediate
+!          positions and velocities back for the TP to use.
+! Authors:  Hal Levison 
+! Date:    3/20/97
+! Last revision: 12/13/00
 
-      subroutine symba5p_step_helio(i1st,nbod,nbodm,mass,j2rp2,
-     &     j4rp4,xh,vxh,dt)
+subroutine symba5p_step_helio(i1st,nbod,nbodm,mass,j2rp2,j4rp4,        &
+                              xh,vxh,dt)
+implicit none
+use swift_mod
+use coord_interface
+use helio_interface
+use mvs_interface
+use symba5p_interface, except_this_one => symba5p_step_helio
 
-      include '../swift.inc'
+integer(ik), intent(in) :: nbod,i1st,nbodm
+real(rk), intent(in)    :: mass(:),dt,j2rp2,j4rp4
 
-c...  Inputs Only: 
-      integer nbod,i1st,nbodm
-      real*8 mass(nbod),dt,j2rp2,j4rp4
+real(rk), intent(inout) :: xh(:,:),vxh(:,:)
 
-c...  Inputs and Outputs:
-      real*8 xh(3,nbod),vxh(3,nbod)
+!...  Internals:
+integer(ik)             :: i1stloc
+real(rk)                :: dth,axh(3,NTPMAX)
+real(rk), save          :: vxb(3,NTPMAX)
+real(rk)                :: ptxb(3),ptxe(3)                              ! Not used here
 
-c...  Internals:
-      integer i1stloc
-      real*8 dth,axh(3,NTPMAX),vxb(3,NTPMAX),msys
-      real*8 ptxb(3)            ! Not used here
-      real*8 ptxe(3)
-      save vxb     ! Note this !!
-c----
-c...  Executable code 
+!...  Executable code
 
-      dth = 0.5d0*dt
+   dth = 0.5_rk*dt
+   i1stloc = i1st
+   if(i1st.eq.0) then
+!...     Convert vel to bery to jacobi coords
+       call coord_vh2b(nbod,mass,vxh,vxb)
+       i1st = 1_ik                                                      ! turn this off
+   endif
 
-      i1stloc = i1st
-      if(i1st.eq.0) then
-c...      Convert vel to bery to jacobi coords
-          call coord_vh2b_symbap(nbod,mass,vxh,vxb,msys)
-          i1st = 1              ! turn this off
-      endif
+!...  Do the linear drift due to momentum of the Sun
+   call helio_lindrift(nbod,mass,vxb,dth,xh,ptxb)
 
-c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxb)
+!...  Get the accelerations in helio frame. if frist time step
+   call symba5p_helio_getacch(i1stloc,nbod,nbodm,mass,j2rp2,j4rp4,xh,axh)
+      i1stloc = 0_ik
 
-c...  Get the accelerations in helio frame. if frist time step
-      call symba5p_helio_getacch(i1stloc,nbod,nbodm,mass,j2rp2,j4rp4,
-     &     xh,axh)
-      i1stloc = 0
+!...  Apply a heliocentric kick for a half dt 
+   call kickvh(nbod,vxb,axh,dth)
 
-c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+!...  Drift in helio coords for the full step 
+   call helio_drift(nbod,mass,xh,vxb,dt)
 
-c..   Drift in helio coords for the full step 
-      call helio_drift_symbap(nbod,mass,xh,vxb,dt)
+!...  Get the accelerations in helio frame. if frist time step
+   call symba5p_helio_getacch(i1stloc,nbod,nbodm,mass,j2rp2,j4rp4,xh,axh)
 
-c...  Get the accelerations in helio frame. if frist time step
-      call symba5p_helio_getacch(i1stloc,nbod,nbodm,mass,j2rp2,j4rp4,
-     &     xh,axh)
+!...  Apply a heliocentric kick for a half dt 
+   call kickvh(nbod,vxb,axh,dth)
 
-c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+!...  Do the linear drift due to momentum of the Sun
+   call helio_lindrift(nbod,mass,vxb,dth,xh,ptxe)
 
-c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxe)
+!...  convert back to helio velocities
+   call coord_vb2h(nbod,mass,vxb,vxh)
 
-c...  convert back to helio velocities
-      call coord_vb2h_symbap(nbod,mass,vxb,vxh)
-
-      return
-      end   ! symba5p_step_helio
-c---------------------------------------------------------------------
+return
+end subroutine symba5p_step_helio

@@ -35,4 +35,9 @@ real(rk), parameter     :: PI3BY2 = 1.5_rk*PI
 real(rk), parameter     :: DEGRAD = 180.0_rk/PI
 real(rk), parameter     :: ONETHRD = 1.0_rk/3.0_rk
 
+!...    format
+character(len = :)      :: fmt_rrr = '3(1p1e23.16,1x)'
+character(len = :)      :: fmt_ri = '1x,1p1e23.16,1x,i4'
+character(len = :)      :: fmt_iirr = 'i7,1x,i7,1x,2(1p1e23.16,1x)'
+character(len = :)      :: fmt_prog = '" Time = ",1p1e12.5,": fraction done = ",0pf5.3,": Number of bodies =",i7'
 end module swift_mod

@@ -1,100 +1,86 @@
-c************************************************************************
-c                          IO_DUMP_PARAM.F
-c************************************************************************
-c IO_DUMP_PARAM dumps out the parameters for the integration. 
-c
-c      Input:
-c       dparfile      ==>  Name of file to write to (character*80)
-c            t0       ==> Initial time (real scalar)
-c            tstop    ==> final time (real scalar)
-c            dt       ==> time step  (real scalar)
-c            dtout    ==> time between binary outputs (real scalar)
-c            dtdump   ==> time between dumps  (real scalar)
-c            iflgchk  ==>  =0 don't run diagnostic routines
-c                         !=0 run them
-c      rmin,rmax      ==>  maximum and min distance from Sun
-c                                if <0  then don't check
-c                                    (real scalar)
-c       rmaxu         ==>  maximum distance from Sun in not bound
-c                                 if <0  then don't check
-c                                      (real scalar)
-c       qmin          ==> Smallest perihelion distance
-c                                 if <0  then don't check
-c                                      (real scalar)
-c       lclose        ==> .true. --> discard particle if it gets 
-c                                    too close to a planet. Read in that 
-c                                    distance in io_init_pl
-c                                      (logical*2 scalar)
-c       outfile       ==>  Name of binary output file (character*80)
+!************************************************************************
+!                          IO_DUMP_PARAM.F
+!************************************************************************
+! IO_DUMP_PARAM dumps out the parameters for the integration. 
+!      Input:
+!       dparfile      ==>  Name of file to write to (character*80)
+!            t0       ==> Initial time (real scalar)
+!            tstop    ==> final time (real scalar)
+!            dt       ==> time step  (real scalar)
+!            dtout    ==> time between binary outputs (real scalar)
+!            dtdump   ==> time between dumps  (real scalar)
+!            iflgchk  ==>  =0 don't run diagnostic routines
+!                         !=0 run them
+!      rmin,rmax      ==>  maximum and min distance from Sun
+!                                if <0  then don't check
+!                                    (real scalar)
+!       rmaxu         ==>  maximum distance from Sun in not bound
+!                                 if <0  then don't check
+!                                      (real scalar)
+!       qmin          ==> Smallest perihelion distance
+!                                 if <0  then don't check
+!                                      (real scalar)
+!       lclose        ==> .true. --> discard particle if it gets 
+!                                    too close to a planet. Read in that 
+!                                    distance in io_init_pl
+!                                      (logical*2 scalar)
+!       outfile       ==>  Name of binary output file (character*80)
+! Remarks: 
+! Authors:  Martin Duncan
+! Date:    3/2/93 
+! Last revision:  5/10/94 HFL
 
-c
-c Remarks: 
-c Authors:  Martin Duncan
-c Date:    3/2/93 
-c Last revision:  5/10/94 HFL
+subroutine io_dump_param(dparfile,t,tstop,dt,dtout,dtdump,             &
+                         iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile)	
+implicit none
+use swift_mod
+use io_mod
+use io_interface, except_this_one => io_dump_param
 
-	subroutine io_dump_param(dparfile,t,tstop,dt,dtout,dtdump,
-     &           iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile)	
+real(rk), intent(in)           :: t,tstop,dt
+integer(ik), intent(in)        :: iflgchk
+real(rk), intent(in)           :: dtout,dtdump
+real(rk), intent(in)           :: rmin,rmax,rmaxu,qmin
+logical(ik), intent(in)        :: lclose
+character(len = :), intent(in) :: outfile,dparfile
 
-	include '../swift.inc'
-	include 'io.inc'
+character(len = :)             :: lflg(0:IO_NBITS-1),cclose
+integer(ik)                    :: i,ierr
 
-c...   Inputs
-	real*8 t,tstop,dt
-	integer iflgchk
-	real*8 dtout,dtdump
-	real*8 rmin,rmax,rmaxu,qmin
-        logical*2 lclose
-	character*(*) outfile,dparfile
+!...  Executable code 
 
-c...  Internals
-        character*1 lflg(0:IO_NBITS-1),cclose
-        integer i,ierr
-
-c-----
-c...  Executable code 
-
-c Open parameter data file for the dump
-        call io_open(7,dparfile,'unknown','formatted',ierr)
+! Open parameter data file for the dump
+   call io_open(7,dparfile,'unknown','formatted',ierr)
 
 	write(7,*) t,tstop,dt
 	write(7,*) dtout,dtdump
 
-        do i=0,IO_NBITS-1
-           if(btest(iflgchk,i))  then 
-              lflg(i) = 'T'
-           else
-              lflg(i) = 'F'
-           endif
-        enddo
+   do i=0,IO_NBITS-1
+      if(btest(iflgchk,i)) then 
+         lflg(i) = 'T'
+      else
+         lflg(i) = 'F'
+      endif
+   enddo
 
-        write(7,1000) (lflg(i),i=IO_NBITS-1,0,-1)
- 1000   format(100(a1,1x))
+   write(7,'100(a1,1x)') (lflg(i),i=IO_NBITS-1,0,-1)
 
-        if(btest(iflgchk,4))  then ! bit 4 is set
-           if(lclose) then
-              cclose = 'T'
-           else
-              cclose = 'F'
-           endif
-           write(7,*) rmin,rmax,rmaxu,qmin,' ',cclose
-        endif
+   if(btest(iflgchk,4)) then ! bit 4 is set
+      if (lclose) then
+         cclose = 'T'
+      else
+         cclose = 'F'
+      endif
+      write(7,*) rmin,rmax,rmaxu,qmin,' ',cclose
+   endif
 
-        if(btest(iflgchk,0).or.btest(iflgchk,1))  then 
-           write(7,2000) outfile
- 2000      format(a)
-        endif
+   if(btest(iflgchk,0).or.btest(iflgchk,1)) then 
+      write(7,'a') outfile
+   endif
 
-        write(7,2000) 'append'
+   write(7,'a') 'append'
 
-	close(unit = 7)
+   close(unit = 7)
 
-	return
-	end     ! io_dump_param
-c____________________________________________________________________________
-c
-c
-
-
-
-
+return
+end subroutine io_dump_param
