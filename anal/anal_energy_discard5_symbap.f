@@ -37,11 +37,11 @@ c Last revision:
 
 c...  Inputs: 
       integer iflg,nbod,nbodm
-      real*8 mass(nbod),j2rp2,j4rp4
-      real*8 xh(3,nbod),vxh(3,nbod)
+      real*8 mass(*),j2rp2,j4rp4
+      real*8 xh(3,*),vxh(3,*)
 
 c...  Output
-      real*8 energy,eltot(3),ke,pot
+      real*8 energy,eltot(*),ke,pot
 
 c...  Internals
       logical leuse
@@ -69,7 +69,7 @@ c...  iflg = 0
          ke = 0.0d0
          pot = 0.0d0
          energy = 0.0d0
-         eltot = 0.0d0
+         eltot(1:3) = 0.0d0
       endif
 
 

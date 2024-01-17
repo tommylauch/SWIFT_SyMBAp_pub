@@ -36,11 +36,11 @@ c Last revision:
 
 c...  Inputs: 
       integer nbod,nbodm
-      real*8 mass(nbod),j2rp2,j4rp4
-      real*8 xh(3,nbod),vxh(3,nbod)
+      real*8 mass(*),j2rp2,j4rp4
+      real*8 xh(3,*),vxh(3,*)
 
 c...  Output
-      real*8 energy,eltot(3),ke,pot
+      real*8 energy,eltot(*),ke,pot
 
 c...  Internals
       real*8 elx(3)
@@ -57,7 +57,7 @@ c...  Executable code
       eltot(1) = (xb(2,nbod)*vxb(3,nbod)-xb(3,nbod)*vxb(2,nbod))
       eltot(2) = (xb(3,nbod)*vxb(1,nbod)-xb(1,nbod)*vxb(3,nbod))
       eltot(3) = (xb(1,nbod)*vxb(2,nbod)-xb(2,nbod)*vxb(1,nbod))
-      eltot = eltot*mass(nbod)
+      eltot(1:3) = eltot(1:3)*mass(nbod)
 
       ke = 0.5*mass(nbod)*(vxb(1,nbod)**2+vxb(2,nbod)**2+vxb(3,nbod)**2)
       pot= 0.d0
@@ -67,7 +67,7 @@ c...  Executable code
          elx(2) = xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i)
          elx(3) = xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i)
          elx = elx*mass(i)
-         eltot(:) = eltot(:) + elx(:)
+         eltot(1:3) = eltot(1:3) + elx(1:3)
          
          ke = ke + 0.5*mass(i)*(vxb(1,i)**2 + vxb(2,i)**2 + vxb(3,i)**2)
          do j = i+1,nbod
@@ -85,7 +85,7 @@ c...  Executable code
          elx(2) = xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i)
          elx(3) = xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i)
          elx = elx*mass(i)
-         eltot(:) = eltot(:) + elx(:)
+         eltot(1:3) = eltot(1:3) + elx(1:3)
       enddo
 
       if(j2rp2.ne.0.0d0) then

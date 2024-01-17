@@ -40,8 +40,8 @@ c Last revision:
 c...  Inputs: 
       integer ip1,ip2
       real*8 time
-      real*8 m(2),r(2),x(3,2),vx(3,2)
-      real*8 mn,rn,xn(3),vxn(3)
+      real*8 m(*),r(*),x(3,*),vx(3,*)
+      real*8 mn,rn,xn(*),vxn(*)
 
 c...  Internals
       integer ierr,iu

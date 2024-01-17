@@ -20,11 +20,11 @@ c Last revision: 2/24/94
 
 c...  Inputs: 
       integer nbod,istart
-      real*8 x(3,nbod)
+      real*8 x(3,*)
 
 c...  Outputs:
-      real*8 ir3(nbod)
-      real*8 ir(nbod)
+      real*8 ir3(*)
+      real*8 ir(*)
 
 c...  Internals:
       integer i

@@ -35,12 +35,12 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,iflg
-      real*8 mass(nbod),x(3,nbod),vx(3,nbod),gm
+      real*8 mass(*),x(3,*),vx(3,*),gm
 
 c...  Outputs:
-      real*8 peri(NTPMAX)
-      integer isperi(NTPMAX)
-      logical*2 lperi(NTPMAX)
+      real*8 peri(*)
+      integer isperi(*)
+      logical*2 lperi(*)
 
 c...  Internals
       integer i,ialpha
@@ -68,8 +68,8 @@ c...  Executable code
                   isperi(i) = 0
                   lperi(i) = .true.
                   gm = mass(1) + mass(i)
-                  call orbel_xv2aeq_symbap(x(:,i),vx(:,i),gm,ialpha,a,e,
-     &                                     peri(i))
+                  call orbel_xv2aeq_symbap(x(1:3,i),vx(1:3,i),gm,ialpha,
+     &                                     a,e,peri(i))
                endif
             else
 

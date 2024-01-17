@@ -31,9 +31,9 @@ c Last revision: 17/8/20
 
 c...  Inputs: 
       integer nbod,nbodm
-      real*8 mass(nbod),j2rp2,j4rp4,mtiny
-      real*8 xh(3,nbod)
-      integer ielst(2,NENMAX),ielc
+      real*8 mass(*),j2rp2,j4rp4,mtiny
+      real*8 xh(3,*)
+      integer ielst(2,*),ielc
 
 c...  Outputs:
       real*8 axh(3,nbod)

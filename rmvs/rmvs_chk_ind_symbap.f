@@ -31,7 +31,7 @@ c Last revision:
       include 'rmvs.inc'
 
 c...  Inputs: 
-      real*8 xr(3),vxr(3),dt,r2crit,r2critp
+      real*8 xr(*),vxr(*),dt,r2crit,r2critp
 
 c...  Outputs
       integer iflag

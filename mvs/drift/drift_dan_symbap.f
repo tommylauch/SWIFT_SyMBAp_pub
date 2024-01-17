@@ -31,7 +31,7 @@ c...  Inputs Only:
       real*8 mu,dt0
 
 c...  Inputs and Outputs:
-      real*8 x0(3),vx0(3)
+      real*8 x0(*),vx0(*)
 
 c...  Output
       integer iflg
@@ -83,11 +83,11 @@ c...  for new coords.
             fdot = - (a/(r0*fp))*en*s
             gdot = (c-1.)/fp + 1.
 
-            x(:) = x0(:)*f + vx0(:)*g
-            vx(:) = x0(:)*fdot + vx0(:)*gdot
+            x(1:3) = x0(1:3)*f + vx0(1:3)*g
+            vx(1:3) = x0(1:3)*fdot + vx0(1:3)*gdot
 
-            x0(:) = x(:)
-            vx0(:) = vx(:)
+            x0(1:3) = x(1:3)
+            vx0(1:3) = vx(1:3)
             iflg = 0
             return
          endif
@@ -101,11 +101,11 @@ c...  for new coords.
            fdot = -(mu/(fp*r0))*c1
            gdot = 1. - (mu/fp)*c2
 
-           x(:) = x0(:)*f + vx0(:)*g
-           vx(:) = x0(:)*fdot + vx0(:)*gdot
+           x(1:3) = x0(1:3)*f + vx0(1:3)*g
+           vx(1:3) = x0(1:3)*fdot + vx0(1:3)*gdot
 
-           x0(:) = x(:)
-           vx0(:) = vx(:)
+           x0(1:3) = x(1:3)
+           vx0(1:3) = vx(1:3)
       endif
 
       return

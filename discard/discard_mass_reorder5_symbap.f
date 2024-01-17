@@ -46,10 +46,10 @@ c...  Inputs:
 
 c...  Input and Output
       integer nbod
-      real*8 mass(nbod),xh(3,nbod)
-      real*8 vxh(3,nbod),rpl(nbod)
-      real*8 rhill(nbod)
-      integer isperih(nbod)
+      real*8 mass(*),xh(3,*)
+      real*8 vxh(3,*),rpl(*)
+      real*8 rhill(*)
+      integer isperih(*)
 
 c...  internal
       integer i,j

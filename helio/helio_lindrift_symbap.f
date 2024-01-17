@@ -28,13 +28,13 @@ c Last revision: 1/8/97
 
 c...  Inputs Only: 
       integer nbod
-      real*8 mass(nbod),dt,vxb(3,nbod)
+      real*8 mass(*),dt,vxb(3,*)
 
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod)
+      real*8 xh(3,*)
 
 c...  Outputs Only: 
-      real*8 ptx(3)
+      real*8 ptx(*)
 
 c...  Internals:
       integer n
@@ -42,17 +42,17 @@ c...  Internals:
 c----
 c...  Executable code 
 
-      ptx(:) = mass(2)*vxb(:,2)
+      ptx(1:3) = mass(2)*vxb(1:3,2)
 
       do n=3,nbod
-         ptx(:) = ptx(:) + mass(n)*vxb(:,n)
+         ptx(1:3) = ptx(1:3) + mass(n)*vxb(1:3,n)
       enddo
 
-      ptx(:) = ptx(:)/mass(1)
+      ptx(1:3) = ptx(1:3)/mass(1)
 
       do n=2,nbod
          if(mass(n).ne.0.0d0) then
-            xh(:,n) = xh(:,n) + ptx(:)*dt
+            xh(1:3,n) = xh(1:3,n) + ptx(1:3)*dt
          endif
       enddo
 

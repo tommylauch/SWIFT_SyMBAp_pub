@@ -35,11 +35,11 @@ c Last revision:
 
 c...  Inputs Only: 
       integer nbod,irec
-      real*8 mass(nbod),dt
-      integer ielev(nbod)
-      integer ielst(2,NENMAX),ielc
+      real*8 mass(*),dt
+      integer ielev(*)
+      integer ielst(2,*),ielc
 c...  Inputs and Outputs:
-      real*8 xh(3,nbod),vxb(3,nbod)
+      real*8 xh(3,*),vxb(3,*)
       
 c...  Internals:
       integer i,j,iflg,i_ie,j_ie

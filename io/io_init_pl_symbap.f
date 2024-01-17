@@ -43,8 +43,8 @@ c...  Input
       logical*2 lclose
 
 c...  Output
-      real*8 mass(NTPMAX),rpl(NTPMAX),j2rp2,j4rp4
-      real*8 xh(3,NTPMAX),vxh(3,NTPMAX),rhill(NTPMAX)
+      real*8 mass(*),rpl(*),j2rp2,j4rp4
+      real*8 xh(3,*),vxh(3,*),rhill(*)
       integer nbod
 
 c...  Internal

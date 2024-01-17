@@ -26,10 +26,10 @@ c***********************************************************************
 
 c...  Inputs: 
       integer nbod
-      real*8 mass(nbod),vxb(3,nbod)
+      real*8 mass(*),vxb(3,*)
 
 c...  Outputs:
-      real*8 vxh(3,nbod)
+      real*8 vxh(3,*)
 
 c...  Internals:
       integer i

@@ -113,8 +113,8 @@ c...    Do the initial io write
 
 c...  must initize discard io routine
       if(btest(iflgchk,4))  then ! bit 4 is set
-         call io_discard_mass_symbap(0,t,0,mass(1),rpl(1),xh(:,1),
-     &        vxh(:,1),iud,-1,fopenstat)
+         call io_discard_mass_symbap(0,t,0,mass(1),rpl(1),xh(1:3,1),
+     &        vxh(1:3,1),iud,-1,fopenstat)
       endif
 
 c...  Calculate the location of the last massive particle

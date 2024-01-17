@@ -30,7 +30,7 @@ c       encounters of test particles with planets.
       include '../swift.inc'
 
 c...  Inputs Only: 
-      real*8 x(3),vx(3),gmsum
+      real*8 x(*),vx(*),gmsum
 
 c...  Outputs
       integer ialpha
