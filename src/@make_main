@@ -1,20 +1,15 @@
 #!/bin/bash
 
 # USERS MUST CHANGE THESE !!!!!!
-SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
+SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub/src"
 FORTRAN=gfortran-13
-FFLAGS='-O -march=native'
+FFLAGS='-O2 -ftree-vectorize -march=native -fopenmp -Wall'
 
 i=1
 for file in *.f90
 do
     echo [$i] $file
     file2="${file%%.*}"
-    if [ $file == swift_symba5p.f ]
-    then
-        $FORTRAN $FFLAGS -fopenmp -o $file2 $file -L$SWIFT_DIR -lswift
-    else
-        $FORTRAN $FFLAGS -o $file2 $file -L$SWIFT_DIR -lswift
-    fi
+    $FORTRAN $FFLAGS -o ../../$file2 $file -L$SWIFT_DIR/build -lswift -I$SWIFT_DIR/build
     ((i++))
 done

@@ -2,12 +2,11 @@ module symba5p_interface
 implicit none
 
 interface
-   subroutine symba5p_chk(rhill,nbod,ip1,ip2,mass,xh,vxh,dt,              &
-                          irec,icflg,svdotr)
+   subroutine symba5p_chk(rhill,ip1,ip2,xh,vxh,dt,irec,icflg,svdotr)
    use swift_mod
    implicit none
-   integer(ik), intent(in)  :: nbod,irec,ip1,ip2
-   real(rk), intent(in)     :: mass(:),xh(:,:),dt
+   integer(ik), intent(in)  :: irec,ip1,ip2
+   real(rk), intent(in)     :: xh(:,:),dt
    real(rk), intent(in)     :: vxh(:,:),rhill(:)
    integer(ik), intent(out) :: icflg
    logical(ik), intent(out) :: svdotr
@@ -15,12 +14,11 @@ interface
 end interface
 
 interface
-   subroutine symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,         &
-                              mtiny,ielc,ielst)
+   subroutine symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,ielc,ielst)
    use swift_mod
    implicit none
    integer(ik), intent(in) :: nbod,nbodm,ielst(:,:),ielc
-   real(rk), intent(in)    :: mass(:),xh(:,:),j2rp2,j4rp4,mtiny
+   real(rk), intent(in)    :: mass(:),xh(:,:),j2rp2,j4rp4
    real(rk), intent(out)   :: axh(:,:)
    end subroutine symba5p_getacch
 end interface
@@ -45,11 +43,10 @@ interface
 end interface
 
 interface
-   subroutine symba5p_helio_drift_g(nbod,ielev,irec,mass,xh,vxb,          &
-                                    dt,ielc,ielst)
+   subroutine symba5p_helio_drift_g(ielev,irec,mass,xh,vxb,dt,ielc,ielst)
    use swift_mod
    implicit none
-   integer(ik), intent(in) :: nbod,irec
+   integer(ik), intent(in) :: irec
    real(rk), intent(in)    :: mass(:),dt
    integer(ik), intent(in) :: ielev(:),ielst(:,:),ielc
    real(rk), intent(inout) :: xh(:,:),vxb(:,:)
@@ -68,11 +65,11 @@ interface
 end interface
 
 interface
-   subroutine symba5p_kick(nbod,mass,irec,iecnt,ielev,                    &
+   subroutine symba5p_kick(mass,irec,iecnt,ielev,                         &
                            rhill,xh,vxb,dt,sgn,ielc,ielst)
    use swift_mod
    implicit none
-   integer(ik), intent(in) :: nbod,irec
+   integer(ik), intent(in) :: irec
    real(rk), intent(in)    :: mass(:),dt,rhill(:),sgn
    integer(ik), intent(in) :: iecnt(:),ielev(:),ielst(:,:),ielc
    real(rk), intent(in)    :: xh(:,:)
@@ -81,11 +78,11 @@ interface
 end interface
 
 interface
-   subroutine symba5p_merge(t,dt,nbod,nbodm,ip1,ip2,mass,xh,vxb,       &
-      ireci,svdotrold,rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
+subroutine symba5p_merge(t,dt,ip1,ip2,mass,xh,vxb,svdotrold,           &
+                         rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
    use swift_mod
    implicit none
-   integer(ik), intent(in)    :: nbod,nbodm,ireci,ip1,ip2
+   integer(ik), intent(in)    :: ip1,ip2
    real(rk), intent(in)       :: t,dt
    logical(ik), intent(in)    :: svdotrold
    real(rk), intent(inout)    :: mass(:),xh(:,:),vxb(:,:),eoff
@@ -120,10 +117,10 @@ end interface
 interface
    subroutine symba5p_step_interp(time,iecnt,ielev,nbod,nbodm,mass,       &
          rhill,j2rp2,j4rp4,lclose,rpl,xh,vxh,dt,mergelst,mergecnt,        &
-         eoff,ielc,ielst,mtiny,grpie,grppc,grpc)
+         eoff,ielc,ielst,grpie,grppc,grpc)
    use swift_mod
    implicit none
-   real(rk), intent(in)       :: dt,j2rp2,j4rp4,time,mtiny
+   real(rk), intent(in)       :: dt,j2rp2,j4rp4,time
    integer(ik), intent(in)    :: nbod,nbodm,iecnt(:)
    integer(ik), intent(in)    :: grpie(:,:),grpc
    logical(ik), intent(in)    :: lclose
@@ -137,11 +134,11 @@ end interface
 interface
    subroutine symba5p_step_pl(i1st,time,nbod,nbodm,mass,j2rp2,j4rp4,      &
                               xh,vxh,dt,lclose,rpl,isenc,                 &
-                              mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
+                              mergelst,mergecnt,iecnt,eoff,rhill)
    use swift_mod
    implicit none
    integer(ik), intent(in)    :: nbod,nbodm
-   real(rk), intent(in)       :: dt,time,j2rp2,j4rp4,mtiny
+   real(rk), intent(in)       :: dt,time,j2rp2,j4rp4
    logical(ik), intent(in)    :: lclose
    integer(ik), intent(inout) :: i1st
    real(rk), intent(inout)    :: xh(:,:),vxh(:,:)

@@ -21,7 +21,7 @@ use swift_mod
 implicit none
 
 integer(ik), intent(in)        :: iu
-character(len=50), intent(in)  :: fname,fopenstat,format
+character(len=*), intent(in)   :: fname,fopenstat,format
 
 integer(ik), intent(out)       :: ierr
 

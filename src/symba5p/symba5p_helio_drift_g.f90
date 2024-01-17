@@ -3,7 +3,6 @@
 !*************************************************************************
 ! This subroutine loops thorugh the particles and calls the danby routine
 !             Input:
-!                 nbod          ==>  number of massive bodies (int scalar)
 !                 ielev         ==>  Level of particles (int array)
 !                 irec          ==>  current level of the code
 !                 mass          ==>  mass of bodies (real array)
@@ -24,15 +23,14 @@
 ! Date:    1/20.97
 ! Last revision: 
 
-subroutine symba5p_helio_drift_g(nbod,ielev,irec,mass,xh,vxb,          &
-                                 dt,ielc,ielst)
+subroutine symba5p_helio_drift_g(ielev,irec,mass,xh,vxb,dt,ielc,ielst)
 use swift_mod
 use symba5p_mod
 use mvs_interface
 use util_interface
 implicit none
 
-integer(ik), intent(in) :: nbod,irec
+integer(ik), intent(in) :: irec
 real(rk), intent(in)    :: mass(:),dt
 integer(ik), intent(in) :: ielev(:),ielst(:,:),ielc
 

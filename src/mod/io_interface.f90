@@ -16,7 +16,7 @@ interface
    integer(ik), intent(in)        :: iwhy,iu,init,id
    real(rk), intent(in)           :: time,m1,r1
    real(rk), intent(in)           :: x1(:),vx1(:)
-   character(len=50), intent(in)  :: fopenstat
+   character(len=*), intent(in)   :: fopenstat
    end subroutine io_discard_mass
 end interface
 
@@ -41,7 +41,7 @@ interface
    real(rk), intent(in)           :: dtout,dtdump
    real(rk), intent(in)           :: rmin,rmax,rmaxu,qmin
    logical(ik), intent(in)        :: lclose
-   character(len=50), intent(in)  :: outfile,dparfile
+   character(len=*), intent(in)   :: outfile,dparfile
    end subroutine io_dump_param
 end interface
 
@@ -53,7 +53,7 @@ interface
    integer(ik), intent(in)        :: nbod,iflgchk
    real(rk), intent(in)           :: mass(:),rpl(:),j2rp2,j4rp4
    real(rk), intent(in)           :: xh(:,:),vxh(:,:),rhill(:)
-   character(len=50), intent(in)  :: dplfile
+   character(len=*), intent(in)   :: dplfile
    logical(ik), intent(in)        :: lclose
    end subroutine io_dump_pl
 end interface
@@ -64,7 +64,7 @@ interface
    implicit none
    integer(ik), intent(in)        :: iu,i1st
    real(rk), intent(in)           :: t,energy,eltot(:)
-   character(len=50), intent(in)  :: fopenstat
+   character(len=*), intent(in)   :: fopenstat
    end subroutine io_energy_write
 end interface
 
@@ -73,13 +73,13 @@ interface
                          rmin,rmax,rmaxu,qmin,lclose,outfile,fopenstat)
    use swift_mod
    implicit none
-   character(len=50), intent(in)   :: infile
+   character(len=*), intent(in)    :: infile
    integer(ik), intent(out)        :: iflgchk
    real(rk), intent(out)           :: t0,tstop,dt
    real(rk), intent(out)           :: dtout,dtdump
    real(rk), intent(out)           :: rmin,rmax,rmaxu,qmin
    logical(ik), intent(out)        :: lclose
-   character(len=50), intent(out)  :: outfile,fopenstat
+   character(len=*), intent(out)   :: outfile,fopenstat
    end subroutine io_init_param
 end interface
 
@@ -88,7 +88,7 @@ interface
                       j2rp2,j4rp4)
    use swift_mod
    implicit none
-   character(len=50), intent(in)  :: infile
+   character(len=*), intent(in)   :: infile
    integer(ik), intent(in)        :: iflgchk
    logical(ik), intent(in)        :: lclose
    real(rk), intent(out)          :: mass(:),rpl(:),j2rp2,j4rp4
@@ -102,7 +102,7 @@ interface
    use swift_mod
    implicit none
    integer(ik), intent(in)        :: iu
-   character(len=50), intent(in)  :: fname,fopenstat,format
+   character(len=*), intent(in)   :: fname,fopenstat,format
    integer(ik), intent(out)       :: ierr
    end subroutine io_open
 end interface
@@ -111,9 +111,9 @@ interface
    subroutine io_splitname(oname,dirname,ldir,filename,lfile)
    use swift_mod
    implicit none
-   character(len=50), intent(in)  :: oname
+   character(len=*), intent(in)   :: oname
    integer(ik), intent(out)       :: ldir,lfile
-   character(len=50), intent(out) :: dirname,filename
+   character(len=*), intent(out)  :: dirname,filename
    end subroutine io_splitname
 end interface
 
@@ -127,7 +127,7 @@ interface
    integer(ik), intent(in)        :: istat(:,:)
    real(rk), intent(in)           :: xh(:,:),vxh(:,:)
    real(rk), intent(in)           :: xht(:,:),vxht(:,:)
-   character(len=50), intent(in)  :: oname,fopenstat
+   character(len=*), intent(in)   :: oname,fopenstat
    end subroutine io_write_frame
 end interface
 
@@ -155,7 +155,7 @@ interface
    implicit none
    integer(ik), intent(in)        :: nbod,iu
    real(rk), intent(in)           :: mass(:),time
-   character(len=50), intent(in)  :: oname,fopenstat 
+   character(len=*), intent(in)   :: oname,fopenstat 
    end subroutine io_write_mass
 end interface
 

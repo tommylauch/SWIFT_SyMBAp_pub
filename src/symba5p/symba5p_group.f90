@@ -91,7 +91,7 @@ integer(ik)              :: temp(2),tempc
             write(*,*) 'ERROR: Group member list filled.'
             write(*,*) 'STOPPING. Pair count=',grppc(temp(1))
             call util_exit(1)
-      	endif
+         endif
          grpie(grppc(temp(1)),temp(1)) = grpie(i,temp(2))
          grpie(i,temp(2)) = 0_ik
       enddo

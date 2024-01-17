@@ -4,9 +4,7 @@
 ! This subroutine checks to see if there are encounters
 !             Input:
 !                 rhill         ==>  Radius of hill sphere (real array)
-!                 nbod          ==>  number of massive bodies (int scalar)
 !                 ip1,ip2       ==>  The two bodies to check (int scalar)
-!                 mass          ==>  mass of bodies (real array)
 !                 xh,yh,zh      ==>  initial position in helio coord 
 !                                    (real arrays)
 !                 vxh,vyh,vzh   ==>  initial velocity in helio coord 
@@ -24,15 +22,14 @@
 ! Date:   3/20/97
 ! Last revision: 
 
-subroutine symba5p_chk(rhill,nbod,ip1,ip2,mass,xh,vxh,dt,              &
-                       irec,icflg,svdotr)
+subroutine symba5p_chk(rhill,ip1,ip2,xh,vxh,dt,irec,icflg,svdotr)
 use swift_mod
 use symba5p_mod
 use rmvs_interface
 implicit none
 
-integer(ik), intent(in)  :: nbod,irec,ip1,ip2
-real(rk), intent(in)     :: mass(:),xh(:,:),dt
+integer(ik), intent(in)  :: irec,ip1,ip2
+real(rk), intent(in)     :: xh(:,:),dt
 real(rk), intent(in)     :: vxh(:,:),rhill(:)
 
 integer(ik), intent(out) :: icflg

@@ -50,9 +50,8 @@
 ! Date:   1/2/97
 ! Last revision: 12/16/09
 
-subroutine symba5p_merge(t,dt,nbod,nbodm,ip1,ip2,mass,xh,vxb,          &
-      ireci,svdotrold,rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
-      
+subroutine symba5p_merge(t,dt,ip1,ip2,mass,xh,vxb,svdotrold,           &
+                         rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
 use swift_mod
 use symba5p_mod
 use discard_interface
@@ -60,7 +59,7 @@ use orbel_interface
 use util_interface
 implicit none
 
-integer(ik), intent(in)    :: nbod,nbodm,ireci,ip1,ip2
+integer(ik), intent(in)    :: ip1,ip2
 real(rk), intent(in)       :: t,dt
 logical(ik), intent(in)    :: svdotrold
 

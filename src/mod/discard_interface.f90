@@ -2,14 +2,12 @@ module discard_interface
 implicit none
 
 interface
-   subroutine discard_massive5p(time,dt,nbod,mass,xh,vxh,rmin,rmax,rmaxu, &
-             qmin,lclose,rpl,rhill,isenc,mergelst,mergecnt,iecnt,eoff,i1st)
+   subroutine discard_massive5p(time,nbod,mass,xh,vxh,rmin,rmax,rmaxu,    &
+           qmin,rpl,rhill,mergelst,mergecnt,iecnt,eoff,i1st)
    use swift_mod
    implicit none
-   real(rk), intent(in)       :: time,dt
-   integer(ik), intent(in)    :: isenc
+   real(rk), intent(in)       :: time
    real(rk), intent(in)       :: rmin,rmax,rmaxu,qmin
-   logical(ik), intent(in)    :: lclose
    integer(ik), intent(in)    :: mergecnt,iecnt(:)
    integer(ik), intent(inout) :: nbod,i1st,mergelst(:,:)
    real(rk), intent(inout)    :: mass(:),xh(:,:),vxh(:,:)

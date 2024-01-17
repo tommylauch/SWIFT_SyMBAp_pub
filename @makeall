@@ -1,34 +1,35 @@
 #!/bin/bash
-mkdir -p build
-cd build && rm -f *
+cd src
+
+mkdir -p build && rm -f build/*
 
 echo DIRECTORY: mod
 cd mod
-rm @make_mod
+rm -f @make_mod
 ln -s ../@make_mod .
 bash @make_mod
 
 echo DIRECTORY: anal
 cd ../anal
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: coord
 cd ../coord
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: discard
 cd ../discard
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: io
 cd ../io
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
@@ -36,19 +37,19 @@ cd ../mvs
 
 echo DIRECTORY: mvs/drift
 cd drift
-rm @make
+rm -f @make
 ln -s ../../@make .
 bash @make
 
 echo DIRECTORY: mvs/getacch
 cd ../getacch
-rm @make
+rm -f @make
 ln -s ../../@make .
 bash @make
 
 echo DIRECTORY: mvs/kickvh
 cd ../kickvh
-rm @make
+rm -f @make
 ln -s ../../@make .
 bash @make
 
@@ -56,42 +57,43 @@ cd ..
 
 echo DIRECTORY: orbel
 cd ../orbel
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: rmvs
 cd ../rmvs
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: obl
 cd ../obl
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: util
 cd ../util
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: helio
 cd ../helio
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
 echo DIRECTORY: symba5p
 cd ../symba5p
-rm @make
+rm -f @make
 ln -s ../@make .
 bash @make
 
-cd ..
-ar ts libswift.a
-ranlib libswift.a
+cd ../main
+rm -f @make_main
+ln -s ../@make_main .
+bash @make_main
 
 echo DONE

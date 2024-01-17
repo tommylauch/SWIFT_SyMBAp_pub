@@ -43,7 +43,7 @@ interface
    integer(ik), intent(in)        :: nbod,iu
    real(rk), intent(in)           :: mass(:),t,j2rp2,j4rp4,eoff
    real(rk), intent(in)           :: xh(:,:),vxh(:,:)
-   character(len=50), intent(in)  :: fopenstat
+   character(len=*), intent(in)   :: fopenstat
    end subroutine anal_energy_write
 end interface
 

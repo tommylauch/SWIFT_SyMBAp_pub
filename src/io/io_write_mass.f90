@@ -23,7 +23,7 @@ implicit none
 
 integer(ik), intent(in)        :: nbod,iu
 real(rk), intent(in)           :: mass(:),time
-character(len=50), intent(in)  :: oname,fopenstat
+character(len=*), intent(in)   :: oname,fopenstat
 
 integer(ik)                    :: ierr,i
 integer(ik), save              :: ldir,lfile

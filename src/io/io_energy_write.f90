@@ -25,7 +25,7 @@ implicit none
 
 integer(ik), intent(in)        :: iu,i1st
 real(rk), intent(in)           :: t,energy,eltot(:)
-character(len=50), intent(in)  :: fopenstat
+character(len=*), intent(in)   :: fopenstat
 
 integer(ik)                    :: ierr
 

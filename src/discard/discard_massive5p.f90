@@ -5,7 +5,6 @@
 ! merged.
 !             Input:
 !                 time          ==>  current time (real scalar)
-!                 dt            ==>  time step  (real scalar)
 !                 nbod          ==>  number of massive bodies (int scalar)
 !                 mass          ==>  mass of bodies (real array)
 !                 xh,yh,zh      ==>   position in helio coord 
@@ -21,16 +20,10 @@
 !                  qmin          ==> Smallest perihelion distance
 !                                      if <0  then don't check
 !                                          (real scalar)
-!                 lclose        ==> .true. --> marge particles if they
-!                                    get too close. Read in that 
-!                                    distance in io_init_pl
-!                                      (logical*2 scalar)
 !                 rpl           ==>  physical size of a planet.
 !                                    (real array)
 !                 rhill         ==>  size of a planet's hill's sphere.
 !                                    (real array)
-!                 isenc         ==>  0 --> No encounter during last dt
-!                                    1 --> There was encounters
 !                                     (integer scalar)
 !                 eoff          ==> Amount of energy lost due to discards
 !                                          (real scalar)
@@ -58,8 +51,8 @@
 ! Date:    12/30/96
 ! Last revision: 5/13/99
 
-subroutine discard_massive5p(time,dt,nbod,mass,xh,vxh,rmin,rmax,rmaxu, &
-          qmin,lclose,rpl,rhill,isenc,mergelst,mergecnt,iecnt,eoff,i1st)
+subroutine discard_massive5p(time,nbod,mass,xh,vxh,rmin,rmax,rmaxu,    &
+           qmin,rpl,rhill,mergelst,mergecnt,iecnt,eoff,i1st)
 use swift_mod
 use discard_interface, except_this_one => discard_massive5p
 use coord_interface
@@ -67,10 +60,8 @@ use anal_interface
 use io_interface
 implicit none
 
-real(rk), intent(in)       :: time,dt
-integer(ik), intent(in)    :: isenc
+real(rk), intent(in)       :: time
 real(rk), intent(in)       :: rmin,rmax,rmaxu,qmin
-logical(ik), intent(in)    :: lclose
 integer(ik), intent(in)    :: mergecnt,iecnt(:)
 
 integer(ik), intent(inout) :: nbod,i1st,mergelst(:,:)

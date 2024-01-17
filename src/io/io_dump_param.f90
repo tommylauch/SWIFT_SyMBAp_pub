@@ -42,7 +42,7 @@ integer(ik), intent(in)        :: iflgchk
 real(rk), intent(in)           :: dtout,dtdump
 real(rk), intent(in)           :: rmin,rmax,rmaxu,qmin
 logical(ik), intent(in)        :: lclose
-character(len=50), intent(in)  :: outfile,dparfile
+character(len=*), intent(in)   :: outfile,dparfile
 
 character(len=50)              :: lflg(0:IO_NBITS-1),cclose
 integer(ik)                    :: i,ierr
@@ -52,8 +52,8 @@ integer(ik)                    :: i,ierr
 ! Open parameter data file for the dump
    call io_open(7,dparfile,'unknown','formatted',ierr)
 
-	write(7,*) t,tstop,dt
-	write(7,*) dtout,dtdump
+   write(7,*) t,tstop,dt
+   write(7,*) dtout,dtdump
 
    do i=0,IO_NBITS-1
       if(btest(iflgchk,i)) then 

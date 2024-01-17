@@ -36,7 +36,7 @@ use util_interface
 use io_interface, except_this_one => io_init_pl
 implicit none
 
-character(len=50), intent(in)  :: infile
+character(len=*), intent(in)   :: infile
 integer(ik), intent(in)        :: iflgchk
 logical(ik), intent(in)        :: lclose
 

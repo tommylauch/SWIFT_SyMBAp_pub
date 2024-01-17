@@ -35,7 +35,7 @@ implicit none
 integer(ik), intent(in)        :: nbod,iflgchk
 real(rk), intent(in)           :: mass(:),rpl(:),j2rp2,j4rp4
 real(rk), intent(in)           :: xh(:,:),vxh(:,:),rhill(:)
-character(len=50), intent(in)  :: dplfile
+character(len=*), intent(in)   :: dplfile
 logical(ik), intent(in)        :: lclose
 
 integer(ik)                    :: j,ierr

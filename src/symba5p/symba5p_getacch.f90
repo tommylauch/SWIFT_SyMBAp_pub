@@ -10,7 +10,6 @@
 !                 j2rp2,j4rp4 ==>  J2*radii_pl^2 and  J4*radii_pl^4
 !                                     (real scalars)
 !                 xh          ==>  position in heliocentric coord (real arrays)
-!                 mtiny       ==>  Small mass  (real array)
 !                ielc         ==>  number of encounters (integer scalar)
 !                ielst        ==>  list of ecnounters (2D integer array)
 !             Output
@@ -21,8 +20,7 @@
 ! Date:    3/20/97
 ! Last revision: 17/8/20
 
-subroutine symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,         &
-                           mtiny,ielc,ielst)
+subroutine symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,ielc,ielst)
 use swift_mod
 use symba5p_mod
 use mvs_interface
@@ -30,7 +28,7 @@ use obl_interface
 implicit none
 
 integer(ik), intent(in) :: nbod,nbodm,ielst(:,:),ielc
-real(rk), intent(in)    :: mass(:),xh(:,:),j2rp2,j4rp4,mtiny
+real(rk), intent(in)    :: mass(:),xh(:,:),j2rp2,j4rp4
 
 real(rk), intent(out)   :: axh(:,:)
 

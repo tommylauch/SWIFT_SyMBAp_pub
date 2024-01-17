@@ -45,7 +45,7 @@ real(rk), intent(inout)    :: vxh(:,:),rpl(:)
 real(rk), intent(inout)    :: rhill(:)
 integer(ik), intent(inout) :: isperih(:)
 
-integer(ik)                :: i,j
+integer(ik)                :: i
 
 !...  Executable code
 

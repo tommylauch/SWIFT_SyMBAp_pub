@@ -57,7 +57,7 @@
 
 subroutine symba5p_step_pl(i1st,time,nbod,nbodm,mass,j2rp2,j4rp4,      &
                            xh,vxh,dt,lclose,rpl,isenc,                 &
-                           mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
+                           mergelst,mergecnt,iecnt,eoff,rhill)
 use swift_mod
 use symba5p_mod
 use util_interface
@@ -65,7 +65,7 @@ use symba5p_interface, except_this_one => symba5p_step_pl
 implicit none
 
 integer(ik), intent(in)    :: nbod,nbodm
-real(rk), intent(in)       :: dt,time,j2rp2,j4rp4,mtiny
+real(rk), intent(in)       :: dt,time,j2rp2,j4rp4
 logical(ik), intent(in)    :: lclose
 
 integer(ik), intent(inout) :: i1st
@@ -94,13 +94,13 @@ integer(ik)                :: grpie(GRPMAX,GRPNMAX),grppc(GRPNMAX),grpc
    grppc = 0_ik
 !$OMP PARALLEL DEFAULT (NONE)                                          &
 !$OMP PRIVATE(i,j,ieflg,svdotr)                                        &
-!$OMP SHARED(rhill,nbod,nbodm,mass,xh,vxh,                             &
+!$OMP SHARED(rhill,nbod,nbodm,xh,vxh,                                  &
 !$OMP dt,irec,iecnt,ielev,ielc,ielst,isenc,grpie,grppc,grpc)
 !$OMP DO COLLAPSE(2)
    do j=2,nbodm
       do i=j+1,nbod
          ieflg = 0_ik
-         call symba5p_chk(rhill,nbod,i,j,mass,xh,vxh,dt,irec,ieflg,svdotr)
+         call symba5p_chk(rhill,i,j,xh,vxh,dt,irec,ieflg,svdotr)
          if (ieflg.ne.0) then
 !$OMP CRITICAL (ENC)
             isenc = 1_ik
@@ -131,7 +131,7 @@ integer(ik)                :: grpie(GRPMAX,GRPNMAX),grppc(GRPNMAX),grpc
    else
       call symba5p_step_interp(time,iecnt,ielev,nbod,nbodm,mass,       &
            rhill,j2rp2,j4rp4,lclose,rpl,xh,vxh,dt,mergelst,mergecnt,   &
-           eoff,ielc,ielst,mtiny,grpie,grppc,grpc)
+           eoff,ielc,ielst,grpie,grppc,grpc)
       i1st = 0_ik
    endif
 

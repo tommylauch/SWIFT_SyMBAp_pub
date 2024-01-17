@@ -19,10 +19,10 @@ subroutine io_splitname(oname,dirname,ldir,filename,lfile)
 use swift_mod
 implicit none
 
-character(len=50), intent(in)   :: oname
+character(len=*), intent(in)    :: oname
 
 integer(ik), intent(out)        :: ldir,lfile
-character(len=50), intent(out)  :: dirname,filename
+character(len=*), intent(out)   :: dirname,filename
 
 integer(ik)                     :: i,il,is
 

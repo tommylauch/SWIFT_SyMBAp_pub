@@ -27,7 +27,6 @@
 !                  eoff          ==>  Energy offset (real scalar)
 !                 iel!            ==>  number of encounters (integer scalar)
 !                 ielst          ==>  list of ecnounters (2D integer array)
-!                 mtiny          ==>  Small mass  (real array)
 !              Output:
 !                  xh,yh,zh      ==>  final position in helio coord 
 !                                        (real arrays)
@@ -50,7 +49,7 @@
 
 subroutine symba5p_step_interp(time,iecnt,ielev,nbod,nbodm,mass,       &
       rhill,j2rp2,j4rp4,lclose,rpl,xh,vxh,dt,mergelst,mergecnt,        &
-      eoff,ielc,ielst,mtiny,grpie,grppc,grpc)
+      eoff,ielc,ielst,grpie,grppc,grpc)
 use swift_mod
 use symba5p_mod
 use coord_interface
@@ -59,7 +58,7 @@ use mvs_interface
 use symba5p_interface, except_this_one => symba5p_step_interp
 implicit none
 
-real(rk), intent(in)       :: dt,j2rp2,j4rp4,time,mtiny
+real(rk), intent(in)       :: dt,j2rp2,j4rp4,time
 integer(ik), intent(in)    :: nbod,nbodm,iecnt(:)
 integer(ik), intent(in)    :: grpie(:,:),grpc
 logical(ik), intent(in)    :: lclose
@@ -88,8 +87,7 @@ logical(ik)                :: svdotr(NENMAX)                            ! Used b
 
 !...  Get the accelerations in helio frame. For each object
 !...     only include those guys that it is not encountering with. 
-   call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,            &
-                        mtiny,ielc,ielst)
+   call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,ielc,ielst)
 
 !...  Apply a heliocentric kick for a half dt 
    call kickvh(nbod,vxb,axh,dth)
@@ -140,8 +138,7 @@ logical(ik)                :: svdotr(NENMAX)                            ! Used b
 
 !...  Get the accelerations in helio frame. For each object
 !...     only include those guys that it is not encountering with. 
-   call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,            &
-                        mtiny,ielc,ielst)
+   call symba5p_getacch(nbod,nbodm,mass,j2rp2,j4rp4,xh,axh,ielc,ielst)
 
 !...  Apply a heliocentric kick for a half dt 
    call kickvh(nbod,vxb,axh,dth)

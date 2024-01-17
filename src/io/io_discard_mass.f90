@@ -32,7 +32,7 @@ implicit none
 integer(ik), intent(in)        :: iwhy,iu,init,id
 real(rk), intent(in)           :: time,m1,r1
 real(rk), intent(in)           :: x1(:),vx1(:)
-character(len=50), intent(in)  :: fopenstat
+character(len=*), intent(in)   :: fopenstat
 
 integer(ik)                    :: ierr
 !...  Executable code 

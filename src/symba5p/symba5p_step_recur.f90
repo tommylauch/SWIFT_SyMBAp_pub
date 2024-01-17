@@ -85,15 +85,14 @@ real(rk)                   :: dtl,dth,sgn
       write(*,*) '         Roundoff will be important!!!! '
    endif
 
-   if (ireci.eq.0) then                                                 ! Do we need to go deeper?
+   if (ireci.eq.0) then  ! Do we need to go deeper?
       irecp = ireci+1
       icflg = 0_ik
       do ie=1,ielc
          i = ielst(1,ie)
          j = ielst(2,ie)
          if ((ielev(i).ge.ireci).and.(ielev(j).ge.ireci)) then
-            call symba5p_chk(rhill,nbod,i,j,mass,xh,vxb,               &
-                             dtl,irecp,ieflg,svdotr(ie))
+            call symba5p_chk(rhill,i,j,xh,vxb,dtl,irecp,ieflg,svdotr(ie))
             if (ieflg.ne.0) then
                icflg = 1_ik
                ielev(i) = irecp
@@ -104,9 +103,9 @@ real(rk)                   :: dtl,dth,sgn
          endif
       enddo
       sgn = 1.0_rk
-      call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                   &
+      call symba5p_kick(mass,irecp,iecnt,ielev,                        &
                         rhill,xh,vxb,dth,sgn,ielc,ielst)
-      call symba5p_helio_drift_g(nbod,ielev,ireci,mass,xh,vxb,         &
+      call symba5p_helio_drift_g(ielev,ireci,mass,xh,vxb,              &
                                  dtl,ielc,ielst)
       if (icflg.ne.0) then
          call symba5p_step_recur(t,nbod,nbodm,mass,irecp,ilevl,        &
@@ -114,16 +113,15 @@ real(rk)                   :: dtl,dth,sgn
               dt0,eoff,svdotr,ielc,ielst)
       endif
       sgn = 1.0_rk
-      call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                   &
+      call symba5p_kick(mass,irecp,iecnt,ielev,                        &
                         rhill,xh,vxb,dth,sgn,ielc,ielst)
       if ( lclose ) then       ! look for mergers
          do ie=1,ielc
             i = ielst(1,ie)
             j = ielst(2,ie)
             if ((ielev(i).ge.ireci).and.(ielev(j).ge.ireci)) then
-               call symba5p_merge(t,dtl,nbod,nbodm,i,j,mass,xh,        &
-                    vxb,ireci,svdotr(ie),rpl,mergelst,mergecnt,        &
-                    rhill,eoff,ielc,ielst)
+               call symba5p_merge(t,dtl,i,j,mass,xh,vxb,svdotr(ie),    &
+                    rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
             endif
          enddo
       endif
@@ -141,8 +139,7 @@ real(rk)                   :: dtl,dth,sgn
             i = ielst(1,ie)
             j = ielst(2,ie)
             if ((ielev(i).ge.ireci).and.(ielev(j).ge.ireci)) then
-               call symba5p_chk(rhill,nbod,i,j,mass,xh,vxb,            &
-                                dtl,irecp,ieflg,svdotr(ie))
+               call symba5p_chk(rhill,i,j,xh,vxb,dtl,irecp,ieflg,svdotr(ie))
                if (ieflg.ne.0) then
                   icflg = 1_ik
                   ielev(i) = irecp
@@ -153,12 +150,12 @@ real(rk)                   :: dtl,dth,sgn
             endif
          enddo
          sgn = 1.0_rk
-         call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                &
+         call symba5p_kick(mass,irecp,iecnt,ielev,                     &
                            rhill,xh,vxb,dth,sgn,ielc,ielst)
          sgn = -1.0_rk
-         call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                &
+         call symba5p_kick(mass,irecp,iecnt,ielev,                     &
                            rhill,xh,vxb,dth,sgn,ielc,ielst)
-         call symba5p_helio_drift_g(nbod,ielev,ireci,mass,xh,vxb,      &
+         call symba5p_helio_drift_g(ielev,ireci,mass,xh,vxb,           &
                                     dtl,ielc,ielst)
          if (icflg.ne.0) then
             call symba5p_step_recur(t,nbod,nbodm,mass,irecp,ilevl,     &
@@ -166,19 +163,18 @@ real(rk)                   :: dtl,dth,sgn
                 mergecnt,dt0,eoff,svdotr,ielc,ielst)
          endif
          sgn = 1.0_rk
-         call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                &
+         call symba5p_kick(mass,irecp,iecnt,ielev,                     &
                            rhill,xh,vxb,dth,sgn,ielc,ielst)
          sgn = -1.0_rk
-         call symba5p_kick(nbod,mass,irecp,iecnt,ielev,                &
+         call symba5p_kick(mass,irecp,iecnt,ielev,                     &
                            rhill,xh,vxb,dth,sgn,ielc,ielst)
          if (lclose) then ! look for mergers
             do ie=1,ielc
                i = ielst(1,ie)
                j = ielst(2,ie)
                if ((ielev(i).ge.ireci).and.(ielev(j).ge.ireci)) then
-                  call symba5p_merge(t,dtl,nbod,nbodm,i,j,mass,xh,     &
-                       vxb,ireci,svdotr(ie),rpl,mergelst,mergecnt,     &
-                       rhill,eoff,ielc,ielst)
+                  call symba5p_merge(t,dtl,i,j,mass,xh,vxb,svdotr(ie), &
+                       rpl,mergelst,mergecnt,rhill,eoff,ielc,ielst)
                endif
             enddo
          endif

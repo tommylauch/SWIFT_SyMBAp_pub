@@ -31,9 +31,8 @@ real(rk)                :: x
 
 !...  Executable code
 
-   nper = angle/TWOPI
+   nper = floor(angle/TWOPI)
    x = angle-nper*TWOPI
-   if (x.lt.0.0_rk) x = x+TWOPI
    sx = sin(x)
    cx = sqrt(1.0_rk-sx**2)
    if ( (x.gt.PIBY2) .and. (x.lt.PI3BY2) ) cx = -cx

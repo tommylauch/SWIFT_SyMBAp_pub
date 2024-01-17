@@ -43,7 +43,7 @@ real(rk), intent(in)           :: mass(:),time
 integer(ik), intent(in)        :: istat(:,:)
 real(rk), intent(in)           :: xh(:,:),vxh(:,:)
 real(rk), intent(in)           :: xht(:,:),vxht(:,:)
-character(len=50), intent(in)  :: oname,fopenstat
+character(len=*), intent(in)   :: oname,fopenstat
 
 integer(ik)                    :: i,id
 integer(ik)                    :: ialpha,ierr

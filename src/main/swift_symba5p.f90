@@ -7,29 +7,28 @@ use symba5p_interface
 use discard_interface
 implicit none
 
-real(rk)           :: mass(NTPMAX),xh(3,NTPMAX),vxh(3,NTPMAX)
-real(rk)           :: xht(3,1),vxht(3,1)             ! Dummy for the io
-real(rk)           :: j2rp2,j4rp4
-integer(ik)        :: nbod,i1st,nbodm,nbodo,ntp,istat(1)
+real(rk)               :: mass(NTPMAX),xh(3,NTPMAX),vxh(3,NTPMAX)
+real(rk)               :: xht(3,1),vxht(3,1)             ! Dummy for the io
+real(rk)               :: j2rp2,j4rp4
+integer(ik), parameter :: ntp = 0_ik
+integer(ik)            :: nbod,i1st,nbodm,nbodo,istat(ntp,1)
 
-integer(ik)        :: threads,th_low,th_max
-integer(ik)        :: iflgchk,iub,iuj,iud,iue,ium
+integer(ik)            :: threads,th_low,th_max
+integer(ik)            :: iflgchk,iub,iuj,iud,iue,ium
 
-real(rk)           :: t0,tstop,dt,dtout,dtdump
-real(rk)           :: t,tout,tdump,tfrac,eoff
-real(rk)           :: rpl(NTPMAX),rhill(NTPMAX)
+real(rk)               :: t0,tstop,dt,dtout,dtdump
+real(rk)               :: t,tout,tdump,tfrac,eoff
+real(rk)               :: rpl(NTPMAX),rhill(NTPMAX)
 
-real(rk)           :: rmin,rmax,rmaxu,qmin,mtiny
-real(rk)           :: ke,pot,energy,eltot(3)
-logical(ik)        :: lclose 
-integer(ik)        :: isenc,ihills
-integer(ik)        :: mergelst(2,NTPMAX),mergecnt,iecnt(NTPMAX)
+real(rk)               :: rmin,rmax,rmaxu,qmin,mtiny
+real(rk)               :: ke,pot,energy,eltot(3)
+logical(ik)            :: lclose 
+integer(ik)            :: isenc,ihills
+integer(ik)            :: mergelst(2,NTPMAX),mergecnt,iecnt(NTPMAX)
 
-character(len=:), allocatable :: outfile,inparfile,inplfile,fopenstat
+character(len=50)      :: outfile,inparfile,inplfile,fopenstat
 
 !...  Executable code
-   ntp = 0_ik
-
 !...  print version number
    call util_version
 
@@ -109,14 +108,13 @@ character(len=:), allocatable :: outfile,inparfile,inplfile,fopenstat
    do while ( (t.le.tstop).and.(nbod.gt.1) )
       call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,         &
                            xh,vxh,dt,lclose,rpl,isenc,                 &
-                           mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
+                           mergelst,mergecnt,iecnt,eoff,rhill)
       t = t+dt
 
       if (btest(iflgchk,4)) then     ! bit 4 set
          nbodo = nbod
-         call discard_massive5p(t,dt,nbod,mass,xh,vxh,rmin,rmax,       &
-              rmaxu,qmin,lclose,rpl,rhill,isenc,mergelst,mergecnt,     &
-              iecnt,eoff,i1st)
+         call discard_massive5p(t,nbod,mass,xh,vxh,rmin,rmax,rmaxu,    &
+              qmin,rpl,rhill,mergelst,mergecnt,iecnt,eoff,i1st)
          if (nbodo.ne.nbod) then
             call symba5p_nbodm(nbod,mass,mtiny,nbodm)
             if ( (nbod/threads.lt.th_low).and.(threads.gt.1) ) then

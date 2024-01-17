@@ -48,14 +48,14 @@ use util_interface
 use io_interface, except_this_one => io_init_param
 implicit none
 
-character(len=50), intent(in)   :: infile
+character(len=*), intent(in)    :: infile
 
 integer(ik), intent(out)        :: iflgchk
 real(rk), intent(out)           :: t0,tstop,dt
 real(rk), intent(out)           :: dtout,dtdump
 real(rk), intent(out)           :: rmin,rmax,rmaxu,qmin
 logical(ik), intent(out)        :: lclose
-character(len=50), intent(out)  :: outfile,fopenstat
+character(len=*), intent(out)   :: outfile,fopenstat
 
 logical(ik)                     :: lflg(0:IO_NBITS-1)
 integer(ik)                     :: i,ierr

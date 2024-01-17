@@ -89,5 +89,5 @@ integer(ik)             :: i,j
 
    energy = ke+pot
 
-return	
+return
 end subroutine anal_energy_mtiny

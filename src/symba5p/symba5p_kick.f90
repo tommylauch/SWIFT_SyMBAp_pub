@@ -3,7 +3,6 @@
 !*************************************************************************
 ! Do a symba5 kick
 !             Input:
-!                 nbod          ==>  number of massive bodies (int scalar)
 !                 mass          ==>  mass of bodies (real array)
 !                 irec          ==>  recursion level  (integer scalar)
 !                 iecnt         ==>  The number of objects that each planet 
@@ -27,13 +26,13 @@
 ! Date:   3/20/97
 ! Last revision: 3/3/10
 
-subroutine symba5p_kick(nbod,mass,irec,iecnt,ielev,                    &
+subroutine symba5p_kick(mass,irec,iecnt,ielev,                         &
                         rhill,xh,vxb,dt,sgn,ielc,ielst)
 use swift_mod
 use symba5p_mod
 implicit none
 
-integer(ik), intent(in) :: nbod,irec
+integer(ik), intent(in) :: irec
 real(rk), intent(in)    :: mass(:),dt,rhill(:),sgn
 integer(ik), intent(in) :: iecnt(:),ielev(:),ielst(:,:),ielc
 real(rk), intent(in)    :: xh(:,:)
