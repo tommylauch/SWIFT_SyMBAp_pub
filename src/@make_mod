@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# USERS MUST CHANGE THESE !!!!!!
+SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub/src"
+FORTRAN=gfortran-13
+FFLAGS='-O2 -ftree-vectorize -march=native -fopenmp -Wall -c'
+
+i=1
+for file in *.f90
+do
+    echo [$i] $file
+    file2="${file%%.*}"
+    $FORTRAN $FFLAGS swift_mod.f90 $file2.f90
+    ar r $SWIFT_DIR/build/libswift.a $file2.o
+    ((i++))
+done
+
+rm -f *.o
+mv *.mod $SWIFT_DIR/build/
+echo Done directory $PWD
