@@ -43,7 +43,7 @@ real(rk)                 :: fdt
 !...  Executable code 
 
 !...    To get close approch needed to take lots of iterations if alpha<0
-   if(alpha.lt.0.0) then
+   if (alpha.lt.0.0) then
       ncmax = NLAG2
    else
       ncmax = NLAG2
@@ -59,9 +59,9 @@ real(rk)                 :: fdt
       c3 = c3*s**3
       f = r0*c1 + u*c2 + mu*c3 - dt
       fp = r0*c0 + u*c1 + mu*c2
-      fpp = (-40.0*alpha + mu)*c1 + u*c0
-      ds = - ln*f/(fp + sign(1.d0,fp)*sqrt(abs((ln - 1.0)*             &
-                   (ln - 1.0)*fp*fp - (ln - 1.0)*ln*f*fpp)))
+      fpp = (-40.0_rk*alpha + mu)*c1 + u*c0
+      ds = - ln*f/(fp + sign(1.0_rk,fp)*sqrt(abs((ln-1.0_rk)*          &
+                   (ln - 1.0_rk)*fp**2-(ln-1.0_rk)*ln*f*fpp)))
       s = s + ds
       fdt = f/dt
 !..        quartic convergence

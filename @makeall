@@ -91,9 +91,16 @@ rm -f @make
 ln -s ../@make .
 bash @make
 
+echo DIRECTORY: main
 cd ../main
 rm -f @make_main
 ln -s ../@make_main .
 bash @make_main
+
+echo DIRECTORY: tools
+cd ../../tools
+bash @make_tools
+
+cd ../
 
 echo DONE

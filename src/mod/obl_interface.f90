@@ -10,9 +10,7 @@ interface
    real(rk), intent(in)    :: mass(:),xh(:,:),irh(:)
    real(rk), intent(out)   :: aoblx(:,:)
    end subroutine obl_acc
-end interface
 
-interface
    subroutine obl_pot(nbod,mass,j2rp2,j4rp4,xh,irh,oblpot)
    use swift_mod
    implicit none

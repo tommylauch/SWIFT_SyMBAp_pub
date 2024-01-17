@@ -71,7 +71,7 @@ integer(ik)                     :: i,ierr
    write(*,*) 'dtout,dtdump : ',dtout,dtdump
    read(7,*) (lflg(i),i=IO_NBITS-1,0,-1)
 
-   iflgchk=0
+   iflgchk = 0_ik
    do i=0,IO_NBITS-1
       if(lflg(i)) then
          iflgchk = ibset(iflgchk,i)
@@ -79,6 +79,11 @@ integer(ik)                     :: i,ierr
    enddo
 
    write(*,*) (lflg(i),i=IO_NBITS-1,0,-1),' = ',iflgchk
+   
+   if (btest(iflgchk,0)) then
+      write(*,*) ' FXDR not implemented'
+      call util_exit(1)
+   endif
 
    if (btest(iflgchk,0) .and. btest(iflgchk,1)) then 
       write(*,*) ' SWIFT ERROR: in io_init_param:'

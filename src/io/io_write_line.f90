@@ -1,7 +1,7 @@
 !*************************************************************************
 !                            IO_WRITE_LINE
 !*************************************************************************
-! write out one line to real*4 binary file.
+! write out one line to real*8 binary file.
 !      Input:
 !            iu       ==> unit number to write to
 !            a        ==> semi-major axis or pericentric distance if a parabola

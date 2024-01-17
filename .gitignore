@@ -1,9 +1,6 @@
 libswift.a
 swift_symba5p
-tools/follow
 tools/follow_symba
-tools/left
-tools/gen_ai
 src/build
 src/coord/@make
 src/discard/@make

@@ -9,9 +9,7 @@ interface
    real(rk), intent(in)    :: mass(:),xh(:,:),vxh(:,:)
    real(rk), intent(out)   :: msys,xb(:,:),vxb(:,:)
    end subroutine coord_h2b
-end interface
 
-interface
    subroutine coord_vb2h(nbod,mass,vxb,vxh)
    use swift_mod
    implicit none
@@ -20,9 +18,7 @@ interface
    real(rk), intent(inout) :: vxb(:,:)
    real(rk), intent(out)   :: vxh(:,:)
    end subroutine coord_vb2h
-end interface
 
-interface
    subroutine coord_vh2b(nbod,mass,vxh,vxb)
    use swift_mod
    implicit none

@@ -11,9 +11,7 @@ interface
    real(rk), intent(in)    :: xh(:,:),vxh(:,:)
    real(rk), intent(out)   :: energy,eltot(:),ke,pot
    end subroutine anal_energy_discard5
-end interface
 
-interface
    subroutine anal_energy(nbod,mass,j2rp2,j4rp4,xh,vxh,ke,pot,energy,eltot)
    use swift_mod
    implicit none
@@ -22,9 +20,7 @@ interface
    real(rk), intent(in)    :: xh(:,:),vxh(:,:)
    real(rk), intent(out)   :: energy,eltot(:),ke,pot
    end subroutine anal_energy
-end interface
 
-interface
    subroutine anal_energy_mtiny(nbod,nbodm,mass,j2rp2,j4rp4,xh,vxh,       &
                                 ke,pot,energy,eltot)
    use swift_mod
@@ -33,9 +29,7 @@ interface
    real(rk), intent(in)    :: mass(:),xh(:,:),vxh(:,:),j2rp2,j4rp4
    real(rk), intent(out)   :: energy,eltot(:),ke,pot
    end subroutine anal_energy_mtiny
-end interface
 
-interface
    subroutine anal_energy_write(t,nbod,mass,j2rp2,j4rp4,xh,vxh,           &
                                 iu,fopenstat,eoff)
    use swift_mod

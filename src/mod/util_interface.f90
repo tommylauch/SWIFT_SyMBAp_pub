@@ -7,18 +7,14 @@ interface
    implicit none
    integer, intent(in) :: iflg
    end subroutine util_exit
-end interface
 
-interface
    subroutine util_hills1(msun,mpl,xh,vxh,rhill) 
    use swift_mod
    implicit none
    real(rk), intent(in)       :: msun,mpl,xh(:),vxh(:)
    real(rk), intent(out)      :: rhill 
    end subroutine util_hills1
-end interface
 
-interface
    subroutine util_hills(nbod,mass,xh,vxh,r2hill)
    use swift_mod
    implicit none
@@ -26,9 +22,7 @@ interface
    real(rk), intent(in)    :: mass(:),xh(:,:),vxh(:,:)
    real(rk), intent(out)   :: r2hill(:)
    end subroutine util_hills
-end interface
 
-interface
    subroutine util_mass_peri(iflg,nbod,x,vx,mass,isperi,peri,lperi)
    use swift_mod
    implicit none

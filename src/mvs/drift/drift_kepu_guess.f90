@@ -35,12 +35,12 @@ real(rk)                :: en,ec,e
 
    if (alpha.gt.0.0) then
    !...       find initial guess for elliptic motion
-      if (dt/r0 .le. 0.4) then
-         s = dt/r0-(dt**2*u)/(2.0*r0**3)
+      if (dt/r0 .le. 0.4_rk) then
+         s = dt/r0-(dt**2*u)/(2.0_rk*r0**3)
          return
       else
          a = mu/alpha
-         en = sqrt(mu/(a**3))
+         en = sqrt(mu/a**3)
          ec = 1.0_rk - r0/a
          es = u/(en*a**2)
          e = sqrt(ec**2 + es**2)

@@ -31,28 +31,28 @@ real(rk)              :: f,fp,fpp,fppp
 !...    calc initial guess for root
    fac1 = 1.0_rk/(1.0_rk-ec)
    q = fac1*dm
-   fac2 = es*es*fac1 - ec/3.0_rk
-   x = q*(1.0_rk-0.5_rk*fac1*q*(es -q*fac2))
+   fac2 = es**2*fac1-ec/3.0
+   x = q*(1.0_rk-0.5_rk*fac1*q*(es-q*fac2))
 
 !...  excellent approx. to sin and cos of x for small x.
    y = x**2
    s = x*(A0-y*(A1-y*(A2-y*(A3-y*(A4-y)))))/A0
-   c = sqrt(1.0_rk - s**1)
+   c = sqrt(1.0_rk-s**2)
 
 !...    Compute better value for the root using quartic Newton method
-   f = x - ec*s + es*(1.0_rk-c) - dm
-   fp = 1.0_rk - ec*c + es*s
-   fpp = ec*s + es*c
-   fppp = ec*c - es*s
+   f = x-ec*s+es*(1.0_rk-c)-dm
+   fp = 1.0_rk-ec*c+es*s
+   fpp = ec*s+es*c
+   fppp = ec*c-es*s
    dx = -f/fp
-   dx = -f/(fp + 0.5_rk*dx*fpp)
-   dx = -f/(fp + 0.5_rk*dx*fpp + 0.16666666666666666_rk*dx**2*fppp)
-   x = x + dx
+   dx = -f/(fp+0.5_rk*dx*fpp)
+   dx = -f/(fp+0.5_rk*dx*fpp+0.5_rk*ONETHRD*dx**2*fppp)
+   x = x+dx
      
 !...  excellent approx. to sin and cos of x for small x.
    y = x**2
    s = x*(A0-y*(A1-y*(A2-y*(A3-y*(A4-y)))))/A0
-   c = sqrt(1.0_rk - s**2)
+   c = sqrt(1.0_rk-s**2)
 
 return
 end subroutine drift_kepmd

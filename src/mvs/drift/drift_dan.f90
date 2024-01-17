@@ -55,26 +55,26 @@ real(rk)                :: fchk,s,c
       a = mu/alpha
       asq = a**2
       en = sqrt(mu/(a*asq))
-      ec = 1.0_rk-r0/a
+      ec = 1.0-r0/a
       es = u/(en*asq)
       esq = ec**2+es**2
       dm = dt*en-int(dt*en/TWOPI)*TWOPI
       dt = dm/en
-      if( (dm**2.le.0.16_rk) .and. (esq.le.0.36_rk) ) then
-         if(esq*dm**2 .lt. 0.0016_rk) then
+      if ( (dm**2.le.0.16_rk) .and. (esq.le.0.36_rk) ) then
+         if (esq*dm**2 .lt. 0.0016_rk) then
             call drift_kepmd(dm,es,ec,xkep,s,c)
-            fchk = (xkep - ec*s +es*(1.0_rk-c) - dm)
+            fchk = (xkep - ec*s +es*(1.0-c) - dm)
 
             if(fchk**2 .gt. DANBYB) then
                iflg = 1_ik
                return
             endif
 
-            fp = 1.0_rk - ec*c + es*s
-            f = (a/r0) * (c-1.0_rk) + 1.0_rk
+            fp = 1.0 - ec*c + es*s
+            f = (a/r0) * (c-1.0) + 1.0
             g = dt + (s-xkep)/en
             fdot = - (a/(r0*fp))*en*s
-            gdot = (c-1.0_rk)/fp + 1.0_rk
+            gdot = (c-1.0)/fp + 1.0
 
             x(:) = x0(:)*f + vx0(:)*g
             vx(:) = x0(:)*fdot + vx0(:)*gdot
@@ -90,10 +90,10 @@ real(rk)                :: fchk,s,c
    call drift_kepu(dt,r0,mu,alpha,u,fp,c1,c2,c3,iflg)
 
    if (iflg .eq.0) then
-        f = 1.0_rk - (mu/r0)*c2
+        f = 1.0 - (mu/r0)*c2
         g = dt - mu*c3
         fdot = -(mu/(fp*r0))*c1
-        gdot = 1.0_rk - (mu/fp)*c2
+        gdot = 1.0 - (mu/fp)*c2
 
         x(:) = x0(:)*f + vx0(:)*g
         vx(:) = x0(:)*fdot + vx0(:)*gdot

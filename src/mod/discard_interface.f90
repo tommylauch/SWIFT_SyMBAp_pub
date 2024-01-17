@@ -13,9 +13,7 @@ interface
    real(rk), intent(inout)    :: mass(:),xh(:,:),vxh(:,:)
    real(rk), intent(inout)    :: eoff,rpl(:),rhill(:)
    end subroutine discard_massive5p
-end interface
 
-interface
    subroutine discard_mass_merge5p_mtiny(time,ip1,ip2,mass,xh,vxh,rpl, &
                                          eoff,ielc,ielst)
    use swift_mod
@@ -25,9 +23,7 @@ interface
    real(rk), intent(inout)    :: mass(:),xh(:,:),vxh(:,:),rpl(:),eoff
    integer(ik), intent(inout) :: ielst(:,:),ielc
    end subroutine discard_mass_merge5p_mtiny
-end interface
 
-interface
    subroutine discard_mass_peri5p(time,nbod,iecnt,mass,xh,                &
                                vxh,qmin,iwhy,isperi)
    use swift_mod
@@ -38,9 +34,7 @@ interface
    integer(ik), intent(inout) :: iwhy(:)
    integer(ik), intent(inout) :: isperi(:)
    end subroutine discard_mass_peri5p
-end interface
 
-interface
    subroutine discard_mass_reorder5(ip,nbod,mass,xh,vxh,rpl,rhill,isperih)
    use swift_mod
    implicit none

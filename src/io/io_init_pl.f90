@@ -64,11 +64,6 @@ real(rk)                       :: r2hill(NTPMAX),rhrat
 
    write(*,*) 'Number of bodies (incl. the Sun) is ',nbod
 
-   if (btest(iflgchk,0)) then
-      write(*,*) ' FXDR not implemented'
-      call util_exit(1)
-   endif
-
 ! For each planet read mass, and helioc. position and vel .
    if (btest(iflgchk,5)) then ! bit 5 is set
       read(7,*) mass(1),j2rp2,j4rp4

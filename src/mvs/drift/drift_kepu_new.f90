@@ -51,8 +51,8 @@ real(rk)                 :: f,fpp,fppp,fdt
       fpp = (-r0*alpha + mu)*c1 + u*c0
       fppp = (- r0*alpha + mu)*c0 - u*alpha*c1
       ds = - f/fp
-      ds = - f/(fp + ds*fpp/2.0)
-      ds = -f/(fp + ds*fpp/2.0 + ds*ds*fppp/6.0)
+      ds = - f/(fp + ds*fpp*0.5_rk)
+      ds = -f/(fp + ds*fpp*0.5_rk + ds*ds*fppp*0.5_rk*ONETHRD)
       s = s + ds
       fdt = f/dt
 

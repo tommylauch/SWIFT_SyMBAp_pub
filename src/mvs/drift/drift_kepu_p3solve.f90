@@ -31,13 +31,13 @@ real(rk)                 :: denom,a0,a1,a2,q,r,sq2,sq,p1,p2
 
 !...  Executable code 
 
-   denom = (mu-alpha*r0)/6.0_rk
+   denom = (mu-alpha*r0)*ONETHRD*0.5_rk
    a2 = 0.5_rk*u/denom
    a1 = r0/denom
-   a0 =-dt/denom
+   a0 = -dt/denom
 
-   q = (a1-a2**2/3.0_rk)/3.0_rk
-   r = (a1*a2-3.0_rk*a0)/6.0_rk-(a2**3)/27.0_rk
+   q = (a1-a2**2*ONETHRD)*ONETHRD
+   r = (a1*a2-3.0_rk*a0)*ONETHRD*0.5_rk-(a2*ONETHRD)**3
    sq2 = q**3+r**2
 
    if (sq2.ge.0.0_rk) then
@@ -48,15 +48,15 @@ real(rk)                 :: denom,a0,a1,a2,q,r,sq2,sq,p1,p2
          p1 = (r + sq)**ONETHRD
       endif
       if ((r-sq) .le. 0.0_rk) then
-         p2 =  -(-(r - sq))**ONETHRD
+         p2 = -(-(r - sq))**ONETHRD
       else
          p2 = (r - sq)**ONETHRD
       endif
       iflg = 0_ik
-      s = p1+p2-a2/3.0_rk
+      s = p1+p2-a2*ONETHRD
    else
       iflg = 1_ik
-      s = 0_ik
+      s = 0_rk
    endif
 
 return

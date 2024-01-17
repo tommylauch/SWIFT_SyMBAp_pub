@@ -28,15 +28,15 @@ real(rk), parameter     :: TINY = 4.0e-15_rk
 !...    trig stuff
 real(rk), parameter     :: PI = 3.14159265358979324_rk
 real(rk), parameter     :: TWOPI = 2.0_rk*PI
-real(rk), parameter     :: TWOPISQ = TWOPI**2
+real(rk), parameter     :: FOURPISQ = TWOPI**2
 real(rk), parameter     :: PIBY2 = 0.5_rk*PI
 real(rk), parameter     :: PI3BY2 = 1.5_rk*PI
 real(rk), parameter     :: DEGRAD = 180.0_rk/PI
 real(rk), parameter     :: ONETHRD = 1.0_rk/3.0_rk
 
 !...    format
-character(len = 15)     :: fmt_rrr = '3(1p1e23.16,1x)'
-character(len = 18)     :: fmt_ri = '1x,1p1e23.16,1x,i4'
-character(len = 27)      :: fmt_iirr = 'i7,1x,i7,1x,2(1p1e23.16,1x)'
-character(len = 73)      :: fmt_prog = '" Time = ",1p1e12.5,": fraction done = ",0pf5.3,": Number of bodies =",i7'
+character(len = 17)     :: fmt_rrr = '(3(1p1e23.16,1x))'
+character(len = 20)     :: fmt_ri = '(1x,1p1e23.16,1x,i4)'
+character(len = 29)      :: fmt_iirr = '(i7,1x,i7,1x,2(1p1e23.16,1x))'
+character(len = 75)      :: fmt_prog = '(" Time = ",1p1e12.5,": fraction done = ",0pf5.3,": Number of bodies =",i7)'
 end module swift_mod
