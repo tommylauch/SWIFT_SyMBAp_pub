@@ -2,7 +2,7 @@
 
 # USERS MUST CHANGE THESE !!!!!!
 SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
-FORTRAN=gfortran-13
+FORTRAN=gfortran
 FFLAGS='-O2 -ftree-vectorize -march=native'
 
 i=1

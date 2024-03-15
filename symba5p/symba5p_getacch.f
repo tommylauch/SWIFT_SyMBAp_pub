@@ -41,7 +41,7 @@ c...  Outputs:
 c...  Internals:
       real*8 aoblx(3,NTPMAX)
       real*8 ir3h(NTPMAX),irh(NTPMAX) 
-      integer i,j,ie
+      integer i,j,ie,ij_tm,ij
       real*8 dx(3),rji2,faci,facj,irij3
 c---
 c...  Executable code 
@@ -49,13 +49,15 @@ c...  Executable code
 c...  Zero things
       axh = 0.d0
 c...  now the third terms
-!$OMP PARALLEL DEFAULT (NONE)
+      ij_tm = ((nbodm-1)*(nbodm-2))/2
+
+!$OMP PARALLEL
 !$OMP& REDUCTION(+:axh)
-!$OMP& PRIVATE(i,j,ie,dx,rji2,irij3,faci,facj)
-!$OMP& SHARED(nbod,nbodm,mass,xh,ielc,ielst)
+!$OMP& PRIVATE(i,j,ij,ie,dx,rji2,irij3,faci,facj)
+!$OMP& SHARED(ij_tm,nbod,nbodm,mass,xh,ielc,ielst)
 !$OMP DO COLLAPSE(2)
       do i=2,nbodm
-         do j=i+1,nbod
+         do j=nbodm+1,nbod
             dx(:) = xh(:,j) - xh(:,i)
             rji2 = dx(1)**2 + dx(2)**2 + dx(3)**2
 
@@ -66,6 +68,26 @@ c...  now the third terms
             axh(:,j) = axh(:,j) - faci*dx(:)
             axh(:,i) = axh(:,i) + facj*dx(:)
          enddo
+      enddo
+!$OMP END DO NOWAIT
+!$OMP DO
+      do ij=0,(ij_tm-1)
+         i=ij/(nbodm-2)+2 !i goes from 2
+         j=mod(ij,(nbodm-2))+3  !j goes from 3
+         if(j.le.i) then
+            i = nbodm-i+2 !i goes to nbodm-1
+            j = nbodm-j+3 !j goes to nbodm
+         endif
+
+         dx(:) = xh(:,j) - xh(:,i)
+         rji2 = dx(1)**2 + dx(2)**2 + dx(3)**2
+
+         irij3 = 1.0d0/(rji2*sqrt(rji2))
+         faci = mass(i)*irij3
+         facj = mass(j)*irij3
+
+         axh(:,j) = axh(:,j) - faci*dx(:)
+         axh(:,i) = axh(:,i) + facj*dx(:)
       enddo
 !$OMP END DO NOWAIT
 c...  Now subtract off anyone in an encounter
