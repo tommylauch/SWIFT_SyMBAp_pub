@@ -4,7 +4,7 @@
 SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
 FORTRAN=gfortran
 FFLAGS='-O2 -ftree-vectorize -march=native -c'
-PRECOMP=cpp-13
+PRECOMP=cpp
 CPPFLAGS='-march=native -D_OPEN_POSITION -D_RECUR_SUB'
 
 # To Profile the code:
