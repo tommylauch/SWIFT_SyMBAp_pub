@@ -1,5 +1,5 @@
 #!/bin/bash
-rm libswift.a
+rm -f libswift.a
 
 echo DIRECTORY: anal
 cd anal
