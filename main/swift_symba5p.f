@@ -17,7 +17,7 @@ c Last revision: 12/27/96
 c Paralleization: 2021
 c Note: integer instead of integer*2 is used entirely
 
-     
+      program swift_symba5p
       include 'swift.inc'
 
       real*8 mass(NTPMAX),j2rp2,j4rp4
@@ -30,6 +30,7 @@ c Note: integer instead of integer*2 is used entirely
       integer nbod,i1st,nbodm,nbodo
       integer threads,th_low,th_max
       integer iflgchk,iub,iuj,iud,iue,ium
+      integer yr,mo,day,hr,mm,sec
       
       real*8 t0,tstop,dt,dtout,dtdump
       real*8 t,tout,tdump,tfrac,eoff
@@ -182,9 +183,11 @@ c If it is time, do a dump
          if(t.ge.tdump) then
 
             tfrac = (t-t0)/(tstop-t0)
-            write(*,998) t,tfrac,nbod
+            call util_time(yr,mo,day,hr,mm,sec)
+            write(*,998) t,tfrac,nbod,yr,mo,day,hr,mm,sec
  998        format(' Time = ',1p1e12.5,': fraction done = ',0pf5.3,
-     &            ': Number of bodies =',i6)
+     &           ': Number of bodies =',i6,': At ',i4,'/',i2.2,'/',i2.2,
+     &           ' ',i2.2,':',i2.2,':',i2.2)
             call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
      &           vxh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
             call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
@@ -203,11 +206,11 @@ c********** end of the big loop from time 't0' to time 'tstop'
 
 c Do a final dump for possible resumption later 
 
-        call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
+      call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
      &            vxh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
-        call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
+      call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
      &         dtdump,iflgchk,rmin,rmax,rmaxu,qmin,lclose,outfile)
 
-        call util_exit(0)
-        end    ! swift_symba5.f
+      call util_exit(0)
+      end    ! swift_symba5.f
 c---------------------------------------------------------------------
