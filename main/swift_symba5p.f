@@ -86,8 +86,8 @@ c Get threads usage parameter:
       write(*,*) 'Max. no. of threads to be used : '
       read(*,'(i6)') th_max
 
-      threads = max(min(nbod/th_low,th_max),1)
-      call omp_set_num_threads(threads)
+      threads = th_max
+      call symba5p_thread(nbod,nbodm,threads,th_low,th_max)
       write(*,*) 'No. of threads: ',threads
 c Initialize initial time and times for first output and first dump
       t = t0
@@ -136,6 +136,9 @@ c...  set up energy write stuff
       ihills = 0
       i1st = 0
 c***************here's the big loop *************************************
+      call util_time(yr,mo,day,hr,mm,sec)
+      write(*,997) yr,mo,day,hr,mm,sec
+ 997  format(' System time: ',i4,2('/',i2.2),' ',i2.2,2(':',i2.2))
       write(*,*) ' ************** MAIN LOOP ****************** '
 
       do while ( (t .le. tstop) .and. (nbod.gt.1) )
@@ -153,11 +156,7 @@ c***************here's the big loop *************************************
             if(nbodo.ne.nbod) then
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
 c change no. of threads if condition met
-               if ((nbod/threads .lt. th_low).and.(threads .gt. 1)) then
-                  threads = max(nbod/th_low,1)
-                  call omp_set_num_threads(threads)
-                  write(*,*) 'No. of threads decreased to ',threads
-               endif
+               call symba5p_thread(nbod,nbodm,threads,th_low,th_max)
             endif
          endif
 
@@ -186,8 +185,8 @@ c If it is time, do a dump
             call util_time(yr,mo,day,hr,mm,sec)
             write(*,998) t,tfrac,nbod,yr,mo,day,hr,mm,sec
  998        format(' Time = ',1p1e12.5,': fraction done = ',0pf5.3,
-     &           ': Number of bodies =',i6,': At ',i4,'/',i2.2,'/',i2.2,
-     &           ' ',i2.2,':',i2.2,':',i2.2)
+     &           ': Number of bodies =',i6,': ',i4,2('/',i2.2),
+     &           ' ',i2.2,2(':',i2.2))
             call io_dump_pl_symbap('dump_pl.dat',nbod,mass,xh,
      &           vxh,lclose,iflgchk,rpl,rhill,j2rp2,j4rp4)
             call io_dump_param('dump_param.dat',t,tstop,dt,dtout,
