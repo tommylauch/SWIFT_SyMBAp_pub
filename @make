@@ -5,10 +5,10 @@ SWIFT_DIR="${HOME}/SWIFT_SyMBAp_pub"
 FORTRAN=gfortran
 FFLAGS='-O2 -ftree-vectorize -march=native -c'
 PRECOMP=cpp
-CPPFLAGS='-march=native -D_OPEN_POSITION -D_RECUR_SUB'
+CPPFLAGS='-U_FXDR_AVAIL'
 
 # To Profile the code:
-if [ `ls *.F | wc -l` != 0 ]
+if [ `ls *.F -R 2>/dev/null | wc -l` != 0 ]
 then
     echo Doing precompiler
     for file in *.F

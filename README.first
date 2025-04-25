@@ -3,8 +3,7 @@
 ******************************************************************************
 Authors : Martin Duncan and Hal Levison
 Date:     June 15/93
-Last Revisions: 11/29/00 HFL
-
+Last Revisions: 4/25/25 TCHL
 
                                 INTRODUCTION
 
@@ -70,11 +69,7 @@ SWIFT. In the top SWIFT directory, you will find a file called
                  for a discussion.
 
    Then type "@makeall".  This will compile all the subroutines in the
-package.  Swift will create a library called "libswift.a".  This file
-must be copied into the "/usr/local/lib" directory on your machine.
-You must be root in order to do this.  Once this is completed you can
-link a program to this package by adding the flag "-L/usr/local/lib -lswift" 
-to your Fortran statements.
+package.  Swift will create a library called "libswift.a".
 
    Now you must complile the drivers.  Change to the directory main
 (enter: " cd main").  You will have to edit "@make" and change the
@@ -84,38 +79,14 @@ files in the directory are now ready for use.
 
    You can now remove swift.tar, if you want.
 
-
                                THE CPP FLAGS
  
    We have made a significant effort making sure that SWIFT is ANSI
 standard Fortran 77.  Therefore, in principal, the Fortran source code
-should compile on any UNIX platform.  Unfortunately, there are two
-places where this ideal breaks down: in the OPEN function and in
-recursive routines.  In these cases, we make use of the C
-pre-compiler, cpp, which is universally available on UNIX machines (at
-least we hope).  Cpp translates files ending with .F into Fortran .f
-files.  In SWIFT, cpp needs two flags that will tell it what kind of
-fortran files to create.  These are:
+should compile on any UNIX platform.  Unfortunately, there is one 
+place where this ideal breaks down:
 
-1) OPEN function: In several places, SWIFT needs to open files and
-   append to the end of them.  So, far we have found the there are two
-   ways in which Fortran compilers do that.  The first is with OPEN
-   specifier "position='append'" and the second with "access='append'".
-   If your machine is of the first type then use the CPPFLAG of
-   "-D_OPEN_POSITION".  If it is of the second use "-U_OPEN_POSITION".
-   We have found that most machines are of the second type, however IBM
-   RS6000's and HP's Fortran 90 are of the first type.  
-
-2) RECURSIVE ROUTINES: (Only SyMBA users need to worry about this!)
-   Fortran 77 and Fortran 90 compilers handle recursion differently. As
-   far as our experience goes, F77 allows any subroutine to be recursive,
-   although you most likely will have to set compiler flags to accomplish
-   this.  F90 compilers require recursive subroutines to declared in the
-   source code as `recursive subroutine X(....)'.  If your compiler
-   requires this than use the CPPFLAG of "-D_RECUR_SUB".  If not use
-   "-U_RECUR_SUB"
-
-3) FXDR package: XDR is a platform independent binary format that
+1) FXDR package: XDR is a platform independent binary format that
    Swift can use to write bin.dat files that can move between
    systems. If requires FXDR which can be found at:
        http://meteora.ucsd.edu/~pierce/fxdr_home_page.html
@@ -123,10 +94,6 @@ fortran files to create.  These are:
    have the fxdr library then set the -D_FXDR_AVAIL.  If you do not
    want to use it then set -U_FXDR_AVAIL.  If you try to write an XDR
    without the FXDR package Swift will complain and stop.
-
-If you don't know which is correct for you, we have supplied a test. 
-Change to the directory cpp_test (enter: " cd cpp_test").  Follow the
-instructions in the README file.
 
                                 THE DRIVERS
 

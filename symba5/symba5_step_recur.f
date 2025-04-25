@@ -57,11 +57,7 @@ c Authors:  Hal Levison
 c Date:    3/20/97
 c Last revision: 12/16/09
 
-#ifdef  _RECUR_SUB
       recursive subroutine
-#else
-      subroutine
-#endif
      &   symba5_step_recur(t,nbod,nbodm,mass,ireci,ilevl,
      &     iecnt,ielev,rhill,xh,yh,zh,vxb,vyb,vzb,lclose,rpl,mergelst,
      &     mergecnt,dt0,eoff,svdotr,ielc,ielst)

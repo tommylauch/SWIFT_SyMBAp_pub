@@ -37,20 +37,11 @@ c...  Executable code
 
       if( (fopenstat(1:6).eq.'append') .or. 
      &     (fopenstat(1:6).eq.'APPEND') ) then
-         open(unit=iu, file=fname, status='old',
-#ifdef  _OPEN_POSITION
-     &        position='append',
-#else
-     &        access='append',
-#endif
-     &        form=format,iostat=ierr)
+         open(unit=iu, file=fname, status='old',position='append',
+     &        access='append',form=format,iostat=ierr)
          if(ierr.ne.0) then
             write(*,*) 'Warning:  Could not open ',fname,' with'
-#ifdef  _OPEN_POSITION
-            write(*,*) '          position=append.'
-#else
             write(*,*) '          access=append.'
-#endif
             write(*,*) '          Will open as status=new'
             open(unit=iu, file=fname, status='new',
      &           form=format,iostat=ierr)
