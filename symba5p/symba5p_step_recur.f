@@ -55,11 +55,7 @@ c Remarks: Based on SYMBA5_STEP_RECUR
 c Authors:
 c Date:
 
-#ifdef  _RECUR_SUB
       recursive subroutine
-#else
-      subroutine
-#endif
      &   symba5p_step_recur(t,nbod,nbodm,mass,ireci,ilevl,iecnt,
      &     ielev,rhill,xh,vxb,lclose,rpl,mergelst,mergecnt,dt0,eoff,
      &     svdotr,ielc,ielst)

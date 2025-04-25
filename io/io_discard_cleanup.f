@@ -66,6 +66,6 @@ c...  Executable code
          write(*,*) ' Cleanup done for discard_mass.out'
       endif
       return
-      end                       ! io_discard_merge.f
+      end                       ! io_discard_cleanup.f
 c--------------------------------------------------------------------------
 

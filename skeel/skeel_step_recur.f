@@ -48,11 +48,7 @@ c Authors:  Hal Levison
 c Date:   9/23/96
 c Last revision: 2/13/01
 
-#ifdef  _RECUR_SUB
       recursive subroutine 
-#else
-      subroutine 
-#endif
      &     skeel_step_recur(msun,mpl,rhill2,xbeg,ybeg,zbeg,
      &         vxbeg,vybeg,vzbeg,xend,yend,zend,
      &         vxend,vyend,vzend,xtp,ytp,ztp,vxtp,vytp,vztp,
