@@ -102,20 +102,20 @@ c Initialize initial time and times for first output and first dump
 
 c...    Do the initial io write
       if(btest(iflgchk,0))  then ! bit 0 is set
-         call io_write_frame_symbap(t0,nbod,ntp,mass,xh,vxh,
+         call io_write_frame_array(t0,nbod,ntp,mass,xh,vxh,
      &        xht,vxht,istat,outfile,iub,fopenstat)
          call io_write_mass(t0,nbod,mass,outfile,ium,fopenstat)
       endif
       if(btest(iflgchk,1))  then ! bit 1 is set
-         call io_write_frame_r_symbap(t0,nbod,ntp,mass,xh,vxh,
+         call io_write_frame_r_array(t0,nbod,ntp,mass,xh,vxh,
      &        xht,vxht,istat,outfile,iub,fopenstat)
          call io_write_mass_r(t0,nbod,mass,outfile,ium,fopenstat)
       endif
 
 c...  must initize discard io routine
       if(btest(iflgchk,4))  then ! bit 4 is set
-         call io_discard_mass_symbap(0,t,0,mass(1),rpl(1),xh(1:3,1),
-     &        vxh(1:3,1),iud,-1,fopenstat)
+         call io_discard_mass_array(0,t,0,mass(1),rpl(1),xh(:,1),
+     &        vxh(:,1),iud,-1,fopenstat)
       endif
 
 c...  Calculate the location of the last massive particle
@@ -124,12 +124,12 @@ c...  Calculate the location of the last massive particle
 c...  set up energy write stuff
       if(btest(iflgchk,2))  then ! bit 2 is set
          eoff = 0.0d0
-         call anal_energy_write_symbap(t0,nbod,mass,j2rp2,j4rp4,xh,vxh,
+         call anal_energy_write_array(t0,nbod,mass,j2rp2,j4rp4,xh,vxh,
      &        iue,fopenstat,eoff)
-         call anal_energy_discard5_symbap(1,nbod,nbodm,mass,j2rp2,j4rp4,
+         call anal_energy_discard5_array(1,nbod,nbodm,mass,j2rp2,j4rp4,
      &        xh,vxh,ke,pot,energy,eltot)
       else
-         call anal_energy_discard5_symbap(-1,nbod,nbodm,mass,j2rp2,
+         call anal_energy_discard5_array(-1,nbod,nbodm,mass,j2rp2,
      &        j4rp4,xh,vxh,ke,pot,energy,eltot)
       endif
 
@@ -165,12 +165,12 @@ c if it is time, output orb. elements,
          if(t .ge. tout) then 
 
             if(btest(iflgchk,0))  then ! bit 0 is set
-               call  io_write_frame_symbap(t,nbod,ntp,mass,xh,vxh,
+               call  io_write_frame_array(t,nbod,ntp,mass,xh,vxh,
      &               xht,vxht,istat,outfile,iub,fopenstat)
                call io_write_mass(t,nbod,mass,outfile,ium,fopenstat)
             endif
             if(btest(iflgchk,1))  then ! bit 1 is set
-               call  io_write_frame_r_symbap(t,nbod,ntp,mass,xh,vxh,
+               call  io_write_frame_r_array(t,nbod,ntp,mass,xh,vxh,
      &               xht,vxht,istat,outfile,iub,fopenstat)
                call io_write_mass_r(t,nbod,mass,outfile,ium,fopenstat)
             endif
@@ -194,7 +194,7 @@ c If it is time, do a dump
             tdump = tdump + dtdump
 
             if(btest(iflgchk,2))  then ! bit 2 is set
-               call anal_energy_write_symbap(t,nbod,mass,j2rp2,j4rp4,
+               call anal_energy_write_array(t,nbod,mass,j2rp2,j4rp4,
      &              xh,vxh,iue,fopenstat,eoff)
             endif
             

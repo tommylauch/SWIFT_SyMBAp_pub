@@ -53,12 +53,12 @@ c...  Executable code
       i1stloc = i1st
       if(i1st.eq.0) then
 c...      Convert vel to bery to jacobi coords
-          call coord_vh2b_symbap(nbod,mass,vxh,vxb,msys)
+          call coord_vh2b_array(nbod,mass,vxh,vxb,msys)
           i1st = 1              ! turn this off
       endif
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxb)
+      call helio_lindrift_array(nbod,mass,vxb,dth,xh,ptxb)
 
 c...  Get the accelerations in helio frame. if frist time step
       call symba5p_helio_getacch(i1stloc,nbod,nbodm,mass,j2rp2,j4rp4,
@@ -66,7 +66,7 @@ c...  Get the accelerations in helio frame. if frist time step
       i1stloc = 0
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+      call kickvh_p(nbod,vxb,axh,dth)
 
 c..   Drift in helio coords for the full step 
       call helio_drift_symbap(nbod,mass,xh,vxb,dt)
@@ -76,13 +76,13 @@ c...  Get the accelerations in helio frame. if frist time step
      &     xh,axh)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+      call kickvh_p(nbod,vxb,axh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxe)
+      call helio_lindrift_array(nbod,mass,vxb,dth,xh,ptxe)
 
 c...  convert back to helio velocities
-      call coord_vb2h_symbap(nbod,mass,vxb,vxh)
+      call coord_vb2h_array(nbod,mass,vxb,vxh)
 
       return
       end   ! symba5p_step_helio

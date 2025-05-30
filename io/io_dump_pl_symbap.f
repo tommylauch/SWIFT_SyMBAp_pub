@@ -59,8 +59,8 @@ c...  Executable code
       else
          write(7,123) mass(1)
       endif
-      write(7,123) xh(1,1),xh(2,1),xh(3,1)
-      write(7,123) vxh(1,1),vxh(2,1),vxh(3,1)
+      write(7,123) xh(:,1)
+      write(7,123) vxh(:,1)
 
       do j=2,nbod
          if(lclose) then
@@ -68,8 +68,8 @@ c...  Executable code
          else
             write(7,123) mass(j),rhill(j)
          endif
-         write(7,123) xh(1,j),xh(2,j),xh(3,j)
-         write(7,123) vxh(1,j),vxh(2,j),vxh(3,j)
+         write(7,123) xh(:,j)
+         write(7,123) vxh(:,j)
       enddo
  123  format(3(1p1e23.16,1x))
 

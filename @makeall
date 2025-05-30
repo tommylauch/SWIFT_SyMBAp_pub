@@ -69,6 +69,32 @@ rm @make
 ln -s ../../@make .
 bash @make
 
+cd ../../mvsp
+
+echo DIRECTORY: mvsp/drift
+cd drift
+rm @makep
+ln -s ../../@makep .
+bash @makep
+
+echo DIRECTORY: mvsp/getacch
+cd ../getacch
+rm @makep
+ln -s ../../@makep .
+bash @makep
+
+echo DIRECTORY: mvsp/kickvh
+cd ../kickvh
+rm @makep
+ln -s ../../@makep .
+bash @makep
+
+echo DIRECTORY: mvsp/step
+cd ../step
+rm @makep
+ln -s ../../@makep .
+bash @makep
+
 cd ..
 
 echo DIRECTORY: orbel

@@ -43,8 +43,8 @@ c...  Input
       logical*2 lclose
 
 c...  Output
-      real*8 mass(*),rpl(*),j2rp2,j4rp4
-      real*8 xh(3,*),vxh(3,*),rhill(*)
+      real*8 mass(nbod),rpl(nbod),j2rp2,j4rp4
+      real*8 xh(3,nbod),vxh(3,nbod),rhill(nbod)
       integer nbod
 
 c...  Internal
@@ -72,7 +72,7 @@ c Read number of planets
       
 c For each planet read mass, 
 c and helioc. position and vel .
-      if(btest(iflgchk,5))  then ! bit 5 is set
+      if (btest(iflgchk,5)) then ! bit 5 is set
          read(7,*) mass(1),j2rp2,j4rp4
       else
          read(7,*) mass(1)
@@ -84,12 +84,7 @@ c and helioc. position and vel .
       rpl(1) = 0.0d0
       rhill(1) = 0.0d0
       
-      if(  (xh(1,1).ne.0.0d0) .or.
-     &     (xh(2,1).ne.0.0d0) .or.
-     &     (xh(3,1).ne.0.0d0) .or.
-     &     (vxh(1,1).ne.0.0d0) .or.
-     &     (vxh(2,1).ne.0.0d0) .or.
-     &     (vxh(3,1).ne.0.0d0) ) then
+      if (any(xh(:,1).ne.0.0d0) .or. any(vxh(:,1).ne.0.0d0)) then
          write(*,*) ' SWIFT ERROR: in io_init_pl_symbap: '
          write(*,*) '   Input MUST be in heliocentric coordinates '
          write(*,*) '   Position and Vel. of Massive body 1 .ne. 0'
@@ -109,7 +104,7 @@ c and helioc. position and vel .
       close(unit = 7)
 
 c...  check to see if the hills spheres are ok
-      call util_hills_symbap(nbod,mass,xh,vxh,r2hill) 
+      call util_hills_array(nbod,mass,xh,vxh,r2hill) 
       ibad = 0
       do j=2,nbod
          rhrat = rhill(j)/sqrt(r2hill(j))

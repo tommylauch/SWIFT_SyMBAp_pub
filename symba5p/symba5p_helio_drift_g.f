@@ -27,7 +27,7 @@ c Date:    1/20.97
 c Last revision: 
 
       subroutine symba5p_helio_drift_g(nbod,ielev,irec,mass,xh,vxb,
-     &                                 dt,ielc,ielst)	
+     &                                 dt,ielc,ielst)
 
       include '../swift.inc'
       include '../symba5/symba5.inc'
@@ -77,12 +77,12 @@ c Take a drift forward dth
       do i=1,gpmbc
          j = gpmb(i)
          if( (ielev(j).eq.irec) .and. (mass(j).ne.0.0d0) ) then
-            call drift_one_symbap(mass(1),xh(:,j),vxb(:,j),dt,iflg)
+            call drift_one_array(mass(1),xh(:,j),vxb(:,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
                write(*,*) mass(1),dt
-               write(*,*) xh(1,j),xh(2,j),xh(3,j),' H '
-               write(*,*) vxb(1,j),vxb(2,j),vxb(3,j),' B '
+               write(*,*) xh(:,j),' H '
+               write(*,*) vxb(:,j),' B '
                write(*,*) ' STOPPING G'
                call util_exit(1)
             endif

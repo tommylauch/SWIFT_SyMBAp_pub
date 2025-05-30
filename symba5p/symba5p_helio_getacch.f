@@ -56,7 +56,7 @@ c...     now the third terms
       do i=2,nbodm
          do j=i+1,nbod
             dx(:) = xh(:,j) - xh(:,i)
-            rji2 = dx(1)**2 + dx(2)**2 + dx(3)**2
+            rji2 = sum(dx**2)
 
             irij3 = 1.0d0/(rji2*sqrt(rji2))
             faci = mass(i)*irij3
@@ -72,8 +72,8 @@ c...     now the third terms
       endif
 c...  Now do j2 and j4 stuff
       if(j2rp2.ne.0.0d0) then
-         call getacch_ir3_symbap(nbod,2,xh,ir3h,irh)
-         call obl_acc_symbap(nbod,mass,j2rp2,j4rp4,xh,irh,aoblx)
+         call getacch_ir3_p(nbod,2,xh,ir3h,irh)
+         call obl_acc_array(nbod,mass,j2rp2,j4rp4,xh,irh,aoblx)
          do i=2,nbod
             axh(:,i) = axhl(:,i) + aoblx(:,i)
          enddo

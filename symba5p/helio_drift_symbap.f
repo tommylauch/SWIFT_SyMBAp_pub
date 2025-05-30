@@ -22,7 +22,7 @@ c Authors:  Hal Levison
 c Date:    11/14/96
 c Last revision: 1/8/97  for symba
 
-      subroutine helio_drift_symbap(nbod,mass,xh,vxb,dt)	
+      subroutine helio_drift_symbap(nbod,mass,xh,vxb,dt)
 
       include '../swift.inc'
 
@@ -47,12 +47,12 @@ c Take a drift forward dth
 !$OMP DO
       do j=2,nbod
          if(mass(j).ne.0.0d0) then
-            call drift_one_symbap(mass(1),xh(1:3,j),vxb(1:3,j),dt,iflg)
+            call drift_one_array(mass(1),xh(:,j),vxb(:,j),dt,iflg)
             if(iflg.ne.0) then
                write(*,*) ' Planet ',j,' is lost !!!!!!!!!'
                write(*,*) mass(1),dt
-               write(*,*) xh(1,j),xh(2,j),xh(3,j),' H '
-               write(*,*) vxb(1,j),vxb(2,j),vxb(3,j),' B '
+               write(*,*) xh(:,j),' H '
+               write(*,*) vxb(:,j),' B '
                write(*,*) ' STOPPING '
                call util_exit(1)
             endif
