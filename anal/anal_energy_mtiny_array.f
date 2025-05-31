@@ -40,7 +40,7 @@ c...  Inputs:
       real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Output
-      real*8 energy,eltot(nbod),ke,pot
+      real*8 energy,eltot(3),ke,pot
 
 c...  Internals
       real*8 elx(3)
@@ -57,7 +57,7 @@ c...  Executable code
       eltot(1) = (xb(2,nbod)*vxb(3,nbod)-xb(3,nbod)*vxb(2,nbod))
       eltot(2) = (xb(3,nbod)*vxb(1,nbod)-xb(1,nbod)*vxb(3,nbod))
       eltot(3) = (xb(1,nbod)*vxb(2,nbod)-xb(2,nbod)*vxb(1,nbod))
-      eltot(:) = eltot(:)*mass(nbod)
+      eltot = eltot*mass(nbod)
 
       ke = 0.5*mass(nbod)*(sum(vxb(:,nbod)**2))
       pot= 0.d0
@@ -67,11 +67,11 @@ c...  Executable code
          elx(2) = xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i)
          elx(3) = xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i)
          elx = elx*mass(i)
-         eltot(:) = eltot(:) + elx(:)
+         eltot = eltot + elx
          
          ke = ke + 0.5*mass(i)*(sum(vxb(:,i)**2))
          do j = i+1,nbod
-            xx(:) = xb(:,i) - xb(:,j)
+            xx = xb(:,i) - xb(:,j)
             rr2 = sum(xx**2)
             if((mass(i).ne.0.0d0).and.(mass(j).ne.0.0d0)) then
                pot = pot - mass(i)*mass(j)/(sqrt(rr2))
@@ -85,7 +85,7 @@ c...  Executable code
          elx(2) = xb(3,i)*vxb(1,i)-xb(1,i)*vxb(3,i)
          elx(3) = xb(1,i)*vxb(2,i)-xb(2,i)*vxb(1,i)
          elx = elx*mass(i)
-         eltot(:) = eltot(:) + elx(:)
+         eltot = eltot + elx
       enddo
 
       if (j2rp2.ne.0.0d0) then

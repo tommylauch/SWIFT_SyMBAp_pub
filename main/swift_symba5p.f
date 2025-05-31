@@ -86,7 +86,7 @@ c Get threads usage parameter:
       write(*,*) 'Max. no. of threads to be used : '
       read(*,'(i6)') th_max
 
-      threads = th_max
+      threads = 0
       call symba5p_thread(nbod,nbodm,threads,th_low,th_max)
       write(*,*) 'No. of threads: ',threads
 c Initialize initial time and times for first output and first dump

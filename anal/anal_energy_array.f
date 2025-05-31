@@ -39,7 +39,7 @@ c...  Inputs:
       real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Output
-      real*8 energy,eltot(nbod),ke,pot
+      real*8 energy,eltot(3),ke,pot
 
 c...  Internals
       real*8 elx(3)
@@ -58,7 +58,7 @@ c...  Executable code
       eltot(3) = xb(1,nbod)*vxb(2,nbod)-xb(2,nbod)*vxb(1,nbod)
       eltot(:) = eltot(:)*mass(nbod)
       
-      ke = 0.5*mass(nbod)*(vxb(1,nbod)**2+vxb(2,nbod)**2+vxb(3,nbod)**2)
+      ke = 0.5*mass(nbod)*sum(vxb(:,nbod)**2)
       pot = 0.d0
 
       do i=1,nbod-1
@@ -68,17 +68,17 @@ c...  Executable code
          elx = elx*mass(i)
          eltot(:) = eltot(:) + elx(:)
          
-         ke = ke + 0.5*mass(i)*(vxb(1,i)**2+vxb(2,i)**2+vxb(3,i)**2)
+         ke = ke + 0.5*mass(i)*sum(vxb(:,i)**2)
          do j=i+1,nbod
-            xx(:) = xb(:,i) - xb(:,j)
-            rr2 = xx(1)**2 + xx(2)**2 + xx(3)**2 
+            xx = xb(:,i) - xb(:,j)
+            rr2 = sum(xx**2)
             if((mass(i).ne.0.0d0).and.(mass(j).ne.0.0d0)) then
                pot = pot - mass(i)*mass(j)/(sqrt(rr2))
             endif
          enddo
       enddo
 
-      if(j2rp2.ne.0.0d0) then
+      if (j2rp2.ne.0.0d0) then
          call getacch_ir3_p(nbod,2,xh,ir3h,irh)
          call obl_pot_array(nbod,mass,j2rp2,j4rp4,xh,irh,oblpot)
          pot = pot + oblpot

@@ -41,7 +41,7 @@ c...  Inputs:
       real*8 xh(3,nbod),vxh(3,nbod)
 
 c...  Output
-      real*8 energy,eltot(nbod),ke,pot
+      real*8 energy,eltot(3),ke,pot
 
 c...  Internals
       logical leuse
@@ -69,7 +69,7 @@ c...  iflg = 0
          ke = 0.0d0
          pot = 0.0d0
          energy = 0.0d0
-         eltot(:) = 0.0d0
+         eltot = 0.0d0
       endif
 
 
