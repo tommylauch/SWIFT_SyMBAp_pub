@@ -12,9 +12,9 @@ do
     file2="${file%%.*}"
     if [ $file == swift_symba5p.f ]
     then
-        $FORTRAN $FFLAGS -fopenmp -o $file2 $file -L$SWIFT_DIR -lswift
+        $FORTRAN $FFLAGS -fopenmp -o $file2 $file -L$SWIFT_DIR -lswift -I$SWIFT_DIR/util
     else
-        $FORTRAN $FFLAGS -o $file2 $file -L$SWIFT_DIR -lswift
+        $FORTRAN $FFLAGS -o $file2 $file -L$SWIFT_DIR -lswift -I$SWIFT_DIR/util
     fi
     ((i++))
 done

@@ -18,6 +18,7 @@ c Paralleization: 2021
 c Note: integer instead of integer*2 is used entirely
 
       program swift_symba5p
+      use util_signal
       include 'swift.inc'
 
       real*8 mass(NTPMAX),j2rp2,j4rp4
@@ -50,6 +51,9 @@ c...  Executable code
 
       ntp = 0
 
+!...  Initialize the signal handler for SIGCONT
+      sig_recv = 0
+      call signal(15,util_signal_handler)
 c...  print version number
       call util_version
       
@@ -159,6 +163,10 @@ c change no. of threads if condition met
             endif
          endif
 
+! stop before dump if signal received
+         if (sig_recv .eq. 1) then
+            call util_exit(0)
+         endif
 
 c if it is time, output orb. elements, 
          if(t .ge. tout) then 
