@@ -1,5 +1,5 @@
 c*************************************************************************
-c                        KICKVH_P.F
+c                        kickvh_array.F
 c*************************************************************************
 c To kick the velocity components vxh(*) by axh(*)*dt 
 c
@@ -22,7 +22,7 @@ c     DATE WRITTEN:  Feb. 2, 1993.
 c     REVISIONS: 2/18/93   HFL
 
 
-      subroutine kickvh_p(nbod,vxh,axh,dt) 
+      subroutine kickvh_array(nbod,vxh,axh,dt) 
 
 
       include '../../swift.inc'
@@ -43,5 +43,5 @@ c...  Executable code
          vxh(:,n) = vxh(:,n) + axh(:,n)*dt
       enddo
       return
-      end    ! kickvh_p
+      end    ! kickvh_array
 c-----------------------------------------------------------------------------

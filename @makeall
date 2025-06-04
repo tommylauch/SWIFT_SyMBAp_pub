@@ -70,31 +70,31 @@ rm @make
 ln -s ../../@make .
 bash @make
 
-cd ../../mvsp
+cd ../../mvs_array
 
-echo DIRECTORY: mvsp/drift
+echo DIRECTORY: mvs_array/drift
 cd drift
-rm @makep
-ln -s ../../@makep .
-bash @makep
+rm @make
+ln -s ../../@make .
+bash @make
 
-echo DIRECTORY: mvsp/getacch
+echo DIRECTORY: mvs_array/getacch
 cd ../getacch
-rm @makep
-ln -s ../../@makep .
-bash @makep
+rm @make
+ln -s ../../@make .
+bash @make
 
-echo DIRECTORY: mvsp/kickvh
+echo DIRECTORY: mvs_array/kickvh
 cd ../kickvh
-rm @makep
-ln -s ../../@makep .
-bash @makep
+rm @make
+ln -s ../../@make .
+bash @make
 
-echo DIRECTORY: mvsp/step
+echo DIRECTORY: mvs_array/step
 cd ../step
-rm @makep
-ln -s ../../@makep .
-bash @makep
+rm @make
+ln -s ../../@make .
+bash @make
 
 cd ..
 

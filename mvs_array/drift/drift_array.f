@@ -21,7 +21,7 @@ c Authors:  Hal Levison
 c Date:    2/12/93
 c Last revision: 9/5/94
 
-      subroutine drift_p(nbod,mass,xj,vxj,dt)
+      subroutine drift_array(nbod,mass,xj,vxj,dt)
 
       include '../../swift.inc'
 

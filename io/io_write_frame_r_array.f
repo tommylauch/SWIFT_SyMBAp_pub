@@ -69,7 +69,7 @@ c...  if first time through open file
          endif
          i1st = 1
       else
-        call io_open(iu,oname,'append','UNFORMATTED',ierr)
+         call io_open(iu,oname,'append','UNFORMATTED',ierr)
       endif
 
       call io_write_hdr_r(iu,time,nbod,ntp,istat)
@@ -78,7 +78,7 @@ c...  write out planets
       do i=2,nbod
          gm = mass(1)+mass(i)
          id = -1*i
- 	      call orbel_xv2el_array(xh(1:3,i),vxh(1:3,i),gm,ialpha,a,e,
+         call orbel_xv2el_array(xh(1:3,i),vxh(1:3,i),gm,ialpha,a,e,
      &                    inc,capom,omega,capm)
          call io_write_line_r(iu,id,a,e,inc,capom,omega,capm)
       enddo
