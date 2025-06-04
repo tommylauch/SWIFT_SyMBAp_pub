@@ -93,10 +93,10 @@ c...  Executable code
       dth = 0.5d0*dt
 
 c...  Convert vel to bery to jacobi coords
-      call coord_vh2b_symbap(nbod,mass,vxh,vxb,msys)
+      call coord_vh2b_array(nbod,mass,vxh,vxb,msys)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxb)
+      call helio_lindrift_array(nbod,mass,vxb,dth,xh,ptxb)
 
 c...  Get the accelerations in helio frame. For each object
 c...     only include those guys that it is not encountering with. 
@@ -104,7 +104,7 @@ c...     only include those guys that it is not encountering with.
      &                     mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+      call kickvh_array(nbod,vxb,axh,dth)
 
 c..   Do a recursion step for full dt for particles not in close encounter
       irec = -1
@@ -158,13 +158,13 @@ c...     only include those guys that it is not encountering with.
      &                     mtiny,ielc,ielst)
 
 c...  Apply a heliocentric kick for a half dt 
-      call kickvh_symbap(nbod,vxb,axh,dth)
+      call kickvh_array(nbod,vxb,axh,dth)
 
 c...  Do the linear drift due to momentum of the Sun
-      call helio_lindrift_symbap(nbod,mass,vxb,dth,xh,ptxe)
+      call helio_lindrift_array(nbod,mass,vxb,dth,xh,ptxe)
 
 c...  convert back to helio velocities
-      call coord_vb2h_symbap(nbod,mass,vxb,vxh)
+      call coord_vb2h_array(nbod,mass,vxb,vxh)
 
       return
       end   ! symba5p_step_interp

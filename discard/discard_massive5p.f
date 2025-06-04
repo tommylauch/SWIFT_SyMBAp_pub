@@ -144,7 +144,7 @@ c...  check for position
          rmin2 = rmin*rmin
          rmax2 = rmax*rmax
          rmaxu2 = rmaxu*rmaxu
-         call coord_h2b_symbap(nbod,mass,xh,vxh,xb,vxb,msys)
+         call coord_h2b_array(nbod,mass,xh,vxh,xb,vxb,msys)
 
          do i=2,nbod
             rh2 = xh(1,i)**2 + xh(2,i)**2 + xh(3,i)**2
@@ -187,10 +187,10 @@ c...  check perihelion distance
          if(iwhy(i).ne.0) then
             if(iflg.eq.0) then
                iflg = 1
-               call anal_energy_symbap(nbod,mass,0.0d0,0.0d0,xh,
+               call anal_energy_array(nbod,mass,0.0d0,0.0d0,xh,
      &           vxh,ke,pot,ei,eltot)
             endif
-            call io_discard_mass_symbap(1,time,i,mass(i),rpl(i),xh(:,i),
+            call io_discard_mass_array(1,time,i,mass(i),rpl(i),xh(:,i),
      &           vxh(:,i),iu,iwhy(i),cdummy)
             do j=i,nbod-1
                iwhy(j) = iwhy(j+1)
@@ -205,7 +205,7 @@ c...  check perihelion distance
 
 
       if(iflg.ne.0) then
-         call anal_energy_symbap(nbod,mass,0.0d0,0.0d0,xh,
+         call anal_energy_array(nbod,mass,0.0d0,0.0d0,xh,
      &        vxh,ke,pot,ef,eltot)
          eoff = ei - ef
       endif

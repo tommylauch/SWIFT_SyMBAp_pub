@@ -114,7 +114,7 @@ c..   Remove any encounters with ip2
 
       eoff = 0.d0
 
-      call io_discard_merge_symbap(time,ip1,ip2,m,r,x,vx,
+      call io_discard_merge_array(time,ip1,ip2,m,r,x,vx,
      &                mass(ip1),rpl(ip1),xh(:,ip1),vxh(:,ip1))
 
       return

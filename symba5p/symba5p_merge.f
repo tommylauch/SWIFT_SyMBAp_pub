@@ -86,7 +86,7 @@ c-----
 c...  Executable code 
 
       xr(:) = xh(:,ip2) - xh(:,ip1)
-      rr2 = xr(1)**2 + xr(2)**2 + xr(3)**2
+      rr2 = sum(xr**2)
       rlim = rpl(ip1)+rpl(ip2)
 
       if(rlim.eq.0.0d0) RETURN  ! <======  NOTE !!!!!
@@ -103,23 +103,23 @@ c...  Executable code
          mergelst(1,mergecnt) = ip1l
          mergelst(2,mergecnt) = ip2l
          rhill(ip2l) = 0.0d0
-         call util_hills1_symbap(mass(1),mass(ip1l),xh(1:3,ip1l),
-     &                           vxb(1:3,ip1l),rhill(ip1l))
+         call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
+     &                           vxb(:,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
          return      !   <=== NOTE !!!!!!!!!
       endif
 
       vxr(:) = vxb(:,ip2) - vxb(:,ip1)
-      vdotr = xr(1)*vxr(1) + xr(2)*vxr(2) + xr(3)*vxr(3)
+      vdotr = sum(xr*vxr)
 
       if( svdotrold .and. (vdotr.gt.0.0d0)) then
 
-         tcross2 = rr2/(vxr(1)**2+vxr(2)**2+vxr(3)**2)
+         tcross2 = rr2/(sum(vxr**2))
          dt2 = dt*dt
 
          if(tcross2.le.dt2) then
             massc = mass(ip1) + mass(ip2)
-            call orbel_xv2aeq_symbap(xr,vxr,massc,ialpha,a,e,peri)
+            call orbel_xv2aeq_array(xr,vxr,massc,ialpha,a,e,peri)
             if( peri.lt.rlim) then
                ip1l = ip1
                ip2l = ip2 
@@ -130,8 +130,8 @@ c...  Executable code
                mergelst(1,mergecnt) = ip1l
                mergelst(2,mergecnt) = ip2l
                rhill(ip2l) = 0.0d0
-               call util_hills1_symbap(mass(1),mass(ip1l),xh(1:3,ip1l),
-     &                                 vxb(1:3,ip1l),rhill(ip1l))
+               call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
+     &                                 vxb(:,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
             endif
          endif
