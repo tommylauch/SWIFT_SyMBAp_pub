@@ -1,5 +1,5 @@
 c*************************************************************************
-c                            DISCARD_MASS_REORDER5_SYMBAP.F
+c                            discard_mass_reorder5_array.F
 c*************************************************************************
 c Remove a massive body
 c
@@ -36,7 +36,7 @@ c Authors:  Hal Levison
 c Date:    1/2/97
 c Last revision: 5/13/99
 
-      subroutine discard_mass_reorder5_symbap(ip,nbod,mass,xh,vxh,
+      subroutine discard_mass_reorder5_array(ip,nbod,mass,xh,vxh,
      &                                        rpl,rhill,isperih)
 
       include '../swift.inc'
