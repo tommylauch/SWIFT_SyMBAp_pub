@@ -1,5 +1,5 @@
 c*************************************************************************
-c                            DISCARD_MASS_PERI_SYMBAP.F
+c                            discard_mass_peri5p_array.F
 c*************************************************************************
 c This subroutine checks to see if a partical should be discarded because
 c of its perihelion distance gets too small
@@ -29,7 +29,7 @@ c Authors:  Hal Levison
 c Date:    12/30/96
 c Last revision: 
 
-      subroutine discard_mass_peri5p_symbap(time,nbod,iecnt,mass,xh,
+      subroutine discard_mass_peri5p_array(time,nbod,iecnt,mass,xh,
      &                                      vxh,qmin,iwhy,isperi)
 
       include '../swift.inc'
@@ -57,13 +57,13 @@ c-----
 c...  Executable code 
 
       if(i1st.eq.0) then     ! if first time through, set things up
-         call util_mass_peri_symbap(0,nbod,xh,vxh,mass,isperi,peri,
+         call util_mass_peri_array(0,nbod,xh,vxh,mass,isperi,peri,
      &                              lperi)
          i1st = 1
          return                 !  <==== RETURN
       endif
 
-      call util_mass_peri_symbap(1,nbod,xh,vxh,mass,isperi,peri,
+      call util_mass_peri_array(1,nbod,xh,vxh,mass,isperi,peri,
      &                           lperi)
 
       do i=2,nbod
@@ -77,5 +77,5 @@ c...  Executable code
       enddo
 
       return
-      end       ! discard_mass_peri5p
+      end       ! discard_mass_peri5p_array
 c------------------------------------------------------

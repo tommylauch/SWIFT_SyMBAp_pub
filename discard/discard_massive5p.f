@@ -120,7 +120,7 @@ c.... take care of mergers
             isperih(i1) =-1
          endif
          if(i2.gt.0) then
-            call discard_mass_reorder5_symbap(i2,nbod,mass,xh,vxh,rpl,
+            call discard_mass_reorder5_array(i2,nbod,mass,xh,vxh,rpl,
      &                                        rhill,isperih)
             i1st = 0
             do j=i+1,mergecnt
@@ -176,7 +176,7 @@ c...  check for position
 
 c...  check perihelion distance
       if(qmin.ge.0.0) then
-         call discard_mass_peri5p_symbap(time,nbod,iecnt,mass,xh,vxh,
+         call discard_mass_peri5p_array(time,nbod,iecnt,mass,xh,vxh,
      &                                   vxh,qmin,iwhy,isperih)
       endif
 
@@ -196,7 +196,7 @@ c...  check perihelion distance
                iwhy(j) = iwhy(j+1)
             enddo
             i1st = 0
-            call discard_mass_reorder5_symbap(i,nbod,mass,xh,vxh,rpl,
+            call discard_mass_reorder5_array(i,nbod,mass,xh,vxh,rpl,
      &                                        rhill,isperih)
          else
             i = i + 1

@@ -1,5 +1,5 @@
 c*************************************************************************
-c                            UTIL_MASS_PERI.F
+c                            util_mass_peri_array.F
 c*************************************************************************
 c This subroutine determines whether peri of a planet has taken place
 c
@@ -28,7 +28,7 @@ c Authors:  Hal Levison
 c Date:    12/30/96
 c Last revision: 
 
-      subroutine util_mass_peri_symbap(iflg,nbod,x,vx,mass,isperi,peri,
+      subroutine util_mass_peri_array(iflg,nbod,x,vx,mass,isperi,peri,
      &                                 lperi)
 
       include '../swift.inc'
@@ -84,7 +84,7 @@ c...  Executable code
       endif
 
       return
-      end    ! util_mass_peri_symbap
+      end    ! util_mass_peri_array
 c------------------------------------------------------------------
 
 

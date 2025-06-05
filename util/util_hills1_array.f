@@ -1,5 +1,5 @@
 c*************************************************************************
-c                            UTIL_HILLS1_symbap.F
+c                            util_hills1_array.F
 c*************************************************************************
 c This subroutine calculates the hill's sphere for the planets
 c
@@ -20,7 +20,7 @@ c Authors:  Hal Levison
 c Date:    1/8/97
 c Last revision: 
 
-      subroutine util_hills1_symbap(msun,mpl,xh,vxh,rhill) 
+      subroutine util_hills1_array(msun,mpl,xh,vxh,rhill) 
 
       include '../swift.inc'
 
@@ -44,6 +44,6 @@ c...  Executable code
       rhill = ap * (((mu/msun)/3.0)**(0.3333333333))
       
       return
-      end                       ! util_hills1_symbap
+      end                       ! util_hills1_array
 
 c---------------------------------------------------

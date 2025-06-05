@@ -103,7 +103,7 @@ c...  Executable code
          mergelst(1,mergecnt) = ip1l
          mergelst(2,mergecnt) = ip2l
          rhill(ip2l) = 0.0d0
-         call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
+         call util_hills1_array(mass(1),mass(ip1l),xh(:,ip1l),
      &                           vxb(:,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
          return      !   <=== NOTE !!!!!!!!!
@@ -130,7 +130,7 @@ c...  Executable code
                mergelst(1,mergecnt) = ip1l
                mergelst(2,mergecnt) = ip2l
                rhill(ip2l) = 0.0d0
-               call util_hills1_symbap(mass(1),mass(ip1l),xh(:,ip1l),
+               call util_hills1_array(mass(1),mass(ip1l),xh(:,ip1l),
      &                                 vxb(:,ip1l),rhill(ip1l))
 !$OMP END CRITICAL (MERGE)
             endif
