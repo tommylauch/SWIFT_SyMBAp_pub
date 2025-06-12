@@ -51,7 +51,7 @@ c...  Executable code
 
       ntp = 0
 
-!...  Initialize the signal handler for SIGCONT
+!...  Initialize the signal handler for SIGTERM
       sig_recv = 0
       call signal(15,util_signal_handler)
 c...  print version number

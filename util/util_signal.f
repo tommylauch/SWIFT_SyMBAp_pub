@@ -9,7 +9,7 @@
       contains
          subroutine util_signal_handler
          implicit none
-         write(*,*) 'SIGCONT Received'
+         write(*,*) 'SIGTERM Received'
          sig_recv = 1
          end subroutine util_signal_handler
       end module util_signal
