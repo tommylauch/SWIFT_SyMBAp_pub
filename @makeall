@@ -90,12 +90,6 @@ rm @make
 ln -s ../../@make .
 bash @make
 
-echo DIRECTORY: mvs_array/step
-cd ../step
-rm @make
-ln -s ../../@make .
-bash @make
-
 cd ..
 
 echo DIRECTORY: orbel
