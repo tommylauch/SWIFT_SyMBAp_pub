@@ -3,7 +3,7 @@
 ******************************************************************************
 Authors : Martin Duncan and Hal Levison
 Date:     June 15/93
-Last Revisions: 4/25/25 TCHL
+Last Revisions: 10/07/25 TCH Lau
 
                                 INTRODUCTION
 
@@ -50,34 +50,27 @@ drivers and the input and output files follow.
 
 
                              COMPILING SWIFT   
-
-    There are two files that must be edited in order to complile
-SWIFT. In the top SWIFT directory, you will find a file called
-"@make".  Edit this file.  You will have to change the values of:
-     SWIFT_DIR which is the top directory in which you put SWIFT.
-     FORTRAN   which is the command on your machine to run the Fortran 
-                 compliler
-     FFLAGS    which are the flags you use for your Fortran. You MUST
-                 include a flag that will tell Fortran to make an object
-                 file, but does not try to link it.  This is a "-c" on
-                 most machines.  (In addition for SyMBA users, the
-                 flags must be set so that recursion will work on your
-                 machine.)  
-      PRECOMP  is the full path of the C pre-compiler on your machine.
-                 This program is usually called cpp.
-      CPPFLAGS are the flags for the cpp pre-compiler.  See the next section
+The original @make* scripts have been replaced by GNU Make. You may have to 
+edit the Makefile, which can be found In the top SWIFT directory.
+Edit this file.  You will have to change the values of:
+      FC       which is the command on your machine to run the Fortran compliler
+      FFLAGS   which are the flags you use for your Fortran. The "-c" option 
+               should not be included here as it is added in the body of 
+               the make file where it is needed
+      CPP      the C pre-compiler on your machine.
+               This program is usually called cpp.
+      CPPFLAGS are the flags for the cpp pre-compiler. See the next section
                  for a discussion.
 
-   Then type "@makeall".  This will compile all the subroutines in the
-package.  Swift will create a library called "libswift.a".
+   Change working directory to top SWIFT directory. Then type "make". This will 
+   compile all the subroutines in the package and then the drivers under main.
+   Swift will create a library called "libswift.a", and the executable files 
+   in the directory main are now ready for use. You can also check
+   "make help" for more options.
 
-   Now you must complile the drivers.  Change to the directory main
-(enter: " cd main").  You will have to edit "@make" and change the
-same variables as you did above.  In this case, you do not want the -c
-option of the Fortran compiler.  Now enter "@make".  The executable
-files in the directory are now ready for use.
-
-   You can now remove swift.tar, if you want.
+For SyMBAp, the OpenMP compiler option is added in the body of the make file 
+when compiling symba5p/. If you do not want to use OpenMP, you can compile the rest of the 
+package with make USE_OPENMP=0
 
                                THE CPP FLAGS
  
