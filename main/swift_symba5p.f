@@ -29,7 +29,7 @@ c Note: integer instead of integer*2 is used entirely
       integer ntp,istat(1)
 
       integer nbod,i1st,nbodm,nbodo
-      integer threads,th_low,th_max
+      integer threads,tune
       integer iflgchk,iub,iuj,iud,iue,ium
       integer yr,mo,day,hr,mm,sec
       
@@ -82,16 +82,11 @@ c Prompt and read name of planet data file
       write(*,*) 'Enter the smallest mass to self gravitate :'
       read(*,*) mtiny
       write(*,*) ' mtiny = ',mtiny
-      
-c Get threads usage parameter:
-      write(*,*) 'Enter lower limit of particle-to-thread ratio : '
-      read(*,'(i6)') th_low
 
       write(*,*) 'Max. no. of threads to be used : '
-      read(*,'(i6)') th_max
-
-      threads = 0
-      call symba5p_thread(nbod,nbodm,threads,th_low,th_max)
+      read(*,'(i6)') threads
+      call omp_set_num_threads(threads)
+      tune = 1
 c Initialize initial time and times for first output and first dump
       t = t0
       tout = t0 + dtout
@@ -145,10 +140,16 @@ c***************here's the big loop *************************************
       write(*,*) ' ************** MAIN LOOP ****************** '
 
       do while ( (t .le. tstop) .and. (nbod.gt.1) )
+         if (tune.ge.1) then
+            call symba5p_tune(tune,threads,1)
+         endif
 
          call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,xh,vxh,
      &    dt,lclose,rpl,isenc,mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
 
+         if (tune.ge.1) then
+            call symba5p_tune(tune,threads,0)
+         endif
          t = t + dt
 
          if(btest(iflgchk,4))  then ! bit 4 is set
@@ -158,8 +159,8 @@ c***************here's the big loop *************************************
      &           iecnt,eoff,i1st)
             if(nbodo.ne.nbod) then
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
-c change no. of threads if condition met
-               call symba5p_thread(nbod,nbodm,threads,th_low,th_max)
+! tune if number of bodies changed
+               tune = 1
             endif
          endif
 
