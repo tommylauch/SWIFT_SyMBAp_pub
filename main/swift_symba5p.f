@@ -160,7 +160,7 @@ c***************here's the big loop *************************************
             if(nbodo.ne.nbod) then
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
 ! tune if number of bodies changed
-               tune = 1
+               if (threads.gt.1) tune = 1
             endif
          endif
 
