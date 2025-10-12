@@ -36,18 +36,18 @@ c...  Executable code
 
       if ((start.eq.1).and.(tune.eq.1)) then
          sc_elapseo = 0
+         threadso = threads
          tune = 2
       endif
 
       if ((start.eq.1).and.(tune.eq.2)) then
-         threadso = threads
          call system_clock(sc_start)
       endif
 
       if (start.eq.0) then
          if (tune.eq.step+2) then
-            tune = 2
             call system_clock(sc_end)
+            tune = 2
             sc_elapse = sc_end-sc_start
             if ((sc_elapseo.eq.0) .or. (sc_elapse.lt.sc_elapseo)) then
                sc_elapseo = sc_elapse
