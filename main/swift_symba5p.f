@@ -86,7 +86,7 @@ c Prompt and read name of planet data file
       write(*,*) 'Max. no. of threads to be used : '
       read(*,'(i6)') threads
       call omp_set_num_threads(threads)
-      tune = 1
+      if (threads.gt.1) tune = 1
 c Initialize initial time and times for first output and first dump
       t = t0
       tout = t0 + dtout
