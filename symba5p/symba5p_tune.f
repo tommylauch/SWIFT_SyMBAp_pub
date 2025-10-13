@@ -53,7 +53,8 @@ c...  Executable code
                sc_elapseo = sc_elapse
                threadso = threads
                threads = threads-1
-               if (threads .eq. 1) then
+               if (threads .eq. 0) then
+                  threads = 1
                   write(*,*) 'Tune done'
                   tune = 0
                   sc_elapseo = 0
