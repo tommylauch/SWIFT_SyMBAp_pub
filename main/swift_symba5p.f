@@ -29,7 +29,7 @@ c Note: integer instead of integer*2 is used entirely
       integer ntp,istat(1)
 
       integer nbod,i1st,nbodm,nbodo
-      integer threads,tune
+      integer tune,threads,threads_max
       integer iflgchk,iub,iuj,iud,iue,ium
       integer yr,mo,day,hr,mm,sec
       
@@ -84,7 +84,9 @@ c Prompt and read name of planet data file
       write(*,*) ' mtiny = ',mtiny
 
       write(*,*) 'Max. no. of threads to be used : '
-      read(*,'(i6)') threads
+      read(*,'(i6)') threads_max
+      write(*,*) 'No. of threads: ',threads_max
+      threads = threads_max
       call omp_set_num_threads(threads)
       if (threads.gt.1) tune = 1
 c Initialize initial time and times for first output and first dump
@@ -141,14 +143,14 @@ c***************here's the big loop *************************************
 
       do while ( (t .le. tstop) .and. (nbod.gt.1) )
          if (tune.ge.1) then
-            call symba5p_tune(tune,threads,1)
+            call symba5p_tune(tune,threads,threads_max,1)
          endif
 
          call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,xh,vxh,
      &    dt,lclose,rpl,isenc,mergelst,mergecnt,iecnt,eoff,rhill,mtiny)
 
          if (tune.ge.1) then
-            call symba5p_tune(tune,threads,0)
+            call symba5p_tune(tune,threads,threads_max,0)
          endif
          t = t + dt
 
