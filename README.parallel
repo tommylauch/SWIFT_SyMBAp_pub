@@ -42,3 +42,4 @@ Jan/22 - version 1.6: Energy offset due to mergers will not be tracked for SyMBA
 Jul/22 - Added subroutine 'io_discard_cleanup' to clean up discard_mass.out upon resumption for SyMBA and SyMBAp
 Jul/23 - version 1.7: Implemented automatic non-rectangular loop nests collapse, requires GCC 13+.
 Dec/23 - version 1.8: x,y,z arrays in SyMBAp are merged into large arrays and the '-ftree-vectorize' flag is added to the compilation scripts.
+Nov/26 - version 1.9: Pair loops in SyMBAp rewritten for speed (results agree with v1.8 to round-off): mutual accelerations in symba5p_pairacc (vectorized row loop, reductions sized nbod instead of NTPMAX), encounter check inlined and vectorized in symba5p_step_pl, per-step reset of the group counters removed. Build with -march=<target> (e.g. znver2) when compiling on a different CPU than the compute nodes.

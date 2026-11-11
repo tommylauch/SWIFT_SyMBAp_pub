@@ -47,29 +47,9 @@ c---
 c...  Executable code 
 
 c...  Zero things
-      axh = 0.d0
-c...  now the third terms
-!$OMP PARALLEL DEFAULT (NONE)
-!$OMP& REDUCTION(+:axh)
-!$OMP& PRIVATE(i,j,ie,dx,rji2,irij3,faci,facj)
-!$OMP& SHARED(nbod,nbodm,mass,xh,ielc,ielst)
-!$OMP DO COLLAPSE(2)
-      do i=2,nbodm
-         do j=i+1,nbod
-            dx(:) = xh(:,j) - xh(:,i)
-            rji2 = sum(dx**2)
+      call symba5p_pairacc(nbod,nbodm,mass,xh,axh)
 
-            irij3 = 1.0d0/(rji2*sqrt(rji2))
-            faci = mass(i)*irij3
-            facj = mass(j)*irij3
-
-            axh(:,j) = axh(:,j) - faci*dx(:)
-            axh(:,i) = axh(:,i) + facj*dx(:)
-         enddo
-      enddo
-!$OMP END DO NOWAIT
-c...  Now subtract off anyone in an encounter
-!$OMP DO
+c...  remove the encounter pairs (handled in symba5p_step_recur)
       do ie=1,ielc
          i = ielst(1,ie)
          j = ielst(2,ie)
@@ -84,8 +64,6 @@ c...  Now subtract off anyone in an encounter
          axh(:,j) = axh(:,j) + faci*dx(:)
          axh(:,i) = axh(:,i) - facj*dx(:)
       enddo
-!$OMP END DO
-!$OMP END PARALLEL
 
 c...  Now do j2 and j4 stuff
       if(j2rp2.ne.0.0d0) then

@@ -35,10 +35,9 @@ c...  Outputs:
       real*8 axh(3,*)
                 
 c...  Internals:
-      integer i,j
+      integer i
       real*8 aoblx(3,NTPMAX),axhl(3,NTPMAX)
       real*8 ir3h(NTPMAX),irh(NTPMAX)
-      real*8 dx(3),rji2,faci,facj,irij3
 
       save axhl     ! Note this !!
 
@@ -46,29 +45,7 @@ c----
 c...  Executable code 
 
       if(iflg.eq.0) then
-         axhl = 0.d0
-c...     now the third terms
-!$OMP PARALLEL DEFAULT (NONE)
-!$OMP& REDUCTION(+:axhl)
-!$OMP& PRIVATE(i,j,dx,rji2,irij3,faci,facj)
-!$OMP& SHARED(nbod,nbodm,mass,xh)
-!$OMP DO COLLAPSE(2)
-      do i=2,nbodm
-         do j=i+1,nbod
-            dx(:) = xh(:,j) - xh(:,i)
-            rji2 = sum(dx**2)
-
-            irij3 = 1.0d0/(rji2*sqrt(rji2))
-            faci = mass(i)*irij3
-            facj = mass(j)*irij3
-
-            axhl(:,j) = axhl(:,j) - faci*dx(:)
-            axhl(:,i) = axhl(:,i) + facj*dx(:)
-         enddo
-      enddo
-!$OMP END DO
-!$OMP END PARALLEL
-
+         call symba5p_pairacc(nbod,nbodm,mass,xh,axhl)
       endif
 c...  Now do j2 and j4 stuff
       if(j2rp2.ne.0.0d0) then

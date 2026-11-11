@@ -80,9 +80,11 @@ c...  Outputs only
       integer mergelst(2,*),mergecnt
 
 c...  Internals
-      integer i,j,ieflg,irec
-      logical*1 svdotr            ! Not used in the routine
+      integer i,j,irec,nflg
       integer ielst(2,NENMAX),ielc,ielev(NTPMAX)
+      integer iflg(nbod)
+      real*8 xj,yj,zj,vxj,vyj,vzj,rhj,dx,dy,dz,dvx,dvy,dvz
+      real*8 r2,v2,vdotr,tmin,r2min,rcrit,r2crit
 
 c... grouping
       integer grpie(GRPMAX,GRPNMAX),grppc(GRPNMAX),grpc
@@ -93,25 +95,67 @@ c...  Executable code
          iecnt(i) = 0
          ielev(i) = -1
       enddo
-      do i=1,GRPNMAX
-         grppc(i) = 0
-      enddo
+c...  grppc needs no reset: symba5p_group sets grppc(grpc) on creation
+c...  and only groups 1..grpc are read
       isenc = 0
-c...  check for encounters
+c...  check for encounters (same test as symba5_chk_symbap/rmvs_chk_ind
+c...  at irec = 0, inlined so that the inner loop vectorizes)
       irec = 0
       ielc = 0
       grpc = 0
-!$OMP PARALLEL DEFAULT (NONE)
-!$OMP& PRIVATE(i,j,ieflg,svdotr)
-!$OMP& SHARED(rhill,nbod,nbodm,mass,xh,vxh,
-!$OMP& dt,irec,iecnt,ielev,ielc,ielst,isenc,grpc,grppc,grpie)
-!$OMP DO COLLAPSE(2)
+!$OMP PARALLEL DO DEFAULT(NONE) SCHEDULE(STATIC,1)
+!$OMP& PRIVATE(i,j,nflg,iflg,xj,yj,zj,vxj,vyj,vzj,rhj)
+!$OMP& PRIVATE(dx,dy,dz,dvx,dvy,dvz,r2,v2,vdotr,tmin,r2min,rcrit,r2crit)
+!$OMP& SHARED(nbod,nbodm,xh,vxh,rhill,dt,iecnt,ielev,ielc,ielst,
+!$OMP& isenc,grpc,grppc,grpie)
       do j=2,nbodm
+         xj = xh(1,j)
+         yj = xh(2,j)
+         zj = xh(3,j)
+         vxj = vxh(1,j)
+         vyj = vxh(2,j)
+         vzj = vxh(3,j)
+         rhj = rhill(j)
+         nflg = 0
+!$OMP SIMD REDUCTION(+:nflg)
+!$OMP& PRIVATE(dx,dy,dz,dvx,dvy,dvz,r2,v2,vdotr,tmin,r2min,rcrit,r2crit)
          do i=j+1,nbod
-            ieflg = 0
-            call symba5_chk_symbap(rhill,nbod,i,j,mass,xh,vxh,
-     &           dt,irec,ieflg,svdotr)
-            if(ieflg.ne.0) then
+            rcrit = (rhill(i)+rhj)*RHSCALE
+            r2crit = rcrit*rcrit
+            dx = xj - xh(1,i)
+            dy = yj - xh(2,i)
+            dz = zj - xh(3,i)
+            dvx = vxj - vxh(1,i)
+            dvy = vyj - vxh(2,i)
+            dvz = vzj - vxh(3,i)
+            r2 = dx**2 + dy**2 + dz**2
+            vdotr = dx*dvx + dy*dvy + dz*dvz
+            if (vdotr .gt. 0.d0) then
+               if (r2 .lt. r2crit) then
+                  iflg(i) = 1
+               else
+                  iflg(i) = 0
+               endif
+            else
+               v2 = dvx**2 + dvy**2 + dvz**2
+               tmin = -vdotr/v2
+               if (tmin.lt.dt) then
+                  r2min = r2 - (vdotr**2)/v2
+               else
+                  r2min = r2 + 2.d0*vdotr*dt + v2*dt*dt
+               endif
+               r2min = min(r2min,r2)
+               if (r2min .le. r2crit) then
+                  iflg(i) = 1
+               else
+                  iflg(i) = 0
+               endif
+            endif
+            nflg = nflg + iflg(i)
+         enddo
+         if (nflg .gt. 0) then
+            do i=j+1,nbod
+               if (iflg(i) .eq. 0) cycle
 !$OMP CRITICAL (ENC)
                isenc = 1
                iecnt(i) = iecnt(i) + 1
@@ -128,11 +172,10 @@ c...  check for encounters
                ielst(2,ielc) = j
                call symba5p_group(ielst,ielc,i,j,grpie,grppc,grpc)
 !$OMP END CRITICAL (ENC)
-            endif
-         enddo
+            enddo
+         endif
       enddo
-!$OMP END DO
-!$OMP END PARALLEL
+!$OMP END PARALLEL DO
 c...  do a step
       if(isenc.eq.0) then
          call symba5p_step_helio(i1st,nbod,nbodm,mass,j2rp2,j4rp4,
