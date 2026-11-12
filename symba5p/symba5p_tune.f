@@ -11,7 +11,8 @@ c                 th_max      ==>  initial position in helio coord
 c             Output:
 c                 threads       ==> no. of thread to use (int scalar)
 c
-c Remarks: 
+c Remarks: threads.dat holding -n fixes the thread count at n and skips
+c          the timing (re-read at every retune, i.e. dumps and mergers)
 c Authors:  TCH Lau
 c Date:   3/20/97
 c Last revision: 
@@ -41,9 +42,17 @@ c...  Executable code
             open(unit=10, file=fn, status='old', iostat=ierr)
             if (ierr.eq.0) then
                read(10,*) threads_file
+               close(10)
+               if (threads_file .lt. 0) then                            ! fixed count -n: use n threads, no tuning
+                  threads = -threads_file
+                  threads_max = max(threads_max,threads)
+                  call omp_set_num_threads(threads)
+                  write(*,*) 'Fixed no. of threads, no tuning: ',threads
+                  tune = 0
+                  return
+               endif
                threads = threads_file                                   ! use previous optimal thread count or use changed value
                threads_max = max(threads_max,threads_file)
-               close(10)
             else
                threads = threads_max
                write(*,*) 'No threads file found'
