@@ -303,8 +303,8 @@ Sun). `j2rp2` and `j4rp4` must use the same length unit as the positions.
   reductions sized `nbod` instead of `NTPMAX`), encounter check inlined and
   vectorised in `symba5p_step_pl`, per-step reset of the group counters removed. No
   loop collapse is used any more, so GCC 13+ is no longer required (the
-  `pre_gcc13_array` branch is retired; this is the `array` branch, formerly
-  `gcc13_array`). `threads.dat` holding `-n` fixes the thread count. The thread
+  `pre_gcc13_array` branch is retired; the former `gcc13_array` branch is now
+  `main`). `threads.dat` holding `-n` fixes the thread count. The thread
   input of version ≤ 1.6 (particle-to-thread ratio, then max. threads) is read
   again, so old input files work unchanged. `swift_rmvs3`/`swift_rmvs4` build with
   the medium code model.
