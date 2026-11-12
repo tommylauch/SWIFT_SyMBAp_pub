@@ -1,7 +1,7 @@
                              SYMBA5 PARALLELIZATION
 Authors : Tommy Chi Ho Lau
 Date:     Aug/20
-Last Revisions: Jul/22
+Last Revisions: Nov/26
 
 SyMBAp (main/swift_symba5p.f) in this package is a parallelized version of SyMBA (main/swift_symba5.f) in the SWIFT subroutine package.
 The original SWIFT package is retrieved from https://www.boulder.swri.edu/~hal/swift.html in Jan 2019.
@@ -15,7 +15,9 @@ Since encounter pairs are grouped in SyMBAp, errors may occur if the max no. of 
                              COMPILATION
                              
 In addition to the default compilation flags, "-fopenmp" is needed for GCC compiler to invoke OpenMP.
-GCC 13+ required for version 1.7+.
+Versions 1.7 and 1.8 required GCC 13+ (collapse of non-rectangular loop nests). Since version 1.9 no collapse is
+used; the code builds with GCC 8.5 (oldest tested) and is in production with GCC 12.3. The pre_gcc13_array
+branch is no longer needed; use the "array" branch (formerly gcc13_array).
 
                              ENVIRONMENT VARIABLE
                              
@@ -42,4 +44,5 @@ Jan/22 - version 1.6: Energy offset due to mergers will not be tracked for SyMBA
 Jul/22 - Added subroutine 'io_discard_cleanup' to clean up discard_mass.out upon resumption for SyMBA and SyMBAp
 Jul/23 - version 1.7: Implemented automatic non-rectangular loop nests collapse, requires GCC 13+.
 Dec/23 - version 1.8: x,y,z arrays in SyMBAp are merged into large arrays and the '-ftree-vectorize' flag is added to the compilation scripts.
-Nov/26 - version 1.9: Pair loops in SyMBAp rewritten for speed (results agree with v1.8 to round-off): mutual accelerations in symba5p_pairacc (vectorized row loop, reductions sized nbod instead of NTPMAX), encounter check inlined and vectorized in symba5p_step_pl, per-step reset of the group counters removed. Build with -march=<target> (e.g. znver2) when compiling on a different CPU than the compute nodes.
+Nov/26 - version 1.9: Pair loops in SyMBAp rewritten for speed (results agree with v1.8 to round-off): mutual accelerations in symba5p_pairacc (vectorized row loop, reductions sized nbod instead of NTPMAX), encounter check inlined and vectorized in symba5p_step_pl, per-step reset of the group counters removed. Build with -march=<target> (e.g. znver2) when compiling on a different CPU than the compute nodes. The rewritten loops need no collapse, so GCC 13+ is no longer required.
+Nov/26 - symba5p_tune: a negative value -n in threads.dat fixes the thread count at n (no tuning); positive values behave as before.
