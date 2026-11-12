@@ -70,11 +70,22 @@ util/util_signal.o: util/util_signal.f $(INC_FILES)
 # 	Special rule for OpenMP files
 symba5p/%.o: symba5p/%.f $(INC_FILES)
 	@$(FC) $(FFLAGS) -I./util -fopenmp -c $< -o $@
+# 	Special rule for the RMVS3/RMVS4 steppers: their static arrays exceed
+# 	2 GB in total, so they (and swift_rmvs3/4 below) use the medium code model
+MCMODEL = -mcmodel=medium
+LARGE_OBJS = $(patsubst %.f,%.o,$(wildcard rmvs3/rmvs3_step*.f rmvs4/*.f))
+$(LARGE_OBJS): %.o: %.f $(INC_FILES)
+	@$(FC) $(FFLAGS) $(MCMODEL) -I./util -c $< -o $@
 
 # main program compilation
-$(filter-out main/swift_symba5p,$(MAIN)): %: %.f $(LIB) $(INC_FILES)
+LARGE_MAIN = main/swift_rmvs3 main/swift_rmvs4
+$(filter-out main/swift_symba5p $(LARGE_MAIN),$(MAIN)): %: %.f $(LIB) $(INC_FILES)
 	@echo "--- MAIN: Compiling $(notdir $*) ---"
 	@$(FC) $(FFLAGS) -I./util -o $@ $< -L. -lswift
+# 	Special rule for the RMVS3/RMVS4 programs (medium code model, see above)
+$(LARGE_MAIN): %: %.f $(LIB) $(INC_FILES)
+	@echo "--- MAIN: Compiling $(notdir $*) ---"
+	@$(FC) $(FFLAGS) $(MCMODEL) -I./util -o $@ $< -L. -lswift
 # 	Special rule for OpenMP files
 main/swift_symba5p: main/swift_symba5p.f $(LIB) $(INC_FILES)
 	@echo "--- MAIN: Compiling swift_symba5p ---"
@@ -98,7 +109,7 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  main       - Build libswift.a and main (default)"
-	@echo "  tools      - Build libswift.a and standalone tools in tools/"
+	@echo "  tool       - Build libswift.a and standalone tools in tools/"
 	@echo "  library    - Build libswift.a only"
 	@echo "  clean      - Remove all generated files"
 	@echo ""

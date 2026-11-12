@@ -29,7 +29,7 @@ c Note: integer instead of integer*2 is used entirely
       integer ntp,istat(1)
 
       integer nbod,i1st,nbodm,nbodo
-      integer tune,threads,threads_max
+      integer tune,threads,threads_max,th_low,th_max,th_cap
       integer iflgchk,iub,iuj,iud,iue,ium
       integer yr,mo,day,hr,mm,sec
       
@@ -58,7 +58,7 @@ c...  print version number
       call util_version
       
       write(*,*) '-----------------------------------------------'
-      write(*,*) '------------- SyMBAp: Version 1.8 -------------'
+      write(*,*) '------------- SyMBAp: Version 1.9 -------------'
       write(*,*) '-----------------------------------------------'
 
 c Get data for the run and the test particles
@@ -83,11 +83,20 @@ c Prompt and read name of planet data file
       read(*,*) mtiny
       write(*,*) ' mtiny = ',mtiny
 
+c Get threads usage parameters (same input as versions <= 1.6):
+c th_low caps the no. of threads at nbod/th_low (also after mergers),
+c the tuner (symba5p_tune) then picks the fastest count up to the cap
+      write(*,*) 'Enter lower limit of particle-to-thread ratio : '
+      read(*,'(i6)') th_low
+      th_low = max(th_low,1)
       write(*,*) 'Max. no. of threads to be used : '
-      read(*,'(i6)') threads_max
-      write(*,*) 'No. of threads: ',threads_max
+      read(*,'(i6)') th_max
+      th_cap = max(min(nbod/th_low,th_max),1)
+      threads_max = th_cap
       threads = threads_max
+      write(*,*) 'No. of threads: ',threads
       call omp_set_num_threads(threads)
+      tune = 0
       if (threads.gt.1) tune = 1
 c Initialize initial time and times for first output and first dump
       t = t0
@@ -144,6 +153,11 @@ c***************here's the big loop *************************************
       do while ( (t .le. tstop) .and. (nbod.gt.1) )
          if (tune.ge.1) then
             call symba5p_tune(tune,threads,threads_max,1)
+            if (threads.gt.th_cap) then                                 !threads.dat may ask for more
+               threads = th_cap
+               threads_max = th_cap
+               call omp_set_num_threads(threads)
+            endif
          endif
 
          call symba5p_step_pl(i1st,t,nbod,nbodm,mass,j2rp2,j4rp4,xh,vxh,
@@ -161,7 +175,14 @@ c***************here's the big loop *************************************
      &           iecnt,eoff,i1st)
             if(nbodo.ne.nbod) then
                call symba5_nbodm(nbod,mass,mtiny,nbodm)
-! tune if number of bodies changed
+! keep the particle-to-thread limit, then tune if number of bodies changed
+               th_cap = max(min(nbod/th_low,th_max),1)
+               if (threads.gt.th_cap) then
+                  threads = th_cap
+                  call omp_set_num_threads(threads)
+                  write(*,*) 'No. of threads decreased to ',threads
+               endif
+               threads_max = min(threads_max,th_cap)
                if (threads.gt.1) tune = 1
             endif
          endif
